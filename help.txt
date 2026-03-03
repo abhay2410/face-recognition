@@ -1,0 +1,6 @@
+run 
+.\venv\Scripts\python.exe -m uvicorn main:app --host 0.0.0.0 --port 8000 --reload
+
+close port 
+powerhell
+Stop-Process -Id (Get-NetTCPConnection -LocalPort 8000).OwningProcess -Force

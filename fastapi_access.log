@@ -1,0 +1,85 @@
+2026-03-03 11:41:42,092  INFO      processor  [Monitor:Entrance] Unknown face detected (Distance: 1.320)
+2026-03-03 11:41:44,811  INFO      processor  [Monitor:Entrance] Unknown face detected (Distance: 1.599)
+2026-03-03 11:41:47,694  INFO      processor  [Monitor:Entrance] Unknown face detected (Distance: 1.363)
+2026-03-03 11:42:25,718  INFO      processor  [Monitor:Entrance] Identity confirmed: 'abhay', waiting for blink...
+2026-03-03 11:42:28,840  INFO      processor  [Monitor:Entrance] Unknown face detected (Distance: 1.106)
+2026-03-03 11:42:39,016  INFO      processor  [Monitor:Entrance] Unknown face detected (Distance: 1.247)
+2026-03-03 11:42:45,412  INFO      processor  [Monitor:Entrance] Unknown face detected (Distance: 1.437)
+2026-03-03 11:42:47,689  INFO      processor  [Monitor:Entrance] Unknown face detected (Distance: 1.052)
+2026-03-03 11:42:49,477  INFO      processor  [Monitor:Entrance] ACCESS GRANTED: 'abhay' (Blink Verified)
+2026-03-03 11:42:49,479  INFO      engine  [Door:Entrance] Unlocking for 'abhay' (Code: 2048) -> http://emplog.grapesonline.net/Admin/LockOrUnlockDoorRemotely?BranchId=2&Status=true&UserId=2048
+2026-03-03 11:42:56,236  INFO      httpx  HTTP Request: POST http://emplog.grapesonline.net/Admin/LockOrUnlockDoorRemotely?BranchId=2&Status=true&UserId=2048 "HTTP/1.1 200 OK"
+2026-03-03 11:42:56,238  INFO      engine  [Door:Entrance] Unlock OK (HTTP 200).
+2026-03-03 11:45:56,355  INFO      processor  [Monitor:Entrance] Unknown face detected (Distance: 1.272)
+2026-03-03 11:45:59,418  INFO      processor  [Monitor:Entrance] Identity confirmed: 'ajith cr', waiting for blink...
+2026-03-03 11:46:12,216  INFO      processor  [Monitor:Exit] Unknown face detected (Distance: 1.527)
+2026-03-03 11:49:09,160  INFO      processor  [Monitor:Entrance] Unknown face detected (Distance: 1.588)
+2026-03-03 11:49:12,049  INFO      processor  [Monitor:Entrance] Unknown face detected (Distance: 1.220)
+2026-03-03 11:50:16,666  INFO      processor  [Monitor:Exit] Unknown face detected (Distance: 1.762)
+2026-03-03 11:50:57,763  INFO      processor  [Monitor:Exit] ACCESS GRANTED: 'abhay' (Blink Verified)
+2026-03-03 11:50:57,764  INFO      engine  [Door:Exit] Unlocking for 'abhay' (Code: 2048) -> http://emplog.grapesonline.net/Admin/LockOrUnlockDoorRemotely?BranchId=2&Status=true&UserId=2048
+2026-03-03 11:51:04,578  INFO      httpx  HTTP Request: POST http://emplog.grapesonline.net/Admin/LockOrUnlockDoorRemotely?BranchId=2&Status=true&UserId=2048 "HTTP/1.1 200 OK"
+2026-03-03 11:51:04,579  INFO      engine  [Door:Exit] Unlock OK (HTTP 200).
+2026-03-03 11:52:05,453  INFO      processor  [Monitor:Entrance] ACCESS GRANTED: 'abhay' (Blink Verified)
+2026-03-03 11:52:05,453  INFO      engine  [Door:Entrance] Unlocking for 'abhay' (Code: 2048) -> http://emplog.grapesonline.net/Admin/LockOrUnlockDoorRemotely?BranchId=2&Status=true&UserId=2048
+2026-03-03 11:52:11,178  INFO      httpx  HTTP Request: POST http://emplog.grapesonline.net/Admin/LockOrUnlockDoorRemotely?BranchId=2&Status=true&UserId=2048 "HTTP/1.1 200 OK"
+2026-03-03 11:52:11,180  INFO      engine  [Door:Entrance] Unlock OK (HTTP 200).
+2026-03-03 12:05:15,220  INFO      processor  [Monitor:Exit] ACCESS GRANTED: 'abhay' (Blink Verified)
+2026-03-03 12:05:15,220  INFO      engine  [Door:Exit] Unlocking for 'abhay' (Code: 2048) -> http://emplog.grapesonline.net/Admin/LockOrUnlockDoorRemotely?BranchId=2&Status=true&UserId=2048
+2026-03-03 12:05:21,976  INFO      httpx  HTTP Request: POST http://emplog.grapesonline.net/Admin/LockOrUnlockDoorRemotely?BranchId=2&Status=true&UserId=2048 "HTTP/1.1 200 OK"
+2026-03-03 12:05:21,978  INFO      engine  [Door:Exit] Unlock OK (HTTP 200).
+2026-03-03 12:06:46,726  INFO      processor  [Monitor:Entrance] Unknown face detected (Distance: 1.106)
+2026-03-03 12:11:23,472  INFO      processor  [Monitor:Exit] Unknown face detected (Distance: 1.679)
+2026-03-03 12:11:25,644  INFO      processor  [Monitor:Exit] ACCESS GRANTED: 'Jerald Nepoleon' (Blink Verified)
+2026-03-03 12:11:25,645  INFO      engine  [Door:Exit] Unlocking for 'Jerald Nepoleon' (Code: 66) -> http://emplog.grapesonline.net/Admin/LockOrUnlockDoorRemotely?BranchId=2&Status=true&UserId=66
+2026-03-03 12:11:32,606  INFO      httpx  HTTP Request: POST http://emplog.grapesonline.net/Admin/LockOrUnlockDoorRemotely?BranchId=2&Status=true&UserId=66 "HTTP/1.1 200 OK"
+2026-03-03 12:11:32,618  INFO      engine  [Door:Exit] Unlock OK (HTTP 200).
+2026-03-03 12:11:39,634  INFO      processor  [Monitor:Entrance] Unknown face detected (Distance: 0.979)
+2026-03-03 12:11:42,500  INFO      processor  [Monitor:Entrance] Unknown face detected (Distance: 1.291)
+2026-03-03 12:11:45,774  INFO      processor  [Monitor:Entrance] Unknown face detected (Distance: 1.238)
+2026-03-03 12:11:49,306  INFO      processor  [Monitor:Entrance] Unknown face detected (Distance: 1.329)
+2026-03-03 12:11:52,738  INFO      processor  [Monitor:Entrance] Unknown face detected (Distance: 1.196)
+2026-03-03 12:11:56,234  INFO      processor  [Monitor:Entrance] Unknown face detected (Distance: 1.275)
+2026-03-03 12:12:03,159  INFO      processor  [Monitor:Entrance] Unknown face detected (Distance: 1.212)
+2026-03-03 12:12:04,562  INFO      processor  [Monitor:Entrance] ACCESS GRANTED: 'Jerald Nepoleon' (Blink Verified)
+2026-03-03 12:12:04,564  INFO      engine  [Door:Entrance] Unlocking for 'Jerald Nepoleon' (Code: 66) -> http://emplog.grapesonline.net/Admin/LockOrUnlockDoorRemotely?BranchId=2&Status=true&UserId=66
+2026-03-03 12:12:10,306  INFO      httpx  HTTP Request: POST http://emplog.grapesonline.net/Admin/LockOrUnlockDoorRemotely?BranchId=2&Status=true&UserId=66 "HTTP/1.1 200 OK"
+2026-03-03 12:12:10,308  INFO      engine  [Door:Entrance] Unlock OK (HTTP 200).
+2026-03-03 12:13:25,869  INFO      processor  [Monitor:Exit] ACCESS GRANTED: 'abhay' (Blink Verified)
+2026-03-03 12:13:25,869  INFO      engine  [Door:Exit] Unlocking for 'abhay' (Code: 2048) -> http://emplog.grapesonline.net/Admin/LockOrUnlockDoorRemotely?BranchId=2&Status=true&UserId=2048
+2026-03-03 12:13:31,582  INFO      httpx  HTTP Request: POST http://emplog.grapesonline.net/Admin/LockOrUnlockDoorRemotely?BranchId=2&Status=true&UserId=2048 "HTTP/1.1 200 OK"
+2026-03-03 12:13:31,590  INFO      engine  [Door:Exit] Unlock OK (HTTP 200).
+2026-03-03 12:13:37,704  INFO      processor  [Monitor:Entrance] ACCESS GRANTED: 'abhay' (Blink Verified)
+2026-03-03 12:13:37,704  INFO      engine  [Door:Entrance] Unlocking for 'abhay' (Code: 2048) -> http://emplog.grapesonline.net/Admin/LockOrUnlockDoorRemotely?BranchId=2&Status=true&UserId=2048
+2026-03-03 12:13:43,440  INFO      httpx  HTTP Request: POST http://emplog.grapesonline.net/Admin/LockOrUnlockDoorRemotely?BranchId=2&Status=true&UserId=2048 "HTTP/1.1 200 OK"
+2026-03-03 12:13:43,456  INFO      engine  [Door:Entrance] Unlock OK (HTTP 200).
+2026-03-03 12:13:48,651  INFO      processor  [Monitor:Entrance] ACCESS GRANTED: 'abhay' (Blink Verified)
+2026-03-03 12:13:48,651  INFO      engine  [Door:Entrance] Unlocking for 'abhay' (Code: 2048) -> http://emplog.grapesonline.net/Admin/LockOrUnlockDoorRemotely?BranchId=2&Status=true&UserId=2048
+2026-03-03 12:13:54,469  INFO      httpx  HTTP Request: POST http://emplog.grapesonline.net/Admin/LockOrUnlockDoorRemotely?BranchId=2&Status=true&UserId=2048 "HTTP/1.1 200 OK"
+2026-03-03 12:13:54,470  INFO      engine  [Door:Entrance] Unlock OK (HTTP 200).
+2026-03-03 12:13:59,668  INFO      processor  [Monitor:Entrance] ACCESS GRANTED: 'abhay' (Blink Verified)
+2026-03-03 12:13:59,668  INFO      engine  [Door:Entrance] Unlocking for 'abhay' (Code: 2048) -> http://emplog.grapesonline.net/Admin/LockOrUnlockDoorRemotely?BranchId=2&Status=true&UserId=2048
+2026-03-03 12:14:05,536  INFO      httpx  HTTP Request: POST http://emplog.grapesonline.net/Admin/LockOrUnlockDoorRemotely?BranchId=2&Status=true&UserId=2048 "HTTP/1.1 200 OK"
+2026-03-03 12:14:05,538  INFO      engine  [Door:Entrance] Unlock OK (HTTP 200).
+2026-03-03 12:14:58,849  INFO      main    Shutdown complete.
+2026-03-03 12:14:58,881  INFO      processor  [Processor:Exit] RTSP capture thread stopped.
+2026-03-03 12:14:58,911  INFO      processor  [Processor:Entrance] RTSP capture thread stopped.
+2026-03-03 12:15:12,418  INFO      main  ============================================================
+2026-03-03 12:15:12,418  INFO      main    FastAPI Door Access System  -  starting up ...
+2026-03-03 12:15:12,418  INFO      main  ============================================================
+2026-03-03 12:15:14,072  INFO      database  [DB] Schema initialised.
+2026-03-03 12:15:14,096  INFO      engine  [Engine] FAISS index loaded with 3 vector(s).
+2026-03-03 12:15:14,142  INFO      processor  [Processor] Initialised 2 camera(s).
+2026-03-03 12:15:14,142  INFO      main    Startup complete. API ready on http://0.0.0.0:8000
+2026-03-03 12:15:14,143  INFO      processor  [Monitor:Exit] Starting live vision pipeline...
+2026-03-03 12:15:14,145  INFO      processor  [Processor:Exit] Opening camera source: rtsp://test:admin123@192.168.1.213:554/stream
+2026-03-03 12:15:14,145  INFO      processor  [Processor:Exit] RTSP capture thread started.
+2026-03-03 12:15:14,146  INFO      processor  [Monitor:Entrance] Starting live vision pipeline...
+2026-03-03 12:15:14,147  INFO      processor  [Processor:Entrance] Opening camera source: rtsp://test:admin123@192.168.1.2:554/stream
+2026-03-03 12:15:14,147  INFO      processor  [Processor:Entrance] RTSP capture thread started.
+2026-03-03 12:15:15,497  INFO      processor  [Processor:Exit] Camera source opened successfully.
+2026-03-03 12:15:15,605  INFO      engine  [Engine] Loading MTCNN face detector ...
+2026-03-03 12:15:15,673  INFO      engine  [Engine] MTCNN ready on cpu.
+2026-03-03 12:15:15,674  INFO      engine  [Engine] Loading FaceNet InceptionResnetV1 (pretrained=vggface2) ...
+2026-03-03 12:15:15,984  INFO      engine  [Engine] FaceNet ready on cpu.
+2026-03-03 12:15:16,708  INFO      processor  [Processor:Entrance] Camera source opened successfully.
