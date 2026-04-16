@@ -1,14 +1,29 @@
-fastapi
-uvicorn[standard]
-python-multipart
-mediapipe
-facenet-pytorch
-faiss-cpu
-pyodbc
-torch
-torchvision
-httpx
-Pillow
-numpy
-opencv-python-headless
-python-dotenv
+# ──────────────────────────────────────────────────────────────────────────────
+#  Face Recognition System — Production Requirements (v2.2)
+# ──────────────────────────────────────────────────────────────────────────────
+
+# --- ML & Vision -----------------------------------------------------------
+numpy>=1.26.0               # Better Python 3.12 compatibility
+opencv-python>=4.9.0.80     # Stable vision core
+
+# ONNX Runtime (CUDA GPU support)
+# Using 1.17.1 for optimal stable support on Windows + Python 3.12
+onnxruntime-gpu>=1.17.1
+
+# InsightFace (ArcFace Core)
+insightface>=0.7.3
+
+# FAISS (High-speed vector search)
+faiss-cpu>=1.8.0            # Using latest 1.8.x stable
+
+# --- API & Server ----------------------------------------------------------
+fastapi>=0.110.0
+uvicorn>=0.28.0
+python-multipart>=0.0.9
+jinja2>=3.1.3
+python-dotenv>=1.0.1
+httpx>=0.27.0               # Better connection pooling
+websockets>=13.0            # Async WebSocket support for door control
+
+# --- Database --------------------------------------------------------------
+pyodbc>=5.1.0               # Faster/newer ODBC core

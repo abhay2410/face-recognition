@@ -1,0 +1,936 @@
+2026-04-09 10:09:11  INFO      main  ============================================================
+2026-04-09 10:09:11  INFO      main    FastAPI Door Access System — starting up ...
+2026-04-09 10:09:11  INFO      main  ============================================================
+2026-04-09 10:09:11  INFO      database  [DB] Schema initialised.
+2026-04-09 10:09:11  INFO      database  [DB] Fetching all embeddings from SQL...
+2026-04-09 10:09:11  INFO      database  [DB] SQL returned 26 rows.
+2026-04-09 10:09:11  WARNING   engine  [Engine] Disk index out of sync (65 vs 68). Rebuilding...
+2026-04-09 10:09:11  INFO      main  [Startup] Building FAISS index from database ...
+2026-04-09 10:09:11  INFO      engine  [Engine] Fetching embeddings from database...
+2026-04-09 10:09:11  INFO      database  [DB] Fetching all embeddings from SQL...
+2026-04-09 10:09:11  INFO      database  [DB] SQL returned 26 rows.
+2026-04-09 10:09:11  INFO      engine  [Engine] Fetched data for 26 employees.
+2026-04-09 10:09:11  INFO      engine  [Engine] Building HNSW index with 68 vectors...
+2026-04-09 10:09:11  INFO      engine  [Engine] Adding vectors to FAISS index...
+2026-04-09 10:09:11  INFO      engine  [Engine] Saving index to C:\Users\Abhay\Desktop\face\data\faiss_hnsw.index...
+2026-04-09 10:09:11  INFO      engine  [Engine] Index saved to disk.
+2026-04-09 10:09:11  INFO      engine  [Engine] Index ready (68 vectors).
+2026-04-09 10:09:11  INFO      processor  [Processor] Camera 'C3' DISABLED — skipping.
+2026-04-09 10:09:11  INFO      processor  [Processor] Initialised 2 active camera(s).
+2026-04-09 10:09:11  INFO      main    Startup complete. API ready on http://0.0.0.0:8000
+2026-04-09 10:09:11  INFO      processor  [Monitor:Exit] Vision pipeline starting.
+2026-04-09 10:09:11  INFO      processor  [RTSP:Exit] Connecting... (retry delay=2.0s)
+2026-04-09 10:09:11  INFO      processor  [RTSP:Exit] Capture thread started (target=10 FPS).
+2026-04-09 10:09:11  INFO      processor  [Monitor:Entrance] Vision pipeline starting.
+2026-04-09 10:09:11  INFO      processor  [RTSP:Entrance] Connecting... (retry delay=2.0s)
+2026-04-09 10:09:11  INFO      processor  [RTSP:Entrance] Capture thread started (target=10 FPS).
+2026-04-09 10:09:11  INFO      database  [DB] Purged audit records older than 7 days.
+2026-04-09 10:09:13  INFO      processor  [RTSP:Exit] Connected successfully.
+2026-04-09 10:09:13  INFO      engine  [Engine] Loading Unified FaceAnalysis (640x640) on GPU (CUDA)...
+2026-04-09 10:09:13  INFO      engine  [Engine] Unified Engine Ready.
+2026-04-09 10:09:14  INFO      processor  [RTSP:Entrance] Connected successfully.
+2026-04-09 10:09:34  INFO      database  [DB] FAISS index blob saved to SQL system_config.
+2026-04-09 10:10:11  INFO      database  [DB] Starting periodic maintenance...
+2026-04-09 10:10:11  INFO      database  [DB] Purged audit records older than 7 days.
+2026-04-09 10:10:11  INFO      database  [DB] Maintenance complete. Access logs older than 2 days purged.
+2026-04-09 10:10:36  INFO      processor  [Monitor:Exit] Scene: 1 unknown face(s) detected.
+2026-04-09 10:10:37  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-09 10:10:37  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-09 10:10:37  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-09 10:10:37  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-09 10:10:37  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-09 10:10:38  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-09 10:10:38  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-09 10:10:38  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-09 10:10:38  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-09 10:10:38  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-09 10:10:38  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-09 10:10:38  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-09 10:10:38  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-09 10:10:38  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-09 10:10:38  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-09 10:10:39  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-09 10:10:39  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-09 10:10:39  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-09 10:10:39  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-09 10:10:39  INFO      httpx  HTTP Request: GET http://emplog.grapesonline.net/Employee/GetEmployeeDetails?RfID=0008941168 "HTTP/1.1 200 OK"
+2026-04-09 10:10:39  INFO      engine  [RF-Check] http://emplog.grapesonline.net/Employee/GetEmployeeDetails → 200 {"status":200,"Data":[{"EmpID":20148,"EmployeeName":"ABHAY RAMESH","DoorStatus":"IN","Checkinstatus":"OUT","ExitType":"R
+2026-04-09 10:10:39  INFO      processor  [Monitor:Exit] ✅ ACCESS GRANTED: 'abhay'
+2026-04-09 10:10:39  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-09 10:10:39  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-09 10:10:39  INFO      engine  [Door] Exit → WebSocket sent: OPEN_DOOR
+2026-04-09 10:10:39  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-09 10:10:39  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-09 10:10:39  INFO      httpx  HTTP Request: POST http://emplog.grapesonline.net/Employee/LogEmployeeEntry?MacAddress=84:1F:E8:24:A0:5C&EmployeeID=20148&Status=OUT "HTTP/1.1 200 OK"
+2026-04-09 10:10:39  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-09 10:10:40  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-09 10:10:40  INFO      httpx  HTTP Request: POST http://192.168.0.251:3596/api/User/SendTextToSpeaker?DeviceID=G-5889-6B1B-5AE0&Message=Thank%20you%20for%20your%20visit%2C%20%2C%20%2C%20abhay.%20We%20hope%20you%20have%20a%20peaceful%20and%20relaxing%20rest%20of%20your%20day.&VoiceOption=Microsoft%20Zira%20Desktop "HTTP/1.1 200 OK"
+2026-04-09 10:10:40  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-09 10:10:40  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-09 10:10:40  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-09 10:10:40  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-09 10:10:40  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-09 10:10:40  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-09 10:10:40  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-09 10:10:40  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-09 10:10:40  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-09 10:10:41  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-09 10:10:41  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-09 10:10:41  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-09 10:10:41  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-09 10:10:41  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-09 10:10:41  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-09 10:14:06  INFO      processor  [Monitor:Entrance] Scene: 1 face(s) | Known: abhay
+2026-04-09 10:14:07  INFO      processor  [Monitor:Entrance] Scene: 1 face(s) | Known: abhay
+2026-04-09 10:14:07  INFO      processor  [Monitor:Entrance] Scene: 1 face(s) | Known: abhay
+2026-04-09 10:14:07  INFO      processor  [Monitor:Entrance] Scene: 1 face(s) | Known: abhay
+2026-04-09 10:14:07  INFO      processor  [Monitor:Entrance] Scene: 1 face(s) | Known: abhay
+2026-04-09 10:14:07  INFO      processor  [Monitor:Entrance] Scene: 1 face(s) | Known: abhay
+2026-04-09 10:14:07  INFO      processor  [Monitor:Entrance] Scene: 1 face(s) | Known: abhay
+2026-04-09 10:14:07  INFO      processor  [Monitor:Entrance] Scene: 1 face(s) | Known: abhay
+2026-04-09 10:14:07  INFO      httpx  HTTP Request: GET http://emplog.grapesonline.net/Employee/GetEmployeeDetails?RfID=0008941168 "HTTP/1.1 200 OK"
+2026-04-09 10:14:07  INFO      engine  [RF-Check] http://emplog.grapesonline.net/Employee/GetEmployeeDetails → 200 {"status":200,"Data":[{"EmpID":20148,"EmployeeName":"ABHAY RAMESH","DoorStatus":"OUT","Checkinstatus":"OUT","ExitType":"
+2026-04-09 10:14:07  INFO      processor  [Monitor:Entrance] ✅ ACCESS GRANTED: 'abhay'
+2026-04-09 10:14:07  INFO      processor  [Monitor:Entrance] Scene: 1 face(s) | Known: abhay
+2026-04-09 10:14:07  INFO      engine  [Door] Entrance → WebSocket sent: OPEN_DOOR
+2026-04-09 10:14:07  INFO      processor  [Monitor:Entrance] Scene: 1 face(s) | Known: abhay
+2026-04-09 10:14:08  INFO      httpx  HTTP Request: POST http://emplog.grapesonline.net/Employee/LogEmployeeEntry?MacAddress=84:1F:E8:24:A0:5C&EmployeeID=20148&Status=IN "HTTP/1.1 200 OK"
+2026-04-09 10:14:08  INFO      processor  [Monitor:Entrance] Scene: 1 face(s) | Known: abhay
+2026-04-09 10:14:08  INFO      processor  [Monitor:Entrance] Scene: 1 face(s) | Known: abhay
+2026-04-09 10:14:08  INFO      processor  [Monitor:Entrance] Scene: 1 unknown face(s) detected.
+2026-04-09 10:14:08  INFO      httpx  HTTP Request: POST http://192.168.0.251:3596/api/User/SendTextToSpeaker?DeviceID=G-5889-6B1B-5AE0&Message=Hello%2C%20%2C%20%2C%20abhay.%20Welcome%20back%20to%20the%20facility.%20Have%20a%20great%20day%20ahead.&VoiceOption=Microsoft%20Zira%20Desktop "HTTP/1.1 200 OK"
+2026-04-09 10:14:08  INFO      processor  [Monitor:Entrance] Scene: 1 face(s) | Known: abhay
+2026-04-09 10:14:08  INFO      processor  [Monitor:Entrance] Scene: 1 face(s) | Known: abhay
+2026-04-09 10:14:08  INFO      processor  [Monitor:Entrance] Scene: 1 face(s) | Known: abhay
+2026-04-09 10:14:08  INFO      processor  [Monitor:Entrance] Scene: 1 face(s) | Known: abhay
+2026-04-09 10:17:07  INFO      processor  [Monitor:Exit] Scene: 1 unknown face(s) detected.
+2026-04-09 10:17:09  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: AJITH P U
+2026-04-09 10:17:09  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: AJITH P U
+2026-04-09 10:17:09  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: AJITH P U
+2026-04-09 10:17:09  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: AJITH P U
+2026-04-09 10:17:09  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: AJITH P U
+2026-04-09 10:17:09  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: AJITH P U
+2026-04-09 10:17:09  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: AJITH P U
+2026-04-09 10:17:09  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: AJITH P U
+2026-04-09 10:17:09  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: AJITH P U
+2026-04-09 10:17:10  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: AJITH P U
+2026-04-09 10:17:10  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: AJITH P U
+2026-04-09 10:17:10  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: AJITH P U
+2026-04-09 10:17:10  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: AJITH P U
+2026-04-09 10:17:10  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: AJITH P U
+2026-04-09 10:17:10  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: AJITH P U
+2026-04-09 10:17:10  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: AJITH P U
+2026-04-09 10:17:10  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: AJITH P U
+2026-04-09 10:17:10  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: AJITH P U
+2026-04-09 10:17:11  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: AJITH P U
+2026-04-09 10:17:11  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: AJITH P U
+2026-04-09 10:17:11  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: AJITH P U
+2026-04-09 10:17:11  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: AJITH P U
+2026-04-09 10:17:11  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: AJITH P U
+2026-04-09 10:17:11  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: AJITH P U
+2026-04-09 10:17:11  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: AJITH P U
+2026-04-09 10:17:11  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: AJITH P U
+2026-04-09 10:17:11  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: AJITH P U
+2026-04-09 10:17:12  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: AJITH P U
+2026-04-09 10:17:12  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: AJITH P U
+2026-04-09 10:17:12  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: AJITH P U
+2026-04-09 10:17:12  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: AJITH P U
+2026-04-09 10:17:12  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: AJITH P U
+2026-04-09 10:17:12  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: AJITH P U
+2026-04-09 10:17:12  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: AJITH P U
+2026-04-09 10:17:12  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: AJITH P U
+2026-04-09 10:17:12  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: AJITH P U
+2026-04-09 10:17:12  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: AJITH P U
+2026-04-09 10:17:12  INFO      httpx  HTTP Request: GET http://emplog.grapesonline.net/Employee/GetEmployeeDetails?RfID=0007194549 "HTTP/1.1 200 OK"
+2026-04-09 10:17:13  INFO      engine  [RF-Check] http://emplog.grapesonline.net/Employee/GetEmployeeDetails → 200 {"status":200,"Data":[{"EmpID":20195,"EmployeeName":"AJITH P U","DoorStatus":"IN","Checkinstatus":"OUT","ExitType":"Tea-
+2026-04-09 10:17:13  INFO      processor  [Monitor:Exit] ✅ ACCESS GRANTED: 'AJITH P U'
+2026-04-09 10:17:13  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: AJITH P U
+2026-04-09 10:17:13  INFO      engine  [Door] Exit → WebSocket sent: OPEN_DOOR
+2026-04-09 10:17:13  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: AJITH P U
+2026-04-09 10:17:13  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: AJITH P U
+2026-04-09 10:17:13  INFO      httpx  HTTP Request: POST http://emplog.grapesonline.net/Employee/LogEmployeeEntry?MacAddress=84:1F:E8:24:A0:5C&EmployeeID=20195&Status=OUT "HTTP/1.1 200 OK"
+2026-04-09 10:17:13  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: AJITH P U
+2026-04-09 10:17:13  INFO      httpx  HTTP Request: POST http://192.168.0.251:3596/api/User/SendTextToSpeaker?DeviceID=G-5889-6B1B-5AE0&Message=Enjoy%20your%20tea%20break%2C%20%2C%20%2C%20AJITH%20P%20U.%20See%20you%20back%20in%20a%20moment.&VoiceOption=Microsoft%20Zira%20Desktop "HTTP/1.1 200 OK"
+2026-04-09 10:17:13  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: AJITH P U
+2026-04-09 10:17:13  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: AJITH P U
+2026-04-09 10:17:13  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: AJITH P U
+2026-04-09 10:17:13  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: AJITH P U
+2026-04-09 10:17:13  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: AJITH P U
+2026-04-09 10:17:14  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: AJITH P U
+2026-04-09 10:17:14  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: AJITH P U
+2026-04-09 10:17:14  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: AJITH P U
+2026-04-09 10:18:53  INFO      processor  [Monitor:Entrance] Scene: 1 unknown face(s) detected.
+2026-04-09 10:18:53  INFO      processor  [Monitor:Entrance] Scene: 1 face(s) | Known: AJITH P U
+2026-04-09 10:18:53  INFO      processor  [Monitor:Entrance] Scene: 1 face(s) | Known: AJITH P U
+2026-04-09 10:18:53  INFO      processor  [Monitor:Entrance] Scene: 1 face(s) | Known: AJITH P U
+2026-04-09 10:18:54  INFO      processor  [Monitor:Entrance] Scene: 1 face(s) | Known: AJITH P U
+2026-04-09 10:18:54  INFO      processor  [Monitor:Entrance] Scene: 1 face(s) | Known: AJITH P U
+2026-04-09 10:18:54  INFO      processor  [Monitor:Entrance] Scene: 1 face(s) | Known: AJITH P U
+2026-04-09 10:18:54  INFO      processor  [Monitor:Entrance] Scene: 1 face(s) | Known: AJITH P U
+2026-04-09 10:18:54  INFO      processor  [Monitor:Entrance] Scene: 1 face(s) | Known: AJITH P U
+2026-04-09 10:18:54  INFO      httpx  HTTP Request: GET http://emplog.grapesonline.net/Employee/GetEmployeeDetails?RfID=0007194549 "HTTP/1.1 200 OK"
+2026-04-09 10:18:54  INFO      engine  [RF-Check] http://emplog.grapesonline.net/Employee/GetEmployeeDetails → 200 {"status":200,"Data":[{"EmpID":20195,"EmployeeName":"AJITH P U","DoorStatus":"OUT","Checkinstatus":"OUT","ExitType":"Tea
+2026-04-09 10:18:54  INFO      processor  [Monitor:Entrance] ✅ ACCESS GRANTED: 'AJITH P U'
+2026-04-09 10:18:54  INFO      processor  [Monitor:Entrance] Scene: 1 face(s) | Known: AJITH P U
+2026-04-09 10:18:54  INFO      engine  [Door] Entrance → WebSocket sent: OPEN_DOOR
+2026-04-09 10:18:54  INFO      processor  [Monitor:Entrance] Scene: 1 face(s) | Known: AJITH P U
+2026-04-09 10:18:55  INFO      httpx  HTTP Request: POST http://emplog.grapesonline.net/Employee/LogEmployeeEntry?MacAddress=84:1F:E8:24:A0:5C&EmployeeID=20195&Status=IN "HTTP/1.1 200 OK"
+2026-04-09 10:18:55  INFO      processor  [Monitor:Entrance] Scene: 1 face(s) | Known: AJITH P U
+2026-04-09 10:18:55  INFO      httpx  HTTP Request: POST http://192.168.0.251:3596/api/User/SendTextToSpeaker?DeviceID=G-5889-6B1B-5AE0&Message=Welcome%20back%20from%20your%20tea%20break%2C%20%2C%20%2C%20AJITH%20P%20U.%20Hope%20you%20are%20refreshed.&VoiceOption=Microsoft%20Zira%20Desktop "HTTP/1.1 200 OK"
+2026-04-09 10:18:55  INFO      processor  [Monitor:Entrance] Scene: 1 face(s) | Known: AJITH P U
+2026-04-09 10:18:55  INFO      processor  [Monitor:Entrance] Scene: 1 face(s) | Known: AJITH P U
+2026-04-09 10:18:55  INFO      processor  [Monitor:Entrance] Scene: 1 face(s) | Known: AJITH P U
+2026-04-09 10:18:55  INFO      processor  [Monitor:Entrance] Scene: 1 face(s) | Known: AJITH P U
+2026-04-09 10:18:55  INFO      processor  [Monitor:Entrance] Scene: 1 face(s) | Known: AJITH P U
+2026-04-09 10:18:55  INFO      processor  [Monitor:Entrance] Scene: 1 face(s) | Known: AJITH P U
+2026-04-09 10:18:55  INFO      processor  [Monitor:Entrance] Scene: 1 face(s) | Known: AJITH P U
+2026-04-09 10:18:55  INFO      processor  [Monitor:Entrance] Scene: 1 face(s) | Known: AJITH P U
+2026-04-09 10:18:56  INFO      processor  [Monitor:Entrance] Scene: 1 face(s) | Known: AJITH P U
+2026-04-09 12:25:40  INFO      main  ============================================================
+2026-04-09 12:25:40  INFO      main    FastAPI Door Access System — starting up ...
+2026-04-09 12:25:40  INFO      main  ============================================================
+2026-04-09 12:25:40  INFO      database  [DB] Schema initialised.
+2026-04-09 12:25:40  INFO      database  [DB] Fetching all embeddings from SQL...
+2026-04-09 12:25:40  INFO      database  [DB] SQL returned 26 rows.
+2026-04-09 12:25:40  INFO      processor  [Processor] Camera 'C3' DISABLED — skipping.
+2026-04-09 12:25:40  INFO      processor  [Processor] Initialised 2 active camera(s).
+2026-04-09 12:25:40  INFO      main    Startup complete. API ready on http://0.0.0.0:8000
+2026-04-09 12:25:40  INFO      processor  [Monitor:Exit] Vision pipeline starting.
+2026-04-09 12:25:40  INFO      processor  [RTSP:Exit] Connecting... (retry delay=2.0s)
+2026-04-09 12:25:40  INFO      processor  [RTSP:Exit] Capture thread started (target=10 FPS).
+2026-04-09 12:25:40  INFO      processor  [Monitor:Entrance] Vision pipeline starting.
+2026-04-09 12:25:40  INFO      processor  [RTSP:Entrance] Connecting... (retry delay=2.0s)
+2026-04-09 12:25:40  INFO      processor  [RTSP:Entrance] Capture thread started (target=10 FPS).
+2026-04-09 12:25:40  INFO      database  [DB] Purged audit records older than 7 days.
+2026-04-09 12:25:42  INFO      processor  [RTSP:Exit] Connected successfully.
+2026-04-09 12:25:42  INFO      engine  [Engine] Loading Unified FaceAnalysis (640x640) on GPU (CUDA)...
+2026-04-09 12:25:42  INFO      engine  [Engine] Unified Engine Ready.
+2026-04-09 12:25:43  INFO      processor  [RTSP:Entrance] Connected successfully.
+2026-04-09 12:26:06  INFO      processor  [Monitor:Exit] Scene: 1 unknown face(s) detected.
+2026-04-09 12:26:07  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-09 12:26:08  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-09 12:26:08  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-09 12:26:08  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-09 12:26:08  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-09 12:26:08  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-09 12:26:08  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-09 12:26:08  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-09 12:26:09  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-09 12:26:09  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-09 12:26:09  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-09 12:26:09  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-09 12:26:09  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-09 12:26:09  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-09 12:26:09  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-09 12:26:09  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-09 12:26:09  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-09 12:26:10  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-09 12:26:10  INFO      httpx  HTTP Request: GET http://emplog.grapesonline.net/Employee/GetEmployeeDetails?RfID=0008941168 "HTTP/1.1 200 OK"
+2026-04-09 12:26:10  INFO      engine  [RF-Check] http://emplog.grapesonline.net/Employee/GetEmployeeDetails → 200 {"status":200,"Data":[{"EmpID":20148,"EmployeeName":"ABHAY RAMESH","DoorStatus":"IN","Checkinstatus":"IN","ExitType":nul
+2026-04-09 12:26:10  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-09 12:26:10  WARNING   processor  [Monitor:Exit] ❌ ACCESS DENIED (RF invalid): 'abhay'
+2026-04-09 12:26:10  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-09 12:26:10  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-09 12:26:10  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-09 12:26:10  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-09 12:26:10  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-09 12:26:10  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-09 12:26:10  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-09 12:26:11  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-09 12:26:11  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-09 12:26:11  INFO      httpx  HTTP Request: POST http://192.168.0.251:3596/api/User/SendTextToSpeaker?DeviceID=G-5889-6B1B-5AE0&Message=Pardon%20me%2C%20%2C%20%2C%20abhay.%20Access%20cannot%20be%20granted%20as%20checkout%20is%20required%20at%20this%20time.%20Thank%20you%20for%20your%20cooperation.&VoiceOption=Microsoft%20Zira%20Desktop "HTTP/1.1 200 OK"
+2026-04-09 12:26:11  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-09 12:26:11  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-09 12:26:11  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-09 12:26:11  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-09 12:26:11  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-09 12:26:11  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-09 12:26:11  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-09 12:26:40  INFO      database  [DB] Starting periodic maintenance...
+2026-04-09 12:26:41  INFO      database  [DB] Purged audit records older than 7 days.
+2026-04-09 12:26:41  INFO      database  [DB] Maintenance complete. Access logs older than 2 days purged.
+2026-04-09 12:28:30  INFO      main    Shutdown initiated ...
+2026-04-09 12:28:30  INFO      processor  [RTSP:Exit] Capture thread stopped.
+2026-04-09 12:28:30  INFO      processor  [RTSP:Entrance] Capture thread stopped.
+2026-04-09 12:28:30  INFO      processor  [Processor] All camera monitors stopped.
+2026-04-09 12:28:31  INFO      main  ============================================================
+2026-04-09 12:28:31  INFO      main    FastAPI Door Access System — starting up ...
+2026-04-09 12:28:31  INFO      main  ============================================================
+2026-04-09 12:28:32  INFO      database  [DB] Schema initialised.
+2026-04-09 12:28:32  INFO      database  [DB] Fetching all embeddings from SQL...
+2026-04-09 12:28:32  INFO      database  [DB] SQL returned 26 rows.
+2026-04-09 12:28:32  INFO      processor  [Processor] Camera 'C3' DISABLED — skipping.
+2026-04-09 12:28:32  INFO      processor  [Processor] Initialised 2 active camera(s).
+2026-04-09 12:28:32  INFO      main    Startup complete. API ready on http://0.0.0.0:8000
+2026-04-09 12:28:32  INFO      processor  [Monitor:Exit] Vision pipeline starting.
+2026-04-09 12:28:32  INFO      processor  [RTSP:Exit] Connecting... (retry delay=2.0s)
+2026-04-09 12:28:32  INFO      processor  [RTSP:Exit] Capture thread started (target=10 FPS).
+2026-04-09 12:28:32  INFO      processor  [Monitor:Entrance] Vision pipeline starting.
+2026-04-09 12:28:32  INFO      processor  [RTSP:Entrance] Connecting... (retry delay=2.0s)
+2026-04-09 12:28:32  INFO      processor  [RTSP:Entrance] Capture thread started (target=10 FPS).
+2026-04-09 12:28:32  INFO      database  [DB] Purged audit records older than 7 days.
+2026-04-09 12:28:33  INFO      processor  [RTSP:Exit] Connected successfully.
+2026-04-09 12:28:33  INFO      engine  [Engine] Loading Unified FaceAnalysis (640x640) on GPU (CUDA)...
+2026-04-09 12:28:33  INFO      engine  [Engine] Unified Engine Ready.
+2026-04-09 12:28:34  INFO      processor  [RTSP:Entrance] Connected successfully.
+2026-04-09 12:28:44  INFO      main    Shutdown initiated ...
+2026-04-09 12:28:44  INFO      processor  [RTSP:Exit] Capture thread stopped.
+2026-04-09 12:28:44  INFO      processor  [RTSP:Entrance] Capture thread stopped.
+2026-04-09 12:28:44  INFO      processor  [Processor] All camera monitors stopped.
+2026-04-09 12:28:46  INFO      main  ============================================================
+2026-04-09 12:28:46  INFO      main    FastAPI Door Access System — starting up ...
+2026-04-09 12:28:46  INFO      main  ============================================================
+2026-04-09 12:28:46  INFO      database  [DB] Schema initialised.
+2026-04-09 12:28:46  INFO      database  [DB] Fetching all embeddings from SQL...
+2026-04-09 12:28:46  INFO      database  [DB] SQL returned 26 rows.
+2026-04-09 12:28:46  INFO      processor  [Processor] Camera 'C3' DISABLED — skipping.
+2026-04-09 12:28:46  INFO      processor  [Processor] Initialised 2 active camera(s).
+2026-04-09 12:28:46  INFO      main    Startup complete. API ready on http://0.0.0.0:8000
+2026-04-09 12:28:46  INFO      processor  [Monitor:Exit] Vision pipeline starting.
+2026-04-09 12:28:46  INFO      processor  [RTSP:Exit] Connecting... (retry delay=2.0s)
+2026-04-09 12:28:46  INFO      processor  [RTSP:Exit] Capture thread started (target=10 FPS).
+2026-04-09 12:28:46  INFO      processor  [Monitor:Entrance] Vision pipeline starting.
+2026-04-09 12:28:46  INFO      processor  [RTSP:Entrance] Connecting... (retry delay=2.0s)
+2026-04-09 12:28:46  INFO      processor  [RTSP:Entrance] Capture thread started (target=10 FPS).
+2026-04-09 12:28:46  INFO      database  [DB] Purged audit records older than 7 days.
+2026-04-09 12:28:47  INFO      processor  [RTSP:Exit] Connected successfully.
+2026-04-09 12:28:48  INFO      engine  [Engine] Loading Unified FaceAnalysis (640x640) on GPU (CUDA)...
+2026-04-09 12:28:48  INFO      engine  [Engine] Unified Engine Ready.
+2026-04-09 12:28:49  INFO      processor  [RTSP:Entrance] Connected successfully.
+2026-04-09 12:29:46  INFO      database  [DB] Starting periodic maintenance...
+2026-04-09 12:29:46  INFO      database  [DB] Purged audit records older than 7 days.
+2026-04-09 12:29:46  INFO      database  [DB] Maintenance complete. Access logs older than 2 days purged.
+2026-04-09 12:29:57  INFO      processor  [Monitor:Exit] Scene: 1 unknown face(s) detected.
+2026-04-09 12:29:59  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-09 12:29:59  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-09 12:29:59  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-09 12:29:59  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-09 12:29:59  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-09 12:29:59  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-09 12:29:59  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-09 12:29:59  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-09 12:30:00  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-09 12:30:00  INFO      httpx  HTTP Request: GET http://emplog.grapesonline.net/Employee/GetEmployeeDetails?RfID=0008941168 "HTTP/1.1 200 OK"
+2026-04-09 12:30:00  INFO      engine  [RF-Check] http://emplog.grapesonline.net/Employee/GetEmployeeDetails → 200 {"status":200,"Data":[{"EmpID":20148,"EmployeeName":"ABHAY RAMESH","DoorStatus":"IN","Checkinstatus":"IN","ExitType":nul
+2026-04-09 12:30:00  WARNING   processor  [Monitor:Exit] ❌ ACCESS DENIED (RF invalid): 'abhay'
+2026-04-09 12:30:00  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-09 12:30:00  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-09 12:30:00  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-09 12:30:00  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-09 12:30:00  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-09 12:30:00  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-09 12:30:00  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-09 12:30:00  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-09 12:30:01  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-09 12:30:01  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-09 12:30:01  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-09 12:30:01  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-09 12:30:01  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-09 12:30:01  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-09 12:30:01  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-09 12:30:01  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-09 12:30:01  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-09 12:30:01  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-09 12:30:02  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-09 12:30:04  INFO      AudioStreamer  [UDP] Stream complete: 372/372 chunks sent.
+2026-04-09 12:31:27  INFO      main    Shutdown initiated ...
+2026-04-09 12:31:27  INFO      processor  [RTSP:Exit] Capture thread stopped.
+2026-04-09 12:31:27  INFO      processor  [RTSP:Entrance] Capture thread stopped.
+2026-04-09 12:31:27  INFO      processor  [Processor] All camera monitors stopped.
+2026-04-09 12:31:29  INFO      main  ============================================================
+2026-04-09 12:31:29  INFO      main    FastAPI Door Access System — starting up ...
+2026-04-09 12:31:29  INFO      main  ============================================================
+2026-04-09 12:31:29  INFO      database  [DB] Schema initialised.
+2026-04-09 12:31:29  INFO      database  [DB] Fetching all embeddings from SQL...
+2026-04-09 12:31:30  INFO      database  [DB] SQL returned 26 rows.
+2026-04-09 12:31:30  INFO      processor  [Processor] Camera 'C3' DISABLED — skipping.
+2026-04-09 12:31:30  INFO      processor  [Processor] Initialised 2 active camera(s).
+2026-04-09 12:31:30  INFO      main    Startup complete. API ready on http://0.0.0.0:8000
+2026-04-09 12:31:30  INFO      processor  [Monitor:Exit] Vision pipeline starting.
+2026-04-09 12:31:30  INFO      processor  [RTSP:Exit] Connecting... (retry delay=2.0s)
+2026-04-09 12:31:30  INFO      processor  [RTSP:Exit] Capture thread started (target=10 FPS).
+2026-04-09 12:31:30  INFO      processor  [Monitor:Entrance] Vision pipeline starting.
+2026-04-09 12:31:30  INFO      processor  [RTSP:Entrance] Connecting... (retry delay=2.0s)
+2026-04-09 12:31:30  INFO      processor  [RTSP:Entrance] Capture thread started (target=10 FPS).
+2026-04-09 12:31:30  INFO      database  [DB] Purged audit records older than 7 days.
+2026-04-09 12:31:31  INFO      processor  [RTSP:Exit] Connected successfully.
+2026-04-09 12:31:31  INFO      engine  [Engine] Loading Unified FaceAnalysis (640x640) on GPU (CUDA)...
+2026-04-09 12:31:31  INFO      engine  [Engine] Unified Engine Ready.
+2026-04-09 12:31:32  INFO      processor  [RTSP:Entrance] Connected successfully.
+2026-04-09 12:31:39  INFO      main    Shutdown initiated ...
+2026-04-09 12:31:39  INFO      processor  [RTSP:Exit] Capture thread stopped.
+2026-04-09 12:31:39  INFO      processor  [RTSP:Entrance] Capture thread stopped.
+2026-04-09 12:31:39  INFO      processor  [Processor] All camera monitors stopped.
+2026-04-09 12:31:40  INFO      main  ============================================================
+2026-04-09 12:31:40  INFO      main    FastAPI Door Access System — starting up ...
+2026-04-09 12:31:40  INFO      main  ============================================================
+2026-04-09 12:31:40  INFO      database  [DB] Schema initialised.
+2026-04-09 12:31:40  INFO      database  [DB] Fetching all embeddings from SQL...
+2026-04-09 12:31:40  INFO      database  [DB] SQL returned 26 rows.
+2026-04-09 12:31:40  INFO      processor  [Processor] Camera 'C3' DISABLED — skipping.
+2026-04-09 12:31:40  INFO      processor  [Processor] Initialised 2 active camera(s).
+2026-04-09 12:31:40  INFO      main    Startup complete. API ready on http://0.0.0.0:8000
+2026-04-09 12:31:40  INFO      processor  [Monitor:Exit] Vision pipeline starting.
+2026-04-09 12:31:40  INFO      processor  [RTSP:Exit] Connecting... (retry delay=2.0s)
+2026-04-09 12:31:40  INFO      processor  [RTSP:Exit] Capture thread started (target=10 FPS).
+2026-04-09 12:31:40  INFO      processor  [Monitor:Entrance] Vision pipeline starting.
+2026-04-09 12:31:40  INFO      processor  [RTSP:Entrance] Connecting... (retry delay=2.0s)
+2026-04-09 12:31:40  INFO      processor  [RTSP:Entrance] Capture thread started (target=10 FPS).
+2026-04-09 12:31:40  INFO      database  [DB] Purged audit records older than 7 days.
+2026-04-09 12:31:41  INFO      processor  [RTSP:Exit] Connected successfully.
+2026-04-09 12:31:42  INFO      engine  [Engine] Loading Unified FaceAnalysis (640x640) on GPU (CUDA)...
+2026-04-09 12:31:42  INFO      engine  [Engine] Unified Engine Ready.
+2026-04-09 12:31:43  INFO      processor  [RTSP:Entrance] Connected successfully.
+2026-04-09 12:32:31  INFO      main  ============================================================
+2026-04-09 12:32:31  INFO      main    FastAPI Door Access System — starting up ...
+2026-04-09 12:32:31  INFO      main  ============================================================
+2026-04-09 12:32:31  INFO      database  [DB] Schema initialised.
+2026-04-09 12:32:31  INFO      database  [DB] Fetching all embeddings from SQL...
+2026-04-09 12:32:31  INFO      database  [DB] SQL returned 26 rows.
+2026-04-09 12:32:31  INFO      processor  [Processor] Camera 'C3' DISABLED — skipping.
+2026-04-09 12:32:31  INFO      processor  [Processor] Initialised 2 active camera(s).
+2026-04-09 12:32:31  INFO      main    Startup complete. API ready on http://0.0.0.0:8000
+2026-04-09 12:32:31  INFO      processor  [Monitor:Exit] Vision pipeline starting.
+2026-04-09 12:32:31  INFO      processor  [RTSP:Exit] Connecting... (retry delay=2.0s)
+2026-04-09 12:32:31  INFO      processor  [RTSP:Exit] Capture thread started (target=10 FPS).
+2026-04-09 12:32:31  INFO      processor  [Monitor:Entrance] Vision pipeline starting.
+2026-04-09 12:32:31  INFO      processor  [RTSP:Entrance] Connecting... (retry delay=2.0s)
+2026-04-09 12:32:31  INFO      processor  [RTSP:Entrance] Capture thread started (target=10 FPS).
+2026-04-09 12:32:31  INFO      database  [DB] Purged audit records older than 7 days.
+2026-04-09 12:32:32  INFO      processor  [RTSP:Exit] Connected successfully.
+2026-04-09 12:32:33  INFO      engine  [Engine] Loading Unified FaceAnalysis (640x640) on GPU (CUDA)...
+2026-04-09 12:32:33  INFO      engine  [Engine] Unified Engine Ready.
+2026-04-09 12:32:34  INFO      processor  [RTSP:Entrance] Connected successfully.
+2026-04-09 12:32:48  INFO      processor  [Monitor:Exit] Scene: 1 unknown face(s) detected.
+2026-04-09 12:32:49  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-09 12:32:49  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-09 12:32:49  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-09 12:32:49  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-09 12:32:49  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-09 12:32:50  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-09 12:32:50  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-09 12:32:50  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-09 12:32:50  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-09 12:32:50  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-09 12:32:50  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-09 12:32:50  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-09 12:32:50  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-09 12:32:50  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-09 12:32:51  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-09 12:32:51  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-09 12:32:51  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-09 12:32:51  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-09 12:32:51  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-09 12:32:51  INFO      httpx  HTTP Request: GET http://emplog.grapesonline.net/Employee/GetEmployeeDetails?RfID=0008941168 "HTTP/1.1 200 OK"
+2026-04-09 12:32:51  INFO      engine  [RF-Check] http://emplog.grapesonline.net/Employee/GetEmployeeDetails → 200 {"status":200,"Data":[{"EmpID":20148,"EmployeeName":"ABHAY RAMESH","DoorStatus":"IN","Checkinstatus":"IN","ExitType":nul
+2026-04-09 12:32:51  WARNING   processor  [Monitor:Exit] ❌ ACCESS DENIED (RF invalid): 'abhay'
+2026-04-09 12:32:51  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-09 12:32:51  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-09 12:32:51  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-09 12:32:51  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-09 12:32:51  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-09 12:32:52  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-09 12:32:52  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-09 12:32:52  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-09 12:32:52  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-09 12:32:52  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-09 12:32:52  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-09 12:32:52  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-09 12:32:52  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-09 12:32:52  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-09 12:32:53  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-09 12:32:53  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-09 12:32:53  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-09 12:32:53  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-09 12:32:53  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-09 12:32:53  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-09 12:32:58  INFO      AudioStreamer  [UDP] Stream complete: 562/562 chunks sent.
+2026-04-09 12:33:31  INFO      database  [DB] Starting periodic maintenance...
+2026-04-09 12:33:31  INFO      database  [DB] Purged audit records older than 7 days.
+2026-04-09 12:33:32  INFO      database  [DB] Maintenance complete. Access logs older than 2 days purged.
+2026-04-09 12:33:58  INFO      processor  [Monitor:Exit] Scene: 1 unknown face(s) detected.
+2026-04-09 12:34:00  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: THEJAS C S
+2026-04-09 12:34:00  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: THEJAS C S
+2026-04-09 12:34:00  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: THEJAS C S
+2026-04-09 12:34:00  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: THEJAS C S
+2026-04-09 12:34:00  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: THEJAS C S
+2026-04-09 12:34:00  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: THEJAS C S
+2026-04-09 12:34:00  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: THEJAS C S
+2026-04-09 12:34:01  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: THEJAS C S
+2026-04-09 12:34:01  INFO      httpx  HTTP Request: GET http://emplog.grapesonline.net/Employee/GetEmployeeDetails?RfID=0000561647 "HTTP/1.1 200 OK"
+2026-04-09 12:34:01  INFO      engine  [RF-Check] http://emplog.grapesonline.net/Employee/GetEmployeeDetails → 200 {"status":200,"Data":[{"EmpID":20191,"EmployeeName":"THEJAS C S ","DoorStatus":"IN","Checkinstatus":"IN","ExitType":null
+2026-04-09 12:34:01  WARNING   processor  [Monitor:Exit] ❌ ACCESS DENIED (RF invalid): 'THEJAS C S'
+2026-04-09 12:34:01  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: THEJAS C S
+2026-04-09 12:34:01  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: THEJAS C S
+2026-04-09 12:34:01  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: THEJAS C S
+2026-04-09 12:34:01  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: THEJAS C S
+2026-04-09 12:34:01  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: THEJAS C S
+2026-04-09 12:34:01  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: THEJAS C S
+2026-04-09 12:34:01  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: THEJAS C S
+2026-04-09 12:34:01  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: THEJAS C S
+2026-04-09 12:34:02  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: THEJAS C S
+2026-04-09 12:34:02  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: THEJAS C S
+2026-04-09 12:34:02  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: THEJAS C S
+2026-04-09 12:34:02  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: THEJAS C S
+2026-04-09 12:34:02  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: THEJAS C S
+2026-04-09 12:34:02  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: THEJAS C S
+2026-04-09 12:34:02  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: THEJAS C S
+2026-04-09 12:34:02  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: THEJAS C S
+2026-04-09 12:34:02  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: THEJAS C S
+2026-04-09 12:34:03  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: THEJAS C S
+2026-04-09 12:34:03  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: THEJAS C S
+2026-04-09 12:34:03  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: THEJAS C S
+2026-04-09 12:34:03  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: THEJAS C S
+2026-04-09 12:34:03  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: THEJAS C S
+2026-04-09 12:34:07  INFO      AudioStreamer  [UDP] Stream complete: 577/577 chunks sent.
+2026-04-09 12:34:45  INFO      main  ============================================================
+2026-04-09 12:34:45  INFO      main    FastAPI Door Access System — starting up ...
+2026-04-09 12:34:45  INFO      main  ============================================================
+2026-04-09 12:34:45  INFO      database  [DB] Schema initialised.
+2026-04-09 12:34:45  INFO      database  [DB] Fetching all embeddings from SQL...
+2026-04-09 12:34:45  INFO      database  [DB] SQL returned 26 rows.
+2026-04-09 12:34:45  INFO      processor  [Processor] Camera 'C3' DISABLED — skipping.
+2026-04-09 12:34:45  INFO      processor  [Processor] Initialised 2 active camera(s).
+2026-04-09 12:34:45  INFO      main    Startup complete. API ready on http://0.0.0.0:8000
+2026-04-09 12:34:45  INFO      processor  [Monitor:Exit] Vision pipeline starting.
+2026-04-09 12:34:45  INFO      processor  [RTSP:Exit] Connecting... (retry delay=2.0s)
+2026-04-09 12:34:45  INFO      processor  [RTSP:Exit] Capture thread started (target=10 FPS).
+2026-04-09 12:34:45  INFO      processor  [Monitor:Entrance] Vision pipeline starting.
+2026-04-09 12:34:45  INFO      processor  [RTSP:Entrance] Connecting... (retry delay=2.0s)
+2026-04-09 12:34:45  INFO      processor  [RTSP:Entrance] Capture thread started (target=10 FPS).
+2026-04-09 12:34:45  INFO      database  [DB] Purged audit records older than 7 days.
+2026-04-09 12:34:46  INFO      processor  [RTSP:Exit] Connected successfully.
+2026-04-09 12:34:47  INFO      engine  [Engine] Loading Unified FaceAnalysis (640x640) on GPU (CUDA)...
+2026-04-09 12:34:47  INFO      engine  [Engine] Unified Engine Ready.
+2026-04-09 12:34:48  INFO      processor  [RTSP:Entrance] Connected successfully.
+2026-04-09 12:35:25  INFO      processor  [Monitor:Exit] Scene: 1 unknown face(s) detected.
+2026-04-09 12:35:29  INFO      processor  [Monitor:Entrance] Scene: 1 unknown face(s) detected.
+2026-04-09 12:35:45  INFO      database  [DB] Starting periodic maintenance...
+2026-04-09 12:35:45  INFO      database  [DB] Purged audit records older than 7 days.
+2026-04-09 12:35:45  INFO      database  [DB] Maintenance complete. Access logs older than 2 days purged.
+2026-04-09 12:35:59  INFO      processor  [Monitor:Exit] Scene: 1 unknown face(s) detected.
+2026-04-09 12:35:59  INFO      processor  [Monitor:Entrance] Scene: 1 unknown face(s) detected.
+2026-04-09 12:36:00  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-09 12:36:00  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-09 12:36:00  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-09 12:36:00  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-09 12:36:01  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-09 12:36:01  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-09 12:36:01  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-09 12:36:01  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-09 12:36:01  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-09 12:36:01  INFO      httpx  HTTP Request: GET http://emplog.grapesonline.net/Employee/GetEmployeeDetails?RfID=0008941168 "HTTP/1.1 200 OK"
+2026-04-09 12:36:01  INFO      engine  [RF-Check] http://emplog.grapesonline.net/Employee/GetEmployeeDetails → 200 {"status":200,"Data":[{"EmpID":20148,"EmployeeName":"ABHAY RAMESH","DoorStatus":"IN","Checkinstatus":"IN","ExitType":nul
+2026-04-09 12:36:01  WARNING   processor  [Monitor:Exit] ❌ ACCESS DENIED (RF invalid): 'abhay'
+2026-04-09 12:36:01  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-09 12:36:01  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-09 12:36:01  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-09 12:36:01  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-09 12:36:01  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-09 12:36:02  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-09 12:36:02  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-09 12:36:02  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-09 12:36:02  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-09 12:36:02  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-09 12:36:02  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-09 12:36:02  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-09 12:36:02  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-09 12:36:02  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-09 12:36:03  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-09 12:36:03  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-09 12:36:03  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-09 12:36:03  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-09 12:36:03  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-09 12:36:03  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-09 12:36:03  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-09 12:36:03  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-09 12:36:09  INFO      AudioStreamer  [UDP] Stream complete: 702/702 chunks sent.
+2026-04-09 12:38:30  INFO      main    Shutdown initiated ...
+2026-04-09 12:38:30  INFO      processor  [RTSP:Exit] Capture thread stopped.
+2026-04-09 12:38:30  INFO      processor  [RTSP:Entrance] Capture thread stopped.
+2026-04-09 12:38:30  INFO      processor  [Processor] All camera monitors stopped.
+2026-04-09 12:38:31  INFO      main  ============================================================
+2026-04-09 12:38:31  INFO      main    FastAPI Door Access System — starting up ...
+2026-04-09 12:38:31  INFO      main  ============================================================
+2026-04-09 12:38:31  INFO      database  [DB] Schema initialised.
+2026-04-09 12:38:31  INFO      database  [DB] Fetching all embeddings from SQL...
+2026-04-09 12:38:31  INFO      database  [DB] SQL returned 26 rows.
+2026-04-09 12:38:31  INFO      processor  [Processor] Camera 'C3' DISABLED — skipping.
+2026-04-09 12:38:31  INFO      processor  [Processor] Initialised 2 active camera(s).
+2026-04-09 12:38:31  INFO      main    Startup complete. API ready on http://0.0.0.0:8000
+2026-04-09 12:38:31  INFO      processor  [Monitor:Exit] Vision pipeline starting.
+2026-04-09 12:38:31  INFO      processor  [RTSP:Exit] Connecting... (retry delay=2.0s)
+2026-04-09 12:38:31  INFO      processor  [RTSP:Exit] Capture thread started (target=10 FPS).
+2026-04-09 12:38:31  INFO      processor  [Monitor:Entrance] Vision pipeline starting.
+2026-04-09 12:38:31  INFO      processor  [RTSP:Entrance] Connecting... (retry delay=2.0s)
+2026-04-09 12:38:31  INFO      processor  [RTSP:Entrance] Capture thread started (target=10 FPS).
+2026-04-09 12:38:31  INFO      database  [DB] Purged audit records older than 7 days.
+2026-04-09 12:38:32  INFO      processor  [RTSP:Exit] Connected successfully.
+2026-04-09 12:38:33  INFO      engine  [Engine] Loading Unified FaceAnalysis (640x640) on GPU (CUDA)...
+2026-04-09 12:38:33  INFO      engine  [Engine] Unified Engine Ready.
+2026-04-09 12:38:34  INFO      processor  [RTSP:Entrance] Connected successfully.
+2026-04-09 12:38:51  INFO      main    Shutdown initiated ...
+2026-04-09 12:38:51  INFO      processor  [RTSP:Exit] Capture thread stopped.
+2026-04-09 12:38:51  INFO      processor  [RTSP:Entrance] Capture thread stopped.
+2026-04-09 12:38:51  INFO      processor  [Processor] All camera monitors stopped.
+2026-04-09 12:38:52  INFO      main  ============================================================
+2026-04-09 12:38:52  INFO      main    FastAPI Door Access System — starting up ...
+2026-04-09 12:38:52  INFO      main  ============================================================
+2026-04-09 12:38:52  INFO      database  [DB] Schema initialised.
+2026-04-09 12:38:52  INFO      database  [DB] Fetching all embeddings from SQL...
+2026-04-09 12:38:52  INFO      database  [DB] SQL returned 26 rows.
+2026-04-09 12:38:52  INFO      processor  [Processor] Camera 'C3' DISABLED — skipping.
+2026-04-09 12:38:52  INFO      processor  [Processor] Initialised 2 active camera(s).
+2026-04-09 12:38:52  INFO      main    Startup complete. API ready on http://0.0.0.0:8000
+2026-04-09 12:38:52  INFO      processor  [Monitor:Exit] Vision pipeline starting.
+2026-04-09 12:38:52  INFO      processor  [RTSP:Exit] Connecting... (retry delay=2.0s)
+2026-04-09 12:38:52  INFO      processor  [RTSP:Exit] Capture thread started (target=10 FPS).
+2026-04-09 12:38:52  INFO      processor  [Monitor:Entrance] Vision pipeline starting.
+2026-04-09 12:38:52  INFO      processor  [RTSP:Entrance] Connecting... (retry delay=2.0s)
+2026-04-09 12:38:52  INFO      processor  [RTSP:Entrance] Capture thread started (target=10 FPS).
+2026-04-09 12:38:52  INFO      database  [DB] Purged audit records older than 7 days.
+2026-04-09 12:38:53  INFO      processor  [RTSP:Exit] Connected successfully.
+2026-04-09 12:38:54  INFO      engine  [Engine] Loading Unified FaceAnalysis (640x640) on GPU (CUDA)...
+2026-04-09 12:38:54  INFO      engine  [Engine] Unified Engine Ready.
+2026-04-09 12:38:55  INFO      processor  [RTSP:Entrance] Connected successfully.
+2026-04-09 12:39:52  INFO      database  [DB] Starting periodic maintenance...
+2026-04-09 12:39:52  INFO      database  [DB] Purged audit records older than 7 days.
+2026-04-09 12:39:52  INFO      database  [DB] Maintenance complete. Access logs older than 2 days purged.
+2026-04-09 12:40:53  INFO      main  ============================================================
+2026-04-09 12:40:53  INFO      main    FastAPI Door Access System — starting up ...
+2026-04-09 12:40:53  INFO      main  ============================================================
+2026-04-09 12:40:53  INFO      database  [DB] Schema initialised.
+2026-04-09 12:40:53  INFO      database  [DB] Fetching all embeddings from SQL...
+2026-04-09 12:40:53  INFO      database  [DB] SQL returned 26 rows.
+2026-04-09 12:40:53  INFO      processor  [Processor] Camera 'C3' DISABLED — skipping.
+2026-04-09 12:40:53  INFO      processor  [Processor] Initialised 2 active camera(s).
+2026-04-09 12:40:53  INFO      main    Startup complete. API ready on http://0.0.0.0:8000
+2026-04-09 12:40:53  INFO      processor  [Monitor:Exit] Vision pipeline starting.
+2026-04-09 12:40:53  INFO      processor  [RTSP:Exit] Connecting... (retry delay=2.0s)
+2026-04-09 12:40:53  INFO      processor  [RTSP:Exit] Capture thread started (target=10 FPS).
+2026-04-09 12:40:53  INFO      processor  [Monitor:Entrance] Vision pipeline starting.
+2026-04-09 12:40:53  INFO      processor  [RTSP:Entrance] Connecting... (retry delay=2.0s)
+2026-04-09 12:40:53  INFO      processor  [RTSP:Entrance] Capture thread started (target=10 FPS).
+2026-04-09 12:40:53  INFO      database  [DB] Purged audit records older than 7 days.
+2026-04-09 12:40:54  INFO      processor  [RTSP:Exit] Connected successfully.
+2026-04-09 12:40:54  INFO      engine  [Engine] Loading Unified FaceAnalysis (640x640) on GPU (CUDA)...
+2026-04-09 12:40:55  INFO      engine  [Engine] Unified Engine Ready.
+2026-04-09 12:40:55  INFO      processor  [Monitor:Exit] Scene: 1 unknown face(s) detected.
+2026-04-09 12:40:55  INFO      processor  [RTSP:Entrance] Connected successfully.
+2026-04-09 12:40:56  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: manu
+2026-04-09 12:40:56  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: manu
+2026-04-09 12:40:56  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: manu
+2026-04-09 12:40:56  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: manu
+2026-04-09 12:40:56  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: manu
+2026-04-09 12:40:57  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: manu
+2026-04-09 12:40:57  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: manu
+2026-04-09 12:40:57  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: manu
+2026-04-09 12:40:57  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: manu
+2026-04-09 12:40:57  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: manu
+2026-04-09 12:40:57  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: manu
+2026-04-09 12:40:57  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: manu
+2026-04-09 12:40:57  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: manu
+2026-04-09 12:40:57  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: manu
+2026-04-09 12:40:57  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: manu
+2026-04-09 12:40:58  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: manu
+2026-04-09 12:40:58  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: manu
+2026-04-09 12:40:58  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: manu
+2026-04-09 12:40:58  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: manu
+2026-04-09 12:40:58  INFO      httpx  HTTP Request: GET http://emplog.grapesonline.net/Employee/GetEmployeeDetails?RfID=0004813043 "HTTP/1.1 200 OK"
+2026-04-09 12:40:58  INFO      engine  [RF-Check] http://emplog.grapesonline.net/Employee/GetEmployeeDetails → 200 {"status":200,"Data":[{"EmpID":130,"EmployeeName":"MANU VARGHESE","DoorStatus":"IN","Checkinstatus":"IN","ExitType":null
+2026-04-09 12:40:58  WARNING   processor  [Monitor:Exit] ❌ ACCESS DENIED (RF invalid): 'manu'
+2026-04-09 12:40:58  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: manu
+2026-04-09 12:40:58  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: manu
+2026-04-09 12:40:58  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: manu
+2026-04-09 12:40:58  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: manu
+2026-04-09 12:40:58  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: manu
+2026-04-09 12:40:58  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: manu
+2026-04-09 12:40:59  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: manu
+2026-04-09 12:40:59  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: manu
+2026-04-09 12:40:59  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: manu
+2026-04-09 12:40:59  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: manu
+2026-04-09 12:40:59  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: manu
+2026-04-09 12:40:59  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: manu
+2026-04-09 12:40:59  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: manu
+2026-04-09 12:40:59  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: manu
+2026-04-09 12:40:59  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: manu
+2026-04-09 12:41:00  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: manu
+2026-04-09 12:41:00  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: manu
+2026-04-09 12:41:00  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: manu
+2026-04-09 12:41:00  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: manu
+2026-04-09 12:41:00  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: manu
+2026-04-09 12:41:00  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: manu
+2026-04-09 12:41:00  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: manu
+2026-04-09 12:41:00  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: manu
+2026-04-09 12:41:00  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: manu
+2026-04-09 12:41:00  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: manu
+2026-04-09 12:41:11  INFO      AudioStreamer  [UDP] Stream complete: 1381/1381 chunks sent.
+2026-04-09 12:41:53  INFO      database  [DB] Starting periodic maintenance...
+2026-04-09 12:41:53  INFO      database  [DB] Purged audit records older than 7 days.
+2026-04-09 12:41:53  INFO      database  [DB] Maintenance complete. Access logs older than 2 days purged.
+2026-04-09 12:42:43  INFO      processor  [Monitor:Exit] Scene: 1 unknown face(s) detected.
+2026-04-09 12:42:55  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-09 12:42:55  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-09 12:42:55  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-09 12:42:55  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-09 12:42:55  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-09 12:42:55  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-09 12:42:55  INFO      httpx  HTTP Request: GET http://emplog.grapesonline.net/Employee/GetEmployeeDetails?RfID=0008941168 "HTTP/1.1 200 OK"
+2026-04-09 12:42:55  INFO      engine  [RF-Check] http://emplog.grapesonline.net/Employee/GetEmployeeDetails → 200 {"status":200,"Data":[{"EmpID":20148,"EmployeeName":"ABHAY RAMESH","DoorStatus":"IN","Checkinstatus":"IN","ExitType":nul
+2026-04-09 12:42:55  WARNING   processor  [Monitor:Exit] ❌ ACCESS DENIED (RF invalid): 'abhay'
+2026-04-09 12:42:55  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-09 12:42:56  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-09 12:42:56  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-09 12:42:56  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-09 12:42:56  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-09 12:42:56  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-09 12:42:57  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-09 12:42:57  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-09 12:42:57  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-09 12:42:57  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-09 12:42:57  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-09 12:42:57  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-09 12:42:58  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-09 12:42:58  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-09 12:42:58  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-09 12:42:58  INFO      processor  [Monitor:Entrance] Scene: 1 unknown face(s) detected.
+2026-04-09 12:43:09  INFO      AudioStreamer  [UDP] Stream complete: 1389/1389 chunks sent.
+2026-04-09 12:43:38  INFO      processor  [Monitor:Exit] Scene: 1 unknown face(s) detected.
+2026-04-09 12:43:40  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-09 12:43:40  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-09 12:43:40  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-09 12:43:40  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-09 12:43:40  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-09 12:43:41  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-09 12:43:41  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-09 12:43:41  INFO      processor  [Monitor:Exit] Scene: 2 face(s) | Known: abhay
+2026-04-09 12:43:41  INFO      httpx  HTTP Request: GET http://emplog.grapesonline.net/Employee/GetEmployeeDetails?RfID=0008941168 "HTTP/1.1 200 OK"
+2026-04-09 12:43:41  INFO      engine  [RF-Check] http://emplog.grapesonline.net/Employee/GetEmployeeDetails → 200 {"status":200,"Data":[{"EmpID":20148,"EmployeeName":"ABHAY RAMESH","DoorStatus":"IN","Checkinstatus":"OUT","ExitType":"T
+2026-04-09 12:43:41  INFO      processor  [Monitor:Exit] ✅ ACCESS GRANTED: 'abhay'
+2026-04-09 12:43:41  INFO      processor  [Monitor:Exit] Scene: 2 face(s) | Known: abhay
+2026-04-09 12:43:41  INFO      processor  [Monitor:Exit] Scene: 2 face(s) | Known: abhay
+2026-04-09 12:43:41  INFO      engine  [Door] Exit → WebSocket sent: OPEN_DOOR
+2026-04-09 12:43:41  INFO      processor  [Monitor:Exit] Scene: 2 face(s) | Known: abhay
+2026-04-09 12:43:41  INFO      processor  [Monitor:Exit] Scene: 2 face(s) | Known: abhay
+2026-04-09 12:43:41  INFO      httpx  HTTP Request: POST http://emplog.grapesonline.net/Employee/LogEmployeeEntry?MacAddress=84:1F:E8:24:A0:5C&EmployeeID=20148&Status=OUT "HTTP/1.1 200 OK"
+2026-04-09 12:43:41  INFO      processor  [Monitor:Exit] Scene: 2 face(s) | Known: abhay
+2026-04-09 12:43:41  INFO      processor  [Monitor:Exit] Scene: 2 face(s) | Known: abhay
+2026-04-09 12:43:42  INFO      processor  [Monitor:Exit] Scene: 2 face(s) | Known: abhay
+2026-04-09 12:43:42  INFO      processor  [Monitor:Exit] Scene: 2 face(s) | Known: abhay
+2026-04-09 12:43:42  INFO      processor  [Monitor:Exit] Scene: 2 face(s) | Known: abhay
+2026-04-09 12:43:42  INFO      processor  [Monitor:Exit] Scene: 2 face(s) | Known: abhay
+2026-04-09 12:43:42  INFO      processor  [Monitor:Exit] Scene: 2 face(s) | Known: abhay
+2026-04-09 12:43:42  INFO      processor  [Monitor:Exit] Scene: 2 face(s) | Known: abhay
+2026-04-09 12:43:42  INFO      processor  [Monitor:Exit] Scene: 2 face(s) | Known: abhay
+2026-04-09 12:43:42  INFO      processor  [Monitor:Exit] Scene: 2 face(s) | Known: abhay, THEJAS C S
+2026-04-09 12:43:42  INFO      processor  [Monitor:Exit] Scene: 2 face(s) | Known: THEJAS C S, abhay
+2026-04-09 12:43:43  INFO      processor  [Monitor:Exit] Scene: 2 face(s) | Known: THEJAS C S, abhay
+2026-04-09 12:43:43  INFO      processor  [Monitor:Exit] Scene: 2 face(s) | Known: THEJAS C S, abhay
+2026-04-09 12:43:43  INFO      processor  [Monitor:Exit] Scene: 2 face(s) | Known: THEJAS C S
+2026-04-09 12:43:43  INFO      httpx  HTTP Request: GET http://emplog.grapesonline.net/Employee/GetEmployeeDetails?RfID=0000561647 "HTTP/1.1 200 OK"
+2026-04-09 12:43:43  INFO      engine  [RF-Check] http://emplog.grapesonline.net/Employee/GetEmployeeDetails → 200 {"status":200,"Data":[{"EmpID":20191,"EmployeeName":"THEJAS C S ","DoorStatus":"IN","Checkinstatus":"OUT","ExitType":"Ex
+2026-04-09 12:43:43  INFO      processor  [Monitor:Exit] ✅ ACCESS GRANTED: 'THEJAS C S'
+2026-04-09 12:43:43  INFO      engine  [Door] Exit → WebSocket sent: OPEN_DOOR
+2026-04-09 12:43:43  INFO      processor  [Monitor:Exit] Scene: 2 face(s) | Known: THEJAS C S
+2026-04-09 12:43:43  INFO      httpx  HTTP Request: POST http://emplog.grapesonline.net/Employee/LogEmployeeEntry?MacAddress=84:1F:E8:24:A0:5C&EmployeeID=20191&Status=OUT "HTTP/1.1 200 OK"
+2026-04-09 12:43:43  INFO      processor  [Monitor:Exit] Scene: 2 face(s) | Known: THEJAS C S
+2026-04-09 12:43:43  INFO      processor  [Monitor:Exit] Scene: 2 face(s) | Known: THEJAS C S
+2026-04-09 12:43:43  INFO      processor  [Monitor:Exit] Scene: 2 face(s) | Known: THEJAS C S
+2026-04-09 12:43:44  INFO      processor  [Monitor:Exit] Scene: 2 face(s) | Known: THEJAS C S
+2026-04-09 12:43:44  INFO      processor  [Monitor:Exit] Scene: 2 face(s) | Known: THEJAS C S
+2026-04-09 12:43:44  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: THEJAS C S
+2026-04-09 12:43:44  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: THEJAS C S
+2026-04-09 12:43:45  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: THEJAS C S
+2026-04-09 12:43:45  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: THEJAS C S
+2026-04-09 12:43:45  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: THEJAS C S
+2026-04-09 12:43:47  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: THEJAS C S
+2026-04-09 12:43:47  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: THEJAS C S
+2026-04-09 12:43:47  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: THEJAS C S
+2026-04-09 12:43:47  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: THEJAS C S
+2026-04-09 12:43:49  INFO      processor  [Monitor:Entrance] Scene: 1 unknown face(s) detected.
+2026-04-09 12:43:49  INFO      AudioStreamer  [UDP] Stream complete: 780/780 chunks sent.
+2026-04-09 12:43:50  INFO      processor  [Monitor:Entrance] Scene: 2 face(s) | Known: abhay
+2026-04-09 12:43:50  INFO      processor  [Monitor:Entrance] Scene: 2 face(s) | Known: abhay
+2026-04-09 12:43:50  INFO      processor  [Monitor:Entrance] Scene: 1 face(s) | Known: abhay
+2026-04-09 12:43:50  INFO      processor  [Monitor:Entrance] Scene: 1 face(s) | Known: abhay
+2026-04-09 12:43:50  INFO      processor  [Monitor:Entrance] Scene: 1 face(s) | Known: abhay
+2026-04-09 12:43:50  INFO      processor  [Monitor:Entrance] Scene: 1 face(s) | Known: abhay
+2026-04-09 12:43:50  INFO      processor  [Monitor:Entrance] Scene: 1 face(s) | Known: abhay
+2026-04-09 12:43:50  INFO      httpx  HTTP Request: GET http://emplog.grapesonline.net/Employee/GetEmployeeDetails?RfID=0008941168 "HTTP/1.1 200 OK"
+2026-04-09 12:43:50  INFO      engine  [RF-Check] http://emplog.grapesonline.net/Employee/GetEmployeeDetails → 200 {"status":200,"Data":[{"EmpID":20148,"EmployeeName":"ABHAY RAMESH","DoorStatus":"OUT","Checkinstatus":"OUT","ExitType":"
+2026-04-09 12:43:50  INFO      processor  [Monitor:Entrance] ✅ ACCESS GRANTED: 'abhay'
+2026-04-09 12:43:50  INFO      processor  [Monitor:Entrance] Scene: 1 face(s) | Known: abhay
+2026-04-09 12:43:50  INFO      engine  [Door] Entrance → WebSocket sent: OPEN_DOOR
+2026-04-09 12:43:51  INFO      processor  [Monitor:Entrance] Scene: 1 face(s) | Known: abhay
+2026-04-09 12:43:51  INFO      httpx  HTTP Request: POST http://emplog.grapesonline.net/Employee/LogEmployeeEntry?MacAddress=84:1F:E8:24:A0:5C&EmployeeID=20148&Status=IN "HTTP/1.1 200 OK"
+2026-04-09 12:43:51  INFO      processor  [Monitor:Entrance] Scene: 1 face(s) | Known: abhay
+2026-04-09 12:43:51  INFO      processor  [Monitor:Entrance] Scene: 1 face(s) | Known: abhay
+2026-04-09 12:43:51  INFO      processor  [Monitor:Entrance] Scene: 1 face(s) | Known: abhay
+2026-04-09 12:43:51  INFO      processor  [Monitor:Entrance] Scene: 1 face(s) | Known: abhay
+2026-04-09 12:43:51  INFO      processor  [Monitor:Entrance] Scene: 1 face(s) | Known: abhay
+2026-04-09 12:43:51  INFO      processor  [Monitor:Entrance] Scene: 1 face(s) | Known: abhay
+2026-04-09 12:43:51  INFO      processor  [Monitor:Entrance] Scene: 1 face(s) | Known: abhay
+2026-04-09 12:43:51  INFO      processor  [Monitor:Entrance] Scene: 1 face(s) | Known: abhay
+2026-04-09 12:43:51  INFO      processor  [Monitor:Entrance] Scene: 2 face(s) | Known: abhay
+2026-04-09 12:43:51  INFO      processor  [Monitor:Entrance] Scene: 1 face(s) | Known: abhay
+2026-04-09 12:43:52  INFO      processor  [Monitor:Entrance] Scene: 1 face(s) | Known: abhay
+2026-04-09 12:43:52  INFO      processor  [Monitor:Entrance] Scene: 1 face(s) | Known: abhay
+2026-04-09 12:43:52  INFO      processor  [Monitor:Entrance] Scene: 1 face(s) | Known: abhay
+2026-04-09 12:43:53  INFO      processor  [Monitor:Entrance] Scene: 1 face(s) | Known: abhay
+2026-04-09 12:43:53  INFO      processor  [Monitor:Entrance] Scene: 1 face(s) | Known: abhay
+2026-04-09 12:43:54  INFO      processor  [Monitor:Entrance] Scene: 1 face(s) | Known: abhay
+2026-04-09 12:43:54  INFO      processor  [Monitor:Entrance] Scene: 1 face(s) | Known: abhay
+2026-04-09 12:43:54  INFO      processor  [Monitor:Entrance] Scene: 1 face(s) | Known: abhay
+2026-04-09 12:43:54  INFO      processor  [Monitor:Entrance] Scene: 1 face(s) | Known: abhay
+2026-04-09 12:43:54  INFO      processor  [Monitor:Entrance] Scene: 1 face(s) | Known: abhay
+2026-04-09 12:43:54  INFO      processor  [Monitor:Entrance] Scene: 1 face(s) | Known: abhay
+2026-04-09 12:43:54  INFO      processor  [Monitor:Entrance] Scene: 1 face(s) | Known: abhay
+2026-04-09 12:43:54  INFO      processor  [Monitor:Entrance] Scene: 1 face(s) | Known: abhay
+2026-04-09 12:43:54  INFO      processor  [Monitor:Entrance] Scene: 1 face(s) | Known: abhay
+2026-04-09 12:43:55  INFO      processor  [Monitor:Entrance] Scene: 1 face(s) | Known: abhay
+2026-04-09 12:43:55  INFO      processor  [Monitor:Entrance] Scene: 1 face(s) | Known: abhay
+2026-04-09 12:43:55  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: manu
+2026-04-09 12:43:56  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: manu
+2026-04-09 12:43:56  INFO      processor  [Monitor:Exit] Scene: 2 face(s) | Known: manu
+2026-04-09 12:43:56  INFO      processor  [Monitor:Exit] Scene: 2 face(s) | Known: manu
+2026-04-09 12:43:56  INFO      processor  [Monitor:Exit] Scene: 2 face(s) | Known: manu
+2026-04-09 12:43:56  INFO      httpx  HTTP Request: GET http://emplog.grapesonline.net/Employee/GetEmployeeDetails?RfID=0004813043 "HTTP/1.1 200 OK"
+2026-04-09 12:43:56  INFO      engine  [RF-Check] http://emplog.grapesonline.net/Employee/GetEmployeeDetails → 200 {"status":200,"Data":[{"EmpID":130,"EmployeeName":"MANU VARGHESE","DoorStatus":"OUT","Checkinstatus":"OUT","ExitType":"E
+2026-04-09 12:43:56  INFO      processor  [Monitor:Exit] ✅ ACCESS GRANTED: 'manu'
+2026-04-09 12:43:56  INFO      engine  [Door] Exit → WebSocket sent: OPEN_DOOR
+2026-04-09 12:43:57  INFO      httpx  HTTP Request: POST http://emplog.grapesonline.net/Employee/LogEmployeeEntry?MacAddress=84:1F:E8:24:A0:5C&EmployeeID=130&Status=OUT "HTTP/1.1 200 OK"
+2026-04-09 12:43:57  INFO      processor  [Monitor:Exit] Scene: 2 face(s) | Known: ROHIT DATTA DIDUGU
+2026-04-09 12:43:58  INFO      processor  [Monitor:Exit] Scene: 2 face(s) | Known: ROHIT DATTA DIDUGU
+2026-04-09 12:43:58  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: ROHIT DATTA DIDUGU
+2026-04-09 12:43:58  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: ROHIT DATTA DIDUGU
+2026-04-09 12:43:58  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: ROHIT DATTA DIDUGU
+2026-04-09 12:43:58  INFO      httpx  HTTP Request: GET http://emplog.grapesonline.net/Employee/GetEmployeeDetails?RfID=0010571007 "HTTP/1.1 200 OK"
+2026-04-09 12:43:58  INFO      engine  [RF-Check] http://emplog.grapesonline.net/Employee/GetEmployeeDetails → 200 {"status":200,"Data":[{"EmpID":20198,"EmployeeName":"ROHIT DATTA DIDUGU","DoorStatus":"IN","Checkinstatus":"IN","ExitTyp
+2026-04-09 12:43:58  WARNING   processor  [Monitor:Exit] ❌ ACCESS DENIED (RF invalid): 'ROHIT DATTA DIDUGU'
+2026-04-09 12:43:58  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: ROHIT DATTA DIDUGU
+2026-04-09 12:43:58  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: ROHIT DATTA DIDUGU
+2026-04-09 12:43:59  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: ROHIT DATTA DIDUGU
+2026-04-09 12:44:01  INFO      AudioStreamer  [UDP] Stream complete: 1102/1102 chunks sent.
+2026-04-09 12:44:08  INFO      processor  [Monitor:Exit] Scene: 2 unknown face(s) detected.
+2026-04-09 12:44:10  INFO      AudioStreamer  [UDP] Stream complete: 835/835 chunks sent.
+2026-04-09 12:44:21  INFO      AudioStreamer  [UDP] Stream complete: 1009/1009 chunks sent.
+2026-04-09 12:44:36  INFO      AudioStreamer  [UDP] Stream complete: 1498/1498 chunks sent.
+2026-04-09 12:45:22  INFO      main  ============================================================
+2026-04-09 12:45:22  INFO      main    FastAPI Door Access System — starting up ...
+2026-04-09 12:45:22  INFO      main  ============================================================
+2026-04-09 12:45:22  INFO      database  [DB] Schema initialised.
+2026-04-09 12:45:22  INFO      database  [DB] Fetching all embeddings from SQL...
+2026-04-09 12:45:22  INFO      database  [DB] SQL returned 26 rows.
+2026-04-09 12:45:22  INFO      processor  [Processor] Camera 'C3' DISABLED — skipping.
+2026-04-09 12:45:22  INFO      processor  [Processor] Initialised 2 active camera(s).
+2026-04-09 12:45:22  INFO      main    Startup complete. API ready on http://0.0.0.0:8000
+2026-04-09 12:45:22  INFO      processor  [Monitor:Exit] Vision pipeline starting.
+2026-04-09 12:45:22  INFO      processor  [RTSP:Exit] Connecting... (retry delay=2.0s)
+2026-04-09 12:45:22  INFO      processor  [RTSP:Exit] Capture thread started (target=10 FPS).
+2026-04-09 12:45:22  INFO      processor  [Monitor:Entrance] Vision pipeline starting.
+2026-04-09 12:45:22  INFO      processor  [RTSP:Entrance] Connecting... (retry delay=2.0s)
+2026-04-09 12:45:22  INFO      processor  [RTSP:Entrance] Capture thread started (target=10 FPS).
+2026-04-09 12:45:23  INFO      database  [DB] Purged audit records older than 7 days.
+2026-04-09 12:45:24  INFO      processor  [RTSP:Exit] Connected successfully.
+2026-04-09 12:45:24  INFO      engine  [Engine] Loading Unified FaceAnalysis (640x640) on GPU (CUDA)...
+2026-04-09 12:45:24  INFO      engine  [Engine] Unified Engine Ready.
+2026-04-09 12:45:25  INFO      processor  [RTSP:Entrance] Connected successfully.
+2026-04-09 12:45:33  INFO      processor  [Monitor:Exit] Scene: 1 unknown face(s) detected.
+2026-04-09 12:45:35  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: BESTIN
+2026-04-09 12:45:35  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: BESTIN
+2026-04-09 12:45:35  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: BESTIN
+2026-04-09 12:45:35  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: BESTIN
+2026-04-09 12:45:35  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: BESTIN
+2026-04-09 12:45:35  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: BESTIN
+2026-04-09 12:45:35  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: BESTIN
+2026-04-09 12:45:36  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: BESTIN
+2026-04-09 12:45:36  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: BESTIN
+2026-04-09 12:45:36  INFO      httpx  HTTP Request: GET http://emplog.grapesonline.net/Employee/GetEmployeeDetails?RfID=0004968669 "HTTP/1.1 200 OK"
+2026-04-09 12:45:36  INFO      engine  [RF-Check] http://emplog.grapesonline.net/Employee/GetEmployeeDetails → 200 {"status":200,"Data":[{"EmpID":20141,"EmployeeName":"BESTIN BENNY","DoorStatus":"IN","Checkinstatus":"OUT","ExitType":"E
+2026-04-09 12:45:36  INFO      processor  [Monitor:Exit] ✅ ACCESS GRANTED: 'BESTIN'
+2026-04-09 12:45:36  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: BESTIN
+2026-04-09 12:45:36  INFO      engine  [Door] Exit → WebSocket sent: OPEN_DOOR
+2026-04-09 12:45:36  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: BESTIN
+2026-04-09 12:45:36  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: BESTIN
+2026-04-09 12:45:36  INFO      httpx  HTTP Request: POST http://emplog.grapesonline.net/Employee/LogEmployeeEntry?MacAddress=84:1F:E8:24:A0:5C&EmployeeID=20141&Status=OUT "HTTP/1.1 200 OK"
+2026-04-09 12:45:36  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: BESTIN
+2026-04-09 12:45:36  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: BESTIN
+2026-04-09 12:45:36  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: BESTIN
+2026-04-09 12:45:36  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: BESTIN
+2026-04-09 12:45:36  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: BESTIN
+2026-04-09 12:45:37  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: BESTIN
+2026-04-09 12:45:37  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: BESTIN
+2026-04-09 12:45:37  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: BESTIN
+2026-04-09 12:45:37  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: BESTIN
+2026-04-09 12:45:38  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: JAYAKRISHNA
+2026-04-09 12:45:38  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: JAYAKRISHNA
+2026-04-09 12:45:39  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: ARJUN
+2026-04-09 12:45:39  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: ARJUN
+2026-04-09 12:45:39  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: ARJUN
+2026-04-09 12:45:39  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: ARJUN
+2026-04-09 12:45:39  INFO      httpx  HTTP Request: GET http://emplog.grapesonline.net/Employee/GetEmployeeDetails?RfID=0005528689 "HTTP/1.1 200 OK"
+2026-04-09 12:45:39  INFO      engine  [RF-Check] http://emplog.grapesonline.net/Employee/GetEmployeeDetails → 200 {"status":200,"Data":[{"EmpID":20157,"EmployeeName":"ARJUN V.U.","DoorStatus":"OUT","Checkinstatus":"RdytoChkIn","ExitTy
+2026-04-09 12:45:39  INFO      processor  [Monitor:Exit] ✅ ACCESS GRANTED: 'ARJUN'
+2026-04-09 12:45:39  INFO      engine  [Door] Exit → WebSocket sent: OPEN_DOOR
+2026-04-09 12:45:40  INFO      httpx  HTTP Request: POST http://emplog.grapesonline.net/Employee/LogEmployeeEntry?MacAddress=84:1F:E8:24:A0:5C&EmployeeID=20157&Status=OUT "HTTP/1.1 200 OK"
+2026-04-09 12:45:40  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: BESTIN
+2026-04-09 12:45:40  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: BESTIN
+2026-04-09 12:45:41  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: BESTIN
+2026-04-09 12:45:41  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: BESTIN
+2026-04-09 12:45:41  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: BESTIN
+2026-04-09 12:45:41  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: BESTIN
+2026-04-09 12:45:41  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: BESTIN
+2026-04-09 12:45:41  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: BESTIN
+2026-04-09 12:45:41  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: BESTIN
+2026-04-09 12:45:41  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: BESTIN
+2026-04-09 12:45:41  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: BESTIN
+2026-04-09 12:45:42  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: BESTIN
+2026-04-09 12:45:45  INFO      AudioStreamer  [UDP] Stream complete: 908/908 chunks sent.
+2026-04-09 12:45:46  INFO      processor  [Monitor:Entrance] Scene: 1 unknown face(s) detected.
+2026-04-09 12:45:54  INFO      AudioStreamer  [UDP] Stream complete: 904/904 chunks sent.
+2026-04-09 12:46:12  INFO      processor  [Monitor:Exit] Scene: 1 unknown face(s) detected.
+2026-04-09 12:46:12  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: JAYAKRISHNA
+2026-04-09 12:46:14  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-09 12:46:14  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-09 12:46:14  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-09 12:46:14  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-09 12:46:14  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-09 12:46:14  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-09 12:46:14  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-09 12:46:14  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-09 12:46:14  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-09 12:46:15  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-09 12:46:15  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-09 12:46:15  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-09 12:46:15  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-09 12:46:15  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-09 12:46:15  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-09 12:46:15  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-09 12:46:15  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-09 12:46:15  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-09 12:46:15  INFO      httpx  HTTP Request: GET http://emplog.grapesonline.net/Employee/GetEmployeeDetails?RfID=0008941168 "HTTP/1.1 200 OK"
+2026-04-09 12:46:15  INFO      engine  [RF-Check] http://emplog.grapesonline.net/Employee/GetEmployeeDetails → 200 {"status":200,"Data":[{"EmpID":20148,"EmployeeName":"ABHAY RAMESH","DoorStatus":"IN","Checkinstatus":"IN","ExitType":nul
+2026-04-09 12:46:15  WARNING   processor  [Monitor:Exit] ❌ ACCESS DENIED (RF invalid): 'abhay'
+2026-04-09 12:46:15  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-09 12:46:16  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-09 12:46:16  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-09 12:46:16  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-09 12:46:16  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-09 12:46:16  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-09 12:46:16  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-09 12:46:16  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-09 12:46:16  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-09 12:46:16  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-09 12:46:17  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-09 12:46:17  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-09 12:46:17  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-09 12:46:17  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-09 12:46:17  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-09 12:46:17  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-09 12:46:17  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-09 12:46:17  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-09 12:46:17  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-09 12:46:22  INFO      database  [DB] Starting periodic maintenance...
+2026-04-09 12:46:22  INFO      database  [DB] Purged audit records older than 7 days.
+2026-04-09 12:46:23  INFO      database  [DB] Maintenance complete. Access logs older than 2 days purged.
+2026-04-09 12:46:26  INFO      AudioStreamer  [UDP] Stream complete: 1149/1149 chunks sent.

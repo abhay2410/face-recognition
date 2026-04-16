@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings | FaceID</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #0d1117;
+            --card-bg: #161b22;
+            --accent-color: #58a6ff;
+            --text-main: #c9d1d9;
+            --text-dim: #8b949e;
+            --success: #238636;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            margin: 0;
+            display: flex;
+            height: 100vh;
+        }
+
+        .sidebar {
+            width: 250px;
+            background-color: var(--card-bg);
+            border-right: 1px solid #30363d;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 600;
+            color: var(--accent-color);
+            margin-bottom: 40px;
+        }
+
+        .nav-item {
+            padding: 12px 15px;
+            text-decoration: none;
+            color: var(--text-main);
+            margin-bottom: 8px;
+            border-radius: 8px;
+            transition: 0.3s;
+        }
+
+        .nav-item:hover {
+            background: #21262d;
+        }
+
+        .nav-item.active {
+            background: #1f6feb22;
+            color: var(--accent-color);
+            border-left: 3px solid var(--accent-color);
+        }
+
+        .main-content {
+            flex: 1;
+            padding: 40px;
+            overflow-y: auto;
+        }
+
+        .card {
+            background: var(--card-bg);
+            border: 1px solid #30363d;
+            border-radius: 12px;
+            padding: 30px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--text-dim);
+            font-size: 14px;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 12px;
+            background: #0d1117;
+            border: 1px solid #30363d;
+            border-radius: 6px;
+            color: white;
+            font-family: inherit;
+            box-sizing: border-box;
+        }
+
+        .form-help {
+            font-size: 12px;
+            color: var(--text-dim);
+            margin-top: 5px;
+        }
+
+        .btn-save {
+            background: var(--accent-color);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.3s;
+            width: 100%;
+        }
+
+        .btn-save:hover {
+            background: #388bfd;
+            transform: translateY(-2px);
+        }
+
+        .success-msg {
+            background: #23863622;
+            color: #3fb950;
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid #23863644;
+            margin-bottom: 25px;
+            text-align: center;
+        }
+
+        /* Toggle Button */
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 50px;
+            height: 24px;
+        }
+
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #30363d;
+            transition: .4s;
+            border-radius: 24px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 18px;
+            width: 18px;
+            left: 3px;
+            bottom: 3px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        input:checked+.slider {
+            background-color: var(--accent-color);
+        }
+
+        input:checked+.slider:before {
+            transform: translateX(26px);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="sidebar">
+        <div class="logo">🛡️ FaceID</div>
+        <a href="/" class="nav-item">Dashboard</a>
+        <a href="/enrol" class="nav-item">New Enrollment</a>
+        <a href="/audit" class="nav-item">🔍 Audit Trail</a>
+        <a href="/settings" class="nav-item active">⚙️ Settings</a>
+        <div style="flex:1"></div>
+        <a href="/logout" class="nav-item" style="color: #f85149">Logout</a>
+    </div>
+
+    <div class="main-content">
+        <div class="card">
+            <h1>System Settings</h1>
+            <p style="color: var(--text-dim); margin-bottom: 30px;">Manage your .env configuration directly. These
+                changes are saved instantly to your environment file.</p>
+
+            <form action="/settings" method="post">
+                <div class="form-group">
+                    <label class="form-label">Default Live Streaming</label>
+                    <label class="switch">
+                        <input type="checkbox" name="STREAMING_DEFAULT_ENABLED" value="true" {% if
+                            settings.STREAMING_DEFAULT_ENABLED %}checked{% endif %}>
+                        <span class="slider"></span>
+                    </label>
+                    <div class="form-help">Should the camera preview start automatically when the dashboard opens?
+                        (Disabling this reduces significant CPU load)</div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Background AI Monitoring</label>
+                    <label class="switch">
+                        <input type="checkbox" name="MONITOR_ENABLED" value="true" {% if settings.MONITOR_ENABLED
+                            %}checked{% endif %}>
+                        <span class="slider"></span>
+                    </label>
+                    <div class="form-help">If disabled, the system stops checking faces but remains active. (Massive CPU
+                        saving)</div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Motion Detection (AI Sleep Mode)</label>
+                    <label class="switch">
+                        <input type="checkbox" name="MOTION_DETECTION_ENABLED" value="true" {% if settings.MOTION_DETECTION_ENABLED %}checked{% endif %}>
+                        <span class="slider"></span>
+                    </label>
+                    <div class="form-help">Wakes up the AI only when motion is detected, saving massive CPU power.</div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Motion Threshold (%)</label>
+                    <input type="number" step="0.1" name="MOTION_THRESHOLD" class="form-input" value="{{ settings.MOTION_THRESHOLD }}">
+                    <div class="form-help">Percentage of screen that must move to wake the AI. Default: 5.0 (Lower = more sensitive).</div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">AI Sleep Timeout (seconds)</label>
+                    <input type="number" step="1.0" name="MOTION_SLEEP_TIME" class="form-input" value="{{ settings.MOTION_SLEEP_TIME }}">
+                    <div class="form-help">How long the AI stays awake after motion stops. Default: 5.0.</div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">FAISS Cosine Threshold</label>
+                    <input type="number" step="0.01" name="FAISS_COSINE_THRESHOLD" class="form-input"
+                        value="{{ settings.FAISS_COSINE_THRESHOLD }}">
+                    <div class="form-help">Lower = more strictly matches (0.45 is standard). Range: 0.1 to 1.0.</div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Blur Threshold</label>
+                    <input type="number" name="BLUR_THRESHOLD" class="form-input" value="{{ settings.BLUR_THRESHOLD }}">
+                    <div class="form-help">Lower = more blurry faces allowed. Higher = stricter sharpness requirement.
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">External Door API</label>
+                    <label class="switch">
+                        <input type="checkbox" name="EXTERNAL_API_ENABLED" value="true" {% if
+                            settings.EXTERNAL_API_ENABLED %}checked{% endif %}>
+                        <span class="slider"></span>
+                    </label>
+                    <div class="form-help">Enable or disable communication with the physical door lock system.</div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">RF Card Check API URL</label>
+                    <input type="text" name="RF_CHECK_API_URL" class="form-input" value="{{ settings.RF_CHECK_API_URL }}">
+                    <div class="form-help">Optional: API to verify card status. Use {rf_card} as placeholder. (e.g. http://api.com/check?card={rf_card})</div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">System Tray Icon</label>
+                    <label class="switch">
+                        <input type="checkbox" name="TRAY_ICON_ENABLED" value="true" {% if
+                            settings.TRAY_ICON_ENABLED %}checked{% endif %}>
+                        <span class="slider"></span>
+                    </label>
+                    <div class="form-help">If enabled, the application will run in the Windows system tray. (Requires restart to apply)</div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Face Label Overlay</label>
+                    <label class="switch">
+                        <input type="checkbox" name="FACE_LABELING_ENABLED" value="true" {% if settings.FACE_LABELING_ENABLED %}checked{% endif %}>
+                        <span class="slider"></span>
+                    </label>
+                    <div class="form-help">Show name labels on detected faces in the live camera feed.</div>
+                </div>
+
+                <hr style="border:0; border-top: 1px solid #30363d; margin: 30px 0;">
+
+                <div class="form-group">
+                    <label class="form-label">Admin Username</label>
+                    <input type="text" name="AUTH_USERNAME" class="form-input" value="{{ settings.AUTH_USERNAME }}">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Admin Password</label>
+                    <input type="password" name="AUTH_PASSWORD" class="form-input" value="****">
+                    <div class="form-help">Leave as **** to keep current password.</div>
+                </div>
+
+                <button type="submit" class="btn-save">Save & Apply Settings</button>
+            </form>
+
+            <div id="status" style="margin-top: 20px;"></div>
+        </div>
+    </div>
+
+    <script>
+        const params = new URLSearchParams(window.location.search);
+        if (params.has('msg')) {
+            const div = document.createElement('div');
+            div.className = 'success-msg';
+            div.innerText = params.get('msg');
+            document.querySelector('.card').prepend(div);
+            // Hide after 5 seconds
+            setTimeout(() => div.remove(), 5000);
+        }
+    </script>
+</body>
+
+</html>

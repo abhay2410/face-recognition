@@ -4,214 +4,527 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Update Photos - FaceID</title>
+    <title>FaceID | Improve Accuracy</title>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary: #8b5cf6;
-            --primary-hover: #7c3aed;
-            --bg: #0f172a;
-            --card: #1e293b;
-            --text: #f8fafc;
-            --text-dim: #94a3b8;
+            --bg-color: #0d1117;
+            --card-bg: #161b22;
+            --accent-color: #58a6ff;
+            --accent-glow: rgba(88, 166, 255, 0.15);
+            --text-main: #c9d1d9;
+            --text-dim: #8b949e;
+            --success: #238636;
+            --error: #f85149;
+            --border: #30363d;
+            --input-bg: #0d1117;
         }
+
+        * { box-sizing: border-box; }
 
         body {
             font-family: 'Outfit', sans-serif;
-            background-color: var(--bg);
-            color: var(--text);
+            background-color: var(--bg-color);
+            color: var(--text-main);
             margin: 0;
             display: flex;
-            justify-content: center;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .sidebar {
+            width: 250px;
+            background-color: var(--card-bg);
+            border-right: 1px solid var(--border);
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            flex-shrink: 0;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--accent-color);
+            display: flex;
             align-items: center;
-            min-height: 100vh;
+            gap: 10px;
+            margin-bottom: 40px;
         }
 
-        .container {
-            background-color: var(--card);
-            padding: 2.5rem;
-            border-radius: 1.5rem;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
-            width: 100%;
-            max-width: 450px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
+        .nav-item {
+            padding: 12px 15px;
+            border-radius: 8px;
+            text-decoration: none;
+            color: var(--text-main);
+            margin-bottom: 8px;
+            transition: 0.25s;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 14px;
         }
 
-        h1 {
-            margin-bottom: 0.5rem;
-            font-weight: 600;
-            font-size: 1.875rem;
-            color: #fff;
+        .nav-item:hover { background-color: #21262d; color: var(--accent-color); }
+        .nav-item.active {
+            background-color: #1f6feb22;
+            color: var(--accent-color);
+            border-left: 3px solid var(--accent-color);
         }
 
-        p {
-            margin-bottom: 2rem;
+        .main-content {
+            flex: 1;
+            padding: 40px;
+            overflow-y: auto;
+        }
+
+        .container { max-width: 700px; margin: 0 auto; }
+
+        header { margin-bottom: 30px; }
+        header h1 { margin: 0 0 6px; font-size: 26px; }
+        header p { color: var(--text-dim); margin: 0; }
+
+        /* ── Tabs ── */
+        .tabs {
+            display: flex;
+            gap: 4px;
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 5px;
+            margin-bottom: 24px;
+        }
+
+        .tab-btn {
+            flex: 1;
+            padding: 11px 16px;
+            background: transparent;
+            border: none;
+            border-radius: 7px;
             color: var(--text-dim);
-            font-size: 0.95rem;
+            font-family: inherit;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.25s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
         }
 
-        .form-group {
-            margin-bottom: 1.5rem;
+        .tab-btn:hover { color: var(--text-main); background: rgba(255,255,255,0.04); }
+        .tab-btn.active {
+            background: var(--accent-glow);
+            color: var(--accent-color);
+            border: 1px solid rgba(88,166,255,0.25);
         }
+
+        .tab-panel { display: none; }
+        .tab-panel.active { display: block; }
+
+        /* ── Card ── */
+        .card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 28px;
+        }
+
+        .form-group { margin-bottom: 18px; }
 
         label {
             display: block;
-            margin-bottom: 0.5rem;
-            font-weight: 500;
-            font-size: 0.875rem;
+            font-size: 13px;
             color: var(--text-dim);
-        }
-
-        select,
-        input[type="file"] {
-            width: 100%;
-            padding: 0.75rem 1rem;
-            border-radius: 0.75rem;
-            border: 1px solid #334155;
-            background-color: #0f172a;
-            color: #fff;
-            box-sizing: border-box;
-            transition: border-color 0.2s;
-            appearance: none;
-        }
-
-        select:focus,
-        input:focus {
-            outline: none;
-            border-color: var(--primary);
-        }
-
-        .file-help {
-            font-size: 0.75rem;
-            color: #64748b;
-            margin-top: 0.5rem;
-        }
-
-        button {
-            width: 100%;
-            padding: 0.875rem;
-            border-radius: 0.75rem;
-            border: none;
-            background-color: var(--primary);
-            color: white;
+            margin-bottom: 7px;
             font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s;
-            margin-top: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
-        button:hover {
-            background-color: var(--primary-hover);
+        input[type="text"],
+        input[type="file"],
+        select {
+            width: 100%;
+            background-color: var(--input-bg);
+            border: 1px solid var(--border);
+            border-radius: 7px;
+            padding: 11px 14px;
+            color: var(--text-main);
+            font-family: inherit;
+            font-size: 14px;
+            transition: 0.25s;
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: var(--accent-color);
+            box-shadow: 0 0 0 3px var(--accent-glow);
+        }
+
+        .btn {
+            width: 100%;
+            background: linear-gradient(135deg, #388bfd, var(--accent-color));
+            color: white;
+            padding: 14px;
+            border: none;
+            border-radius: 8px;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.25s;
+            letter-spacing: 0.3px;
+        }
+
+        .btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(88,166,255,0.25); }
+        .btn:disabled {
+            background: var(--border);
+            color: var(--text-dim);
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .btn-secondary {
+            background: transparent;
+            border: 1px solid var(--border);
+            color: var(--text-main);
+        }
+        .btn-secondary:hover {
+            background: rgba(255,255,255,0.05);
+            box-shadow: none;
             transform: translateY(-1px);
         }
 
-        button:active {
-            transform: translateY(0);
-        }
-
-        .nav-link {
-            display: block;
-            text-align: center;
-            margin-top: 1.5rem;
-            color: var(--text-dim);
-            text-decoration: none;
-            font-size: 0.875rem;
-        }
-
-        .nav-link:hover {
-            color: #fff;
-        }
-
-        #status {
-            margin-top: 1.5rem;
-            padding: 1rem;
-            border-radius: 0.75rem;
+        #status, #cam-status {
+            margin-top: 18px;
+            padding: 14px 16px;
+            border-radius: 8px;
             display: none;
-            font-size: 0.9rem;
+            font-size: 14px;
         }
 
-        .success {
-            background-color: rgba(34, 197, 94, 0.1);
-            color: #4ade80;
-            border: 1px solid rgba(34, 197, 94, 0.2);
+        .success { background: rgba(35,134,54,0.1); color: #3fb950; border: 1px solid rgba(35,134,54,0.25); }
+        .error   { background: rgba(248,81,73,0.1); color: #f85149; border: 1px solid rgba(248,81,73,0.25); }
+
+        /* ── Camera Preview ── */
+        .cam-preview-wrapper {
+            position: relative;
+            background: #000;
+            border-radius: 10px;
+            overflow: hidden;
+            border: 1px solid var(--border);
+            aspect-ratio: 16/9;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
-        .error {
-            background-color: rgba(239, 68, 68, 0.1);
-            color: #f87171;
-            border: 1px solid rgba(239, 68, 68, 0.2);
+        #cam-preview-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
         }
+
+        .cam-overlay {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            background: rgba(0,0,0,0.7);
+            color: var(--text-dim);
+            font-size: 14px;
+        }
+        .cam-overlay.hidden { display: none; }
+
+        .progress-bar-wrapper {
+            height: 6px;
+            background: var(--border);
+            border-radius: 99px;
+            margin-bottom: 16px;
+            overflow: hidden;
+            display: none;
+        }
+        .progress-bar-wrapper.visible { display: block; }
+        .progress-bar-fill {
+            height: 100%;
+            border-radius: 99px;
+            background: linear-gradient(90deg, #388bfd, var(--accent-color));
+            transition: width 0.3s ease;
+            width: 0%;
+        }
+
+        .capture-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 13px;
+            color: var(--text-dim);
+            margin-bottom: 14px;
+        }
+        .capture-badge .dot {
+            width: 8px; height: 8px;
+            border-radius: 50%;
+            background: var(--accent-color);
+            animation: pulse 1.5s infinite;
+        }
+        @keyframes pulse {
+            0%   { box-shadow: 0 0 0 0 rgba(88,166,255,0.7); }
+            70%  { box-shadow: 0 0 0 8px rgba(88,166,255,0); }
+            100% { box-shadow: 0 0 0 0 rgba(88,166,255,0); }
+        }
+
+        .cam-select-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+        .cam-select-row label { margin: 0; white-space: nowrap; }
+        .cam-select-row select { flex: 1; }
+
+        .divider { border: none; border-top: 1px solid var(--border); margin: 20px 0; }
     </style>
 </head>
 
 <body>
-    <div class="container">
-        <h1>Improve Accuracy</h1>
-        <p>Add more photos to an existing person to improve identification and blink detection.</p>
 
-        <form id="updateForm">
-            <div class="form-group">
-                <label for="name">Select Person</label>
-                <select id="name" name="name" required>
-                    <option value="" disabled selected>Choose a registered person...</option>
-                    {% for emp in employees %}
-                    <option value="{{ emp.name }}">{{ emp.name }} ({{ emp.department or 'No Dept' }})</option>
-                    {% endfor %}
-                </select>
+    <div class="sidebar">
+        <div class="logo"><span>🛡️</span> FaceID</div>
+        <a href="/" class="nav-item">📊 Dashboard</a>
+        <a href="/enrol" class="nav-item">➕ New Enrollment</a>
+        <a href="/update" class="nav-item active">🔄 Improve Accuracy</a>
+        <a href="/settings" class="nav-item">⚙️ Settings</a>
+        <div style="flex:1"></div>
+        <a href="/logout" class="nav-item" style="color: var(--error);">🚪 Logout</a>
+        <a href="/docs" class="nav-item" style="font-size: 12px; color: var(--text-dim);">API Docs</a>
+    </div>
+
+    <div class="main-content">
+        <div class="container">
+            <header>
+                <h1>Improve Accuracy</h1>
+                <p>Merge additional photos/frames into an existing profile to improve recognition consistency.</p>
+            </header>
+
+            <div class="tabs" role="tablist">
+                <button class="tab-btn active" id="tab-upload-btn" onclick="switchTab('upload')">📁 Upload New Photos</button>
+                <button class="tab-btn" id="tab-camera-btn" onclick="switchTab('camera')">📷 Capture from Camera</button>
             </div>
 
-            <div class="form-group">
-                <label for="images">Upload New Photos</label>
-                <input type="file" id="images" name="images" accept="image/*" multiple required>
-                <div class="file-help">Adding at least 3-5 photos from different angles is recommended.</div>
+            <!-- TAB 1: Upload -->
+            <div class="tab-panel active" id="tab-upload">
+                <div class="card">
+                    <form id="updateForm">
+                        <div class="form-group">
+                            <label for="name">Select Employee *</label>
+                            <select id="name" name="name" required>
+                                <option value="" disabled selected>Choose a registered person...</option>
+                                {% for emp in employees %}
+                                <option value="{{ emp.name }}">{{ emp.name }} ({{ emp.department or 'No Dept' }})</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="images">Add Photos <span style="color:var(--text-dim);font-weight:400;">(Min 5 recommended)</span></label>
+                            <input type="file" id="images" name="images" accept="image/*" multiple required>
+                        </div>
+                        <button type="submit" id="submitBtn" class="btn">⭐ Update Profile & Rebuild Index</button>
+                    </form>
+                    <div id="status"></div>
+                </div>
             </div>
 
-            <button type="submit" id="submitBtn">Update Profile</button>
-        </form>
+            <!-- TAB 2: Camera Capture -->
+            <div class="tab-panel" id="tab-camera">
+                <div class="card">
+                    <div class="cam-select-row">
+                        <label for="cam-select">Camera</label>
+                        <select id="cam-select" onchange="onCameraChange()">
+                            {% for cam_name in cameras %}
+                            <option value="{{ loop.index0 }}">{{ cam_name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
 
-        <a href="/enrol" class="nav-link">← Back to New Enrolment</a>
+                    <div class="cam-preview-wrapper">
+                        <img id="cam-preview-img" src="" alt="Camera Preview" style="display:none;">
+                        <div class="cam-overlay" id="cam-overlay">
+                            <span style="font-size:36px;">📷</span>
+                            <span>Click Preview to start camera</span>
+                        </div>
+                    </div>
 
-        <div id="status"></div>
+                    <div style="display:flex; gap:10px; margin-bottom:16px;">
+                        <button class="btn btn-secondary" id="preview-btn" onclick="togglePreview()" style="font-size:13px; padding:10px;">▶ Start Preview</button>
+                    </div>
+
+                    <hr class="divider">
+
+                    <form id="cameraUpdateForm">
+                        <div class="form-group">
+                            <label for="cam-emp-name">Select Employee *</label>
+                            <select id="cam-emp-name" name="name" required>
+                                <option value="" disabled selected>Choose profile to improve...</option>
+                                {% for emp in employees %}
+                                <option value="{{ emp.name }}">{{ emp.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="cam-frames">Capture Quality</label>
+                            <select id="cam-frames" name="num_frames">
+                                <option value="10" selected>10 frames (Normal)</option>
+                                <option value="20">20 frames (Highly Robust)</option>
+                            </select>
+                        </div>
+
+                        <div class="progress-bar-wrapper" id="progress-wrapper">
+                            <div class="progress-bar-fill" id="progress-fill"></div>
+                        </div>
+
+                        <div id="capture-status-text" class="capture-badge" style="display:none;">
+                            <div class="dot"></div>
+                            <span id="capture-status-msg">Capturing...</span>
+                        </div>
+
+                        <button type="submit" id="cam-submit-btn" class="btn">📸 Start Camera Update</button>
+                    </form>
+                    <div id="cam-status"></div>
+                </div>
+            </div>
+        </div>
     </div>
 
     <script>
-        const form = document.getElementById('updateForm');
-        const status = document.getElementById('status');
-        const btn = document.getElementById('submitBtn');
+        function switchTab(tab) {
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+            document.getElementById('tab-' + tab + '-btn').classList.add('active');
+            document.getElementById('tab-' + tab).classList.add('active');
+            if (tab !== 'camera') stopPreview();
+        }
 
-        form.onsubmit = async (e) => {
+        // Upload Form
+        const updateForm = document.getElementById('updateForm');
+        const updateStatus = document.getElementById('status');
+        const updateBtn = document.getElementById('submitBtn');
+
+        updateForm.onsubmit = async (e) => {
             e.preventDefault();
+            updateBtn.disabled = true;
+            updateBtn.textContent = "Merging Profile Data...";
+            updateStatus.style.display = 'none';
 
-            btn.disabled = true;
-            btn.textContent = "Processing...";
-            status.style.display = 'none';
-
-            const formData = new FormData(form);
-
+            const formData = new FormData(updateForm);
             try {
-                // Re-using the /onboard endpoint since it now supports merging
-                const response = await fetch('/onboard', {
-                    method: 'POST',
-                    body: formData
-                });
-
+                const response = await fetch('/onboard', { method: 'POST', body: formData });
                 const result = await response.json();
-
-                status.style.display = 'block';
+                updateStatus.style.display = 'block';
                 if (response.ok) {
-                    status.className = 'success';
-                    status.textContent = "✓ Successfully added photos! Accuracy for " + formData.get('name') + " has been improved.";
-                    form.reset();
+                    updateStatus.className = 'success';
+                    updateStatus.innerHTML = `<strong>✅ Success!</strong> Profile updated. Re-indexed ${result.frames_used} new frames.`;
+                    updateForm.reset();
                 } else {
-                    status.className = 'error';
-                    status.textContent = result.detail || "Update failed. Please try again.";
+                    updateStatus.className = 'error';
+                    updateStatus.innerText = result.detail || "Error during update.";
                 }
             } catch (err) {
-                status.className = 'error';
-                status.textContent = "Connection error. Is the server running?";
+                updateStatus.className = 'error';
+                updateStatus.innerText = "Connection error.";
             } finally {
-                btn.disabled = false;
-                btn.textContent = "Update Profile";
+                updateBtn.disabled = false;
+                updateBtn.textContent = "⭐ Update Profile & Rebuild Index";
+            }
+        };
+
+        // Camera Preview
+        let previewInterval = null;
+        let previewRunning = false;
+
+        function startPreview() {
+            previewRunning = true;
+            document.getElementById('preview-btn').textContent = '⏹ Stop Preview';
+            const img = document.getElementById('cam-preview-img');
+            const overlay = document.getElementById('cam-overlay');
+            clearInterval(previewInterval);
+            previewInterval = setInterval(() => {
+                const camId = document.getElementById('cam-select').value;
+                img.src = `/snapshot/${camId}?t=${Date.now()}`;
+                img.style.display = 'block';
+                overlay.classList.add('hidden');
+            }, 400);
+        }
+
+        function stopPreview() {
+            previewRunning = false;
+            clearInterval(previewInterval);
+            document.getElementById('cam-preview-img').style.display = 'none';
+            document.getElementById('cam-overlay').classList.remove('hidden');
+            document.getElementById('preview-btn').textContent = '▶ Start Preview';
+        }
+
+        function togglePreview() { previewRunning ? stopPreview() : startPreview(); }
+        function onCameraChange() { if (previewRunning) startPreview(); }
+
+        // Camera Update Logic
+        const cameraUpdateForm = document.getElementById('cameraUpdateForm');
+        const camStatus = document.getElementById('cam-status');
+        const camSubmitBtn = document.getElementById('cam-submit-btn');
+
+        cameraUpdateForm.onsubmit = async (e) => {
+            e.preventDefault();
+            camSubmitBtn.disabled = true;
+            camSubmitBtn.textContent = 'Capturing...';
+            camStatus.style.display = 'none';
+
+            const numFrames = parseInt(document.getElementById('cam-frames').value);
+            const progressWrapper = document.getElementById('progress-wrapper');
+            const progressFill = document.getElementById('progress-fill');
+            const statusText = document.getElementById('capture-status-text');
+            const statusMsg = document.getElementById('capture-status-msg');
+
+            progressWrapper.classList.add('visible');
+            statusText.style.display = 'flex';
+            progressFill.style.width = '0%';
+
+            const fd = new FormData();
+            fd.append('camera_id', document.getElementById('cam-select').value);
+            fd.append('name', document.getElementById('cam-emp-name').value);
+            fd.append('num_frames', numFrames);
+
+            try {
+                const response = await fetch('/enrol/from-camera', { method: 'POST', body: fd });
+                const result = await response.json();
+                progressFill.style.width = '100%';
+                statusMsg.textContent = 'Capture Complete!';
+
+                setTimeout(() => {
+                    progressWrapper.classList.remove('visible');
+                    statusText.style.display = 'none';
+                }, 1000);
+
+                camStatus.style.display = 'block';
+                if (response.ok) {
+                    camStatus.className = 'success';
+                    camStatus.innerHTML = `<strong>✅ Success!</strong> Profile updated from camera. ${result.frames_used} anchors added.`;
+                } else {
+                    camStatus.className = 'error';
+                    camStatus.innerText = result.detail || 'Update failed.';
+                }
+            } catch (err) {
+                camStatus.className = 'error';
+                camStatus.innerText = 'Connection error.';
+            } finally {
+                camSubmitBtn.disabled = false;
+                camSubmitBtn.textContent = '📸 Start Camera Update';
             }
         };
     </script>

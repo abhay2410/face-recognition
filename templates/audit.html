@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recognition Audit - Face Access System</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #0f172a;
+            --card-bg: #1e293b;
+            --text: #f1f5f9;
+            --accent: #38bdf8;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+            --success: #10b981;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            margin: 0;
+            padding: 20px;
+        }
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+        h1 { margin: 0; font-weight: 600; font-size: 1.5rem; }
+        .nav-links a { color: var(--accent); text-decoration: none; margin-left: 20px; font-weight: 500; }
+        
+        .filters {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        .filter-btn {
+            background: var(--card-bg);
+            border: 1px solid #334155;
+            color: var(--text);
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .filter-btn.active {
+            background: var(--accent);
+            border-color: var(--accent);
+            color: #000;
+        }
+
+        .snapshot-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+        }
+        .snapshot-card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid #334155;
+            transition: transform 0.2s;
+        }
+        .snapshot-card:hover { transform: translateY(-4px); }
+        .img-container {
+            width: 100%;
+            height: 200px;
+            background: #000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .img-container img { height: 100%; width: 100%; object-fit: contain; }
+        
+        .card-body { padding: 15px; }
+        .card-header { display: flex; justify-content: space-between; align-items: start; margin-bottom: 10px; }
+        .name { font-weight: 600; font-size: 1.1rem; }
+        .score { font-size: 0.9rem; padding: 2px 8px; border-radius: 4px; font-weight: 600; }
+        .score-good { background: rgba(16, 185, 129, 0.2); color: var(--success); }
+        .score-weak { background: rgba(245, 158, 11, 0.2); color: var(--warning); }
+        .score-bad { background: rgba(239, 68, 68, 0.2); color: var(--danger); }
+        
+        .meta { font-size: 0.85rem; color: #94a3b8; display: flex; flex-direction: column; gap: 4px; }
+        .badge { font-size: 0.75rem; text-transform: uppercase; padding: 2px 6px; border-radius: 3px; font-weight: 700; width: fit-content; }
+        .ambiguous { background: var(--warning); color: #000; }
+
+        .loader { text-align: center; padding: 40px; font-size: 1.1rem; color: #64748b; }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>Recognition Audit (Last 7 Days)</h1>
+    <div class="nav-links">
+        <a href="/">Dashboard</a>
+        <a href="/settings">Settings</a>
+    </div>
+</header>
+
+<div class="filters">
+    <button class="filter-btn active" onclick="setFilter('all', this)">All Events</button>
+    <button class="filter-btn" onclick="setFilter('ambiguous', this)">Ambiguous (Safety Risk)</button>
+    <button class="filter-btn" onclick="setFilter('unknown', this)">Unknown Persons</button>
+</div>
+
+<div id="grid" class="snapshot-grid">
+    <div class="loader">Loading snapshot logs...</div>
+</div>
+
+<script>
+    let currentFilter = 'all';
+
+    async function loadLogs() {
+        const grid = document.getElementById('grid');
+        try {
+            const url = `/api/audit/logs?filter=${currentFilter}`;
+            const resp = await fetch(url);
+            const data = await resp.json();
+            
+            if (data.length === 0) {
+                grid.innerHTML = '<div class="loader">No recognition events found for this filter.</div>';
+                return;
+            }
+
+            grid.innerHTML = data.map(log => {
+                const score = parseFloat(log.cosine_score).toFixed(3);
+                let scoreClass = 'score-good';
+                if (score < 0.45) scoreClass = 'score-bad';
+                else if (score < 0.55) scoreClass = 'score-weak';
+
+                return `
+                    <div class="snapshot-card">
+                        <div class="img-container">
+                            <img src="/api/audit/image/${log.id}" alt="face">
+                        </div>
+                        <div class="card-body">
+                            <div class="card-header">
+                                <span class="name">${log.employee_name || 'Unknown'}</span>
+                                <span class="score ${scoreClass}">${score}</span>
+                            </div>
+                            <div class="meta">
+                                <span>Camera: ${log.camera_name}</span>
+                                <span>Time: ${new Date(log.detected_at).toLocaleString()}</span>
+                                ${log.is_ambiguous ? '<span class="badge ambiguous">Ambiguous</span>' : ''}
+                                <span class="badge" style="background: ${log.door_granted ? 'rgba(16,185,129,0.2)' : 'rgba(239,68,68,0.2)'}; color: ${log.door_granted ? '#10b981' : '#ef4444'}">
+                                    ${log.door_granted ? 'Granted' : 'Denied'}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        } catch (e) {
+            grid.innerHTML = `<div class="loader" style="color: var(--danger)">Error loading logs: ${e.message}</div>`;
+        }
+    }
+
+    function setFilter(f, btn) {
+        currentFilter = f;
+        document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        loadLogs();
+    }
+
+    // Refresh every 30 seconds
+    loadLogs();
+    setInterval(loadLogs, 30000);
+</script>
+
+</body>
+</html>

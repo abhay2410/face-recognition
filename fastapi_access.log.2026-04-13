@@ -1,0 +1,427 @@
+2026-04-13 10:19:04  INFO      main  ============================================================
+2026-04-13 10:19:04  INFO      main    FastAPI Door Access System — starting up ...
+2026-04-13 10:19:04  INFO      main  ============================================================
+2026-04-13 10:19:05  INFO      database  [DB] Schema initialised.
+2026-04-13 10:19:05  INFO      database  [DB] Fetching all embeddings from SQL...
+2026-04-13 10:19:05  INFO      database  [DB] SQL returned 26 rows.
+2026-04-13 10:19:05  INFO      processor  [Processor] Camera 'C3' DISABLED — skipping.
+2026-04-13 10:19:05  INFO      processor  [Processor] Initialised 2 active camera(s).
+2026-04-13 10:19:05  INFO      main    Startup complete. API ready on http://0.0.0.0:8000
+2026-04-13 10:19:05  INFO      processor  [Monitor:Exit] Vision pipeline starting.
+2026-04-13 10:19:05  INFO      processor  [RTSP:Exit] Connecting... (retry delay=2.0s)
+2026-04-13 10:19:05  INFO      processor  [RTSP:Exit] Capture thread started (target=10 FPS).
+2026-04-13 10:19:05  INFO      processor  [Monitor:Entrance] Vision pipeline starting.
+2026-04-13 10:19:05  INFO      processor  [RTSP:Entrance] Connecting... (retry delay=2.0s)
+2026-04-13 10:19:05  INFO      processor  [RTSP:Entrance] Capture thread started (target=10 FPS).
+2026-04-13 10:19:05  INFO      database  [DB] Purged audit records older than 7 days.
+2026-04-13 10:19:06  INFO      processor  [RTSP:Exit] Connected successfully.
+2026-04-13 10:19:06  INFO      engine  [Engine] Loading Unified FaceAnalysis (640x640) on GPU (CUDA)...
+2026-04-13 10:19:06  INFO      engine  [Engine] Unified Engine Ready.
+2026-04-13 10:19:07  INFO      processor  [RTSP:Entrance] Connected successfully.
+2026-04-13 10:20:05  INFO      database  [DB] Starting periodic maintenance...
+2026-04-13 10:20:05  INFO      database  [DB] Purged audit records older than 7 days.
+2026-04-13 10:20:05  INFO      database  [DB] Maintenance complete. Access logs older than 2 days purged.
+2026-04-13 10:22:22  INFO      processor  [Monitor:Exit] Scene: 1 unknown face(s) detected.
+2026-04-13 10:22:23  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-13 10:22:23  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-13 10:22:23  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-13 10:22:23  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-13 10:22:23  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-13 10:22:23  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-13 10:22:23  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-13 10:22:24  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-13 10:22:24  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-13 10:22:24  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-13 10:22:24  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-13 10:22:24  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-13 10:22:24  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-13 10:22:24  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-13 10:22:24  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-13 10:22:24  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-13 10:22:25  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-13 10:22:25  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-13 10:22:25  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-13 10:22:25  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-13 10:22:25  INFO      httpx  HTTP Request: GET http://emplog.grapesonline.net/Employee/GetEmployeeDetails?RfID=0008941168 "HTTP/1.1 200 OK"
+2026-04-13 10:22:25  INFO      engine  [RF-Check] http://emplog.grapesonline.net/Employee/GetEmployeeDetails → 200 {"status":200,"Data":[{"EmpID":20148,"EmployeeName":"ABHAY RAMESH","DoorStatus":"IN","Checkinstatus":"OUT","ExitType":"T
+2026-04-13 10:22:25  INFO      processor  [Monitor:Exit] ✅ ACCESS GRANTED: 'abhay'
+2026-04-13 10:22:25  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-13 10:22:25  INFO      engine  [Door] Exit → WebSocket sent: OPEN_DOOR
+2026-04-13 10:22:25  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-13 10:22:25  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-13 10:22:25  INFO      httpx  HTTP Request: POST http://emplog.grapesonline.net/Employee/LogEmployeeEntry?MacAddress=84:1F:E8:24:A0:5C&EmployeeID=20148&Status=OUT "HTTP/1.1 200 OK"
+2026-04-13 10:22:25  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-13 10:22:25  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-13 10:22:25  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-13 10:22:26  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-13 10:22:26  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-13 10:22:26  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-13 10:22:26  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-13 10:22:26  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-13 10:22:26  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-13 10:22:26  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-13 10:22:26  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-13 10:22:26  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-13 10:22:27  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-13 10:22:27  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-13 10:22:27  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-13 10:22:27  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-13 10:22:27  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: abhay
+2026-04-13 10:22:32  INFO      AudioStreamer  [UDP] Stream complete: 695/695 chunks sent.
+2026-04-13 10:22:53  INFO      processor  [Monitor:Exit] Scene: 1 unknown face(s) detected.
+2026-04-13 10:23:13  INFO      processor  [Monitor:Entrance] Scene: 1 unknown face(s) detected.
+2026-04-13 10:35:52  INFO      processor  [Monitor:Exit] Scene: 1 unknown face(s) detected.
+2026-04-13 10:36:01  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: ARJUN
+2026-04-13 10:36:10  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: ADHIN 
+2026-04-13 10:36:10  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: ADHIN 
+2026-04-13 10:36:11  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: ADHIN 
+2026-04-13 10:36:12  INFO      httpx  HTTP Request: GET http://emplog.grapesonline.net/Employee/GetEmployeeDetails?RfID=0001409545 "HTTP/1.1 200 OK"
+2026-04-13 10:36:12  INFO      engine  [RF-Check] http://emplog.grapesonline.net/Employee/GetEmployeeDetails → 200 {"status":200,"Data":[{"EmpID":133,"EmployeeName":"ADHIN NADH T V ","DoorStatus":"OUT","Checkinstatus":"OUT","ExitType":
+2026-04-13 10:36:12  INFO      processor  [Monitor:Exit] ✅ ACCESS GRANTED: 'ADHIN '
+2026-04-13 10:36:12  INFO      engine  [Door] Exit → WebSocket sent: OPEN_DOOR
+2026-04-13 10:36:13  INFO      httpx  HTTP Request: POST http://emplog.grapesonline.net/Employee/LogEmployeeEntry?MacAddress=84:1F:E8:24:A0:5C&EmployeeID=133&Status=OUT "HTTP/1.1 200 OK"
+2026-04-13 10:36:19  INFO      AudioStreamer  [UDP] Stream complete: 690/690 chunks sent.
+2026-04-13 10:36:28  INFO      processor  [Monitor:Exit] Scene: 1 unknown face(s) detected.
+2026-04-13 10:36:29  INFO      processor  [Monitor:Entrance] Scene: 1 unknown face(s) detected.
+2026-04-13 10:36:30  INFO      processor  [Monitor:Entrance] Scene: 1 face(s) | Known: BUHARI
+2026-04-13 10:36:30  INFO      processor  [Monitor:Entrance] Scene: 1 face(s) | Known: BUHARI
+2026-04-13 10:36:30  INFO      processor  [Monitor:Entrance] Scene: 1 face(s) | Known: BUHARI
+2026-04-13 10:36:30  INFO      processor  [Monitor:Entrance] Scene: 1 face(s) | Known: BUHARI
+2026-04-13 10:36:30  INFO      processor  [Monitor:Entrance] Scene: 1 face(s) | Known: BUHARI
+2026-04-13 10:36:31  INFO      processor  [Monitor:Entrance] Scene: 1 face(s) | Known: BUHARI
+2026-04-13 10:36:31  INFO      processor  [Monitor:Entrance] Scene: 1 face(s) | Known: BUHARI
+2026-04-13 10:36:31  INFO      processor  [Monitor:Entrance] Scene: 1 face(s) | Known: BUHARI
+2026-04-13 10:36:31  INFO      httpx  HTTP Request: GET http://emplog.grapesonline.net/Employee/GetEmployeeDetails?RfID=0008779049 "HTTP/1.1 200 OK"
+2026-04-13 10:36:31  INFO      engine  [RF-Check] http://emplog.grapesonline.net/Employee/GetEmployeeDetails → 200 {"status":200,"Data":[{"EmpID":20200,"EmployeeName":"BUHARI K ","DoorStatus":"OUT","Checkinstatus":"RdytoChkIn","ExitTyp
+2026-04-13 10:36:31  INFO      processor  [Monitor:Entrance] ✅ ACCESS GRANTED: 'BUHARI'
+2026-04-13 10:36:31  INFO      processor  [Monitor:Entrance] Scene: 1 face(s) | Known: BUHARI
+2026-04-13 10:36:31  INFO      engine  [Door] Entrance → WebSocket sent: OPEN_DOOR
+2026-04-13 10:36:31  INFO      processor  [Monitor:Entrance] Scene: 1 face(s) | Known: BUHARI
+2026-04-13 10:36:31  INFO      httpx  HTTP Request: POST http://emplog.grapesonline.net/Employee/LogEmployeeEntry?MacAddress=84:1F:E8:24:A0:5C&EmployeeID=20200&Status=IN "HTTP/1.1 200 OK"
+2026-04-13 10:36:39  INFO      AudioStreamer  [UDP] Stream complete: 823/823 chunks sent.
+2026-04-13 10:44:03  INFO      processor  [Monitor:Entrance] Scene: 1 unknown face(s) detected.
+2026-04-13 10:44:03  INFO      processor  [Monitor:Entrance] Scene: 1 face(s) | Known: SACHIN E L
+2026-04-13 10:44:03  INFO      processor  [Monitor:Entrance] Scene: 1 face(s) | Known: SACHIN E L
+2026-04-13 10:44:03  INFO      processor  [Monitor:Entrance] Scene: 1 face(s) | Known: SACHIN E L
+2026-04-13 10:44:03  INFO      processor  [Monitor:Entrance] Scene: 1 face(s) | Known: SACHIN E L
+2026-04-13 10:44:03  INFO      processor  [Monitor:Entrance] Scene: 1 face(s) | Known: SACHIN E L
+2026-04-13 10:44:04  INFO      processor  [Monitor:Entrance] Scene: 1 face(s) | Known: SACHIN E L
+2026-04-13 10:44:04  INFO      processor  [Monitor:Entrance] Scene: 1 face(s) | Known: SACHIN E L
+2026-04-13 10:44:04  INFO      processor  [Monitor:Entrance] Scene: 1 face(s) | Known: SACHIN E L
+2026-04-13 10:44:04  INFO      processor  [Monitor:Entrance] Scene: 1 face(s) | Known: SACHIN E L
+2026-04-13 10:44:04  INFO      processor  [Monitor:Entrance] Scene: 1 face(s) | Known: SACHIN E L
+2026-04-13 10:44:04  INFO      processor  [Monitor:Entrance] Scene: 1 face(s) | Known: SACHIN E L
+2026-04-13 10:44:05  INFO      httpx  HTTP Request: GET http://emplog.grapesonline.net/Employee/GetEmployeeDetails?RfID=0000662747 "HTTP/1.1 200 OK"
+2026-04-13 10:44:05  INFO      engine  [RF-Check] http://emplog.grapesonline.net/Employee/GetEmployeeDetails → 200 {"status":200,"Data":[{"EmpID":3,"EmployeeName":"SACHIN E L","DoorStatus":"OUT","Checkinstatus":"RdytoChkIn","ExitType":
+2026-04-13 10:44:05  INFO      processor  [Monitor:Entrance] ✅ ACCESS GRANTED: 'SACHIN E L'
+2026-04-13 10:44:05  INFO      engine  [Door] Entrance → WebSocket sent: OPEN_DOOR
+2026-04-13 10:44:05  INFO      httpx  HTTP Request: POST http://emplog.grapesonline.net/Employee/LogEmployeeEntry?MacAddress=84:1F:E8:24:A0:5C&EmployeeID=3&Status=IN "HTTP/1.1 200 OK"
+2026-04-13 10:44:08  INFO      processor  [Monitor:Exit] Scene: 1 unknown face(s) detected.
+2026-04-13 10:44:13  INFO      AudioStreamer  [UDP] Stream complete: 806/806 chunks sent.
+2026-04-13 10:44:24  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: SACHIN E L
+2026-04-13 10:44:24  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: SACHIN E L
+2026-04-13 10:44:24  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: SACHIN E L
+2026-04-13 10:44:24  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: SACHIN E L
+2026-04-13 10:44:24  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: SACHIN E L
+2026-04-13 10:44:24  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: SACHIN E L
+2026-04-13 10:44:25  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: SACHIN E L
+2026-04-13 10:44:25  INFO      httpx  HTTP Request: GET http://emplog.grapesonline.net/Employee/GetEmployeeDetails?RfID=0000662747 "HTTP/1.1 200 OK"
+2026-04-13 10:44:25  INFO      engine  [RF-Check] http://emplog.grapesonline.net/Employee/GetEmployeeDetails → 200 {"status":200,"Data":[{"EmpID":3,"EmployeeName":"SACHIN E L","DoorStatus":"IN","Checkinstatus":"RdytoChkIn","ExitType":n
+2026-04-13 10:44:25  INFO      processor  [Monitor:Exit] ✅ ACCESS GRANTED: 'SACHIN E L'
+2026-04-13 10:44:25  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: SACHIN E L
+2026-04-13 10:44:25  INFO      engine  [Door] Exit → WebSocket sent: OPEN_DOOR
+2026-04-13 10:44:25  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: SACHIN E L
+2026-04-13 10:44:25  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: SACHIN E L
+2026-04-13 10:44:25  INFO      httpx  HTTP Request: POST http://emplog.grapesonline.net/Employee/LogEmployeeEntry?MacAddress=84:1F:E8:24:A0:5C&EmployeeID=3&Status=OUT "HTTP/1.1 200 OK"
+2026-04-13 10:44:25  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: SACHIN E L
+2026-04-13 10:44:25  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: SACHIN E L
+2026-04-13 10:44:25  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: SACHIN E L
+2026-04-13 10:44:25  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: SACHIN E L
+2026-04-13 10:44:25  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: SACHIN E L
+2026-04-13 10:44:26  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: SACHIN E L
+2026-04-13 10:44:26  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: SACHIN E L
+2026-04-13 10:44:26  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: SACHIN E L
+2026-04-13 10:44:26  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: SACHIN E L
+2026-04-13 10:44:26  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: SACHIN E L
+2026-04-13 10:44:26  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: SACHIN E L
+2026-04-13 10:44:34  INFO      AudioStreamer  [UDP] Stream complete: 967/967 chunks sent.
+2026-04-13 10:46:49  INFO      processor  [Monitor:Exit] Scene: 1 unknown face(s) detected.
+2026-04-13 10:46:59  INFO      processor  [Monitor:Entrance] Scene: 1 unknown face(s) detected.
+2026-04-13 10:47:09  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: ARJUN
+2026-04-13 10:47:09  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: ARJUN
+2026-04-13 10:47:09  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: ARJUN
+2026-04-13 10:47:09  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: ARJUN
+2026-04-13 10:47:09  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: ARJUN
+2026-04-13 10:47:10  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: ARJUN
+2026-04-13 10:47:10  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: ARJUN
+2026-04-13 10:47:10  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: ARJUN
+2026-04-13 10:47:10  INFO      httpx  HTTP Request: GET http://emplog.grapesonline.net/Employee/GetEmployeeDetails?RfID=0005528689 "HTTP/1.1 200 OK"
+2026-04-13 10:47:10  INFO      engine  [RF-Check] http://emplog.grapesonline.net/Employee/GetEmployeeDetails → 200 {"status":200,"Data":[{"EmpID":20157,"EmployeeName":"ARJUN V.U.","DoorStatus":"OUT","Checkinstatus":"OUT","ExitType":"Re
+2026-04-13 10:47:10  INFO      processor  [Monitor:Exit] ✅ ACCESS GRANTED: 'ARJUN'
+2026-04-13 10:47:10  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: ARJUN
+2026-04-13 10:47:10  INFO      engine  [Door] Exit → WebSocket sent: OPEN_DOOR
+2026-04-13 10:47:10  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: ARJUN
+2026-04-13 10:47:10  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: ARJUN
+2026-04-13 10:47:10  INFO      httpx  HTTP Request: POST http://emplog.grapesonline.net/Employee/LogEmployeeEntry?MacAddress=84:1F:E8:24:A0:5C&EmployeeID=20157&Status=OUT "HTTP/1.1 200 OK"
+2026-04-13 10:47:19  INFO      AudioStreamer  [UDP] Stream complete: 904/904 chunks sent.
+2026-04-13 10:47:19  INFO      processor  [Monitor:Exit] Scene: 1 unknown face(s) detected.
+2026-04-13 10:51:04  INFO      processor  [Monitor:Exit] Scene: 1 unknown face(s) detected.
+2026-04-13 10:54:54  INFO      processor  [Monitor:Exit] Scene: 1 unknown face(s) detected.
+2026-04-13 10:57:31  INFO      processor  [Monitor:Entrance] Scene: 1 unknown face(s) detected.
+2026-04-13 10:57:36  INFO      processor  [Monitor:Exit] Scene: 1 unknown face(s) detected.
+2026-04-13 10:58:42  INFO      processor  [Monitor:Entrance] Scene: 1 unknown face(s) detected.
+2026-04-13 10:58:44  INFO      processor  [Monitor:Entrance] Scene: 2 face(s) | Known: RAHUL
+2026-04-13 10:58:46  INFO      processor  [Monitor:Entrance] Scene: 1 face(s) | Known: RAHUL
+2026-04-13 10:58:48  INFO      processor  [Monitor:Entrance] Scene: 1 face(s) | Known: ASWIN
+2026-04-13 10:58:48  INFO      processor  [Monitor:Entrance] Scene: 1 face(s) | Known: ASWIN
+2026-04-13 10:58:48  INFO      processor  [Monitor:Entrance] Scene: 1 face(s) | Known: ASWIN
+2026-04-13 10:58:49  INFO      processor  [Monitor:Entrance] Scene: 1 face(s) | Known: ASWIN
+2026-04-13 10:58:50  INFO      processor  [Monitor:Exit] Scene: 1 unknown face(s) detected.
+2026-04-13 10:58:50  INFO      httpx  HTTP Request: GET http://emplog.grapesonline.net/Employee/GetEmployeeDetails?RfID=0001906527 "HTTP/1.1 200 OK"
+2026-04-13 10:58:50  INFO      engine  [RF-Check] http://emplog.grapesonline.net/Employee/GetEmployeeDetails → 200 {"status":200,"Data":[{"EmpID":20188,"EmployeeName":"ASWIN N A","DoorStatus":"OUT","Checkinstatus":"OUT","ExitType":"Tea
+2026-04-13 10:58:50  INFO      processor  [Monitor:Entrance] ✅ ACCESS GRANTED: 'ASWIN'
+2026-04-13 10:58:50  INFO      engine  [Door] Entrance → WebSocket sent: OPEN_DOOR
+2026-04-13 10:58:50  INFO      httpx  HTTP Request: POST http://emplog.grapesonline.net/Employee/LogEmployeeEntry?MacAddress=84:1F:E8:24:A0:5C&EmployeeID=20188&Status=IN "HTTP/1.1 200 OK"
+2026-04-13 10:58:57  INFO      AudioStreamer  [UDP] Stream complete: 744/744 chunks sent.
+2026-04-13 10:59:39  INFO      processor  [Monitor:Entrance] Scene: 1 unknown face(s) detected.
+2026-04-13 10:59:43  INFO      processor  [Monitor:Exit] Scene: 1 unknown face(s) detected.
+2026-04-13 11:01:22  INFO      processor  [Monitor:Entrance] Scene: 1 unknown face(s) detected.
+2026-04-13 11:03:02  INFO      processor  [Monitor:Exit] Scene: 1 unknown face(s) detected.
+2026-04-13 11:03:09  INFO      processor  [Monitor:Entrance] Scene: 1 unknown face(s) detected.
+2026-04-13 11:05:19  INFO      processor  [Monitor:Entrance] Scene: 1 face(s) | Known: ARJUN
+2026-04-13 11:05:19  INFO      processor  [Monitor:Entrance] Scene: 1 unknown face(s) detected.
+2026-04-13 11:05:20  INFO      processor  [Monitor:Entrance] Scene: 1 face(s) | Known: ARJUN
+2026-04-13 11:05:20  INFO      processor  [Monitor:Entrance] Scene: 1 face(s) | Known: ARJUN
+2026-04-13 11:05:21  INFO      processor  [Monitor:Entrance] Scene: 1 face(s) | Known: ARJUN
+2026-04-13 11:05:21  INFO      processor  [Monitor:Entrance] Scene: 1 face(s) | Known: ARJUN
+2026-04-13 11:05:22  INFO      processor  [Monitor:Entrance] Scene: 1 face(s) | Known: ARJUN
+2026-04-13 11:05:22  INFO      processor  [Monitor:Entrance] Scene: 1 face(s) | Known: ARJUN
+2026-04-13 11:05:22  INFO      processor  [Monitor:Entrance] Scene: 1 face(s) | Known: ARJUN
+2026-04-13 11:05:22  INFO      processor  [Monitor:Entrance] Scene: 1 face(s) | Known: ARJUN
+2026-04-13 11:05:22  INFO      processor  [Monitor:Entrance] Scene: 1 face(s) | Known: ARJUN
+2026-04-13 11:05:24  INFO      httpx  HTTP Request: GET http://emplog.grapesonline.net/Employee/GetEmployeeDetails?RfID=0005528689 "HTTP/1.1 200 OK"
+2026-04-13 11:05:24  INFO      engine  [RF-Check] http://emplog.grapesonline.net/Employee/GetEmployeeDetails → 200 {"status":200,"Data":[{"EmpID":20157,"EmployeeName":"ARJUN V.U.","DoorStatus":"IN","Checkinstatus":"OUT","ExitType":"Res
+2026-04-13 11:05:24  INFO      processor  [Monitor:Entrance] ✅ ACCESS GRANTED: 'ARJUN'
+2026-04-13 11:05:24  INFO      engine  [Door] Entrance → WebSocket sent: OPEN_DOOR
+2026-04-13 11:05:24  INFO      httpx  HTTP Request: POST http://emplog.grapesonline.net/Employee/LogEmployeeEntry?MacAddress=84:1F:E8:24:A0:5C&EmployeeID=20157&Status=IN "HTTP/1.1 200 OK"
+2026-04-13 11:05:24  INFO      processor  [Monitor:Entrance] Scene: 1 face(s) | Known: ADHIN 
+2026-04-13 11:05:25  INFO      processor  [Monitor:Entrance] Scene: 1 face(s) | Known: ADHIN 
+2026-04-13 11:05:25  INFO      processor  [Monitor:Entrance] Scene: 1 face(s) | Known: ADHIN 
+2026-04-13 11:05:25  INFO      processor  [Monitor:Entrance] Scene: 1 face(s) | Known: ADHIN 
+2026-04-13 11:05:25  INFO      processor  [Monitor:Entrance] Scene: 1 face(s) | Known: ADHIN 
+2026-04-13 11:05:25  INFO      processor  [Monitor:Entrance] Scene: 1 face(s) | Known: ADHIN 
+2026-04-13 11:05:25  INFO      processor  [Monitor:Entrance] Scene: 1 face(s) | Known: ADHIN 
+2026-04-13 11:05:25  INFO      processor  [Monitor:Exit] Scene: 1 unknown face(s) detected.
+2026-04-13 11:05:25  INFO      processor  [Monitor:Entrance] Scene: 1 face(s) | Known: ADHIN 
+2026-04-13 11:05:25  INFO      processor  [Monitor:Entrance] Scene: 1 face(s) | Known: ADHIN 
+2026-04-13 11:05:25  INFO      processor  [Monitor:Entrance] Scene: 1 face(s) | Known: ADHIN 
+2026-04-13 11:05:25  INFO      httpx  HTTP Request: GET http://emplog.grapesonline.net/Employee/GetEmployeeDetails?RfID=0001409545 "HTTP/1.1 200 OK"
+2026-04-13 11:05:26  INFO      engine  [RF-Check] http://emplog.grapesonline.net/Employee/GetEmployeeDetails → 200 {"status":200,"Data":[{"EmpID":133,"EmployeeName":"ADHIN NADH T V ","DoorStatus":"OUT","Checkinstatus":"OUT","ExitType":
+2026-04-13 11:05:26  INFO      processor  [Monitor:Entrance] ✅ ACCESS GRANTED: 'ADHIN '
+2026-04-13 11:05:26  INFO      processor  [Monitor:Entrance] Scene: 1 face(s) | Known: ADHIN 
+2026-04-13 11:05:26  INFO      engine  [Door] Entrance → WebSocket sent: OPEN_DOOR
+2026-04-13 11:05:26  INFO      processor  [Monitor:Entrance] Scene: 1 face(s) | Known: ADHIN 
+2026-04-13 11:05:26  INFO      processor  [Monitor:Entrance] Scene: 1 face(s) | Known: ADHIN 
+2026-04-13 11:05:26  INFO      processor  [Monitor:Entrance] Scene: 1 face(s) | Known: ADHIN 
+2026-04-13 11:05:26  INFO      httpx  HTTP Request: POST http://emplog.grapesonline.net/Employee/LogEmployeeEntry?MacAddress=84:1F:E8:24:A0:5C&EmployeeID=133&Status=IN "HTTP/1.1 200 OK"
+2026-04-13 11:05:32  INFO      AudioStreamer  [UDP] Stream complete: 876/876 chunks sent.
+2026-04-13 11:05:40  INFO      AudioStreamer  [UDP] Stream complete: 733/733 chunks sent.
+2026-04-13 11:09:28  INFO      processor  [Monitor:Exit] Scene: 1 unknown face(s) detected.
+2026-04-13 11:09:30  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: BUHARI
+2026-04-13 11:09:30  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: BUHARI
+2026-04-13 11:09:30  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: BUHARI
+2026-04-13 11:09:30  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: BUHARI
+2026-04-13 11:09:30  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: BUHARI
+2026-04-13 11:09:31  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: BUHARI
+2026-04-13 11:09:31  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: BUHARI
+2026-04-13 11:09:31  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: BUHARI
+2026-04-13 11:09:31  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: BUHARI
+2026-04-13 11:09:31  INFO      httpx  HTTP Request: GET http://emplog.grapesonline.net/Employee/GetEmployeeDetails?RfID=0008779049 "HTTP/1.1 200 OK"
+2026-04-13 11:09:31  INFO      engine  [RF-Check] http://emplog.grapesonline.net/Employee/GetEmployeeDetails → 200 {"status":200,"Data":[{"EmpID":20200,"EmployeeName":"BUHARI K ","DoorStatus":"IN","Checkinstatus":"RdytoChkIn","ExitType
+2026-04-13 11:09:31  INFO      processor  [Monitor:Exit] ✅ ACCESS GRANTED: 'BUHARI'
+2026-04-13 11:09:31  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: BUHARI
+2026-04-13 11:09:31  INFO      engine  [Door] Exit → WebSocket sent: OPEN_DOOR
+2026-04-13 11:09:31  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: BUHARI
+2026-04-13 11:09:31  INFO      httpx  HTTP Request: POST http://emplog.grapesonline.net/Employee/LogEmployeeEntry?MacAddress=84:1F:E8:24:A0:5C&EmployeeID=20200&Status=OUT "HTTP/1.1 200 OK"
+2026-04-13 11:09:31  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: BUHARI
+2026-04-13 11:09:31  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: BUHARI
+2026-04-13 11:09:31  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: BUHARI
+2026-04-13 11:09:32  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: BUHARI
+2026-04-13 11:09:32  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: BUHARI
+2026-04-13 11:09:32  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: BUHARI
+2026-04-13 11:09:32  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: BUHARI
+2026-04-13 11:09:32  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: BUHARI
+2026-04-13 11:09:32  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: BUHARI
+2026-04-13 11:09:32  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: BUHARI
+2026-04-13 11:09:32  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: BUHARI
+2026-04-13 11:09:40  INFO      AudioStreamer  [UDP] Stream complete: 908/908 chunks sent.
+2026-04-13 11:09:44  INFO      processor  [Monitor:Entrance] Scene: 1 unknown face(s) detected.
+2026-04-13 11:18:40  INFO      processor  [Monitor:Entrance] Scene: 1 unknown face(s) detected.
+2026-04-13 11:18:48  INFO      processor  [Monitor:Exit] Scene: 1 unknown face(s) detected.
+2026-04-13 11:18:50  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: ARJUN
+2026-04-13 11:19:34  INFO      processor  [Monitor:Entrance] Scene: 1 unknown face(s) detected.
+2026-04-13 11:24:05  INFO      processor  [Monitor:Entrance] Scene: 1 unknown face(s) detected.
+2026-04-13 11:24:05  INFO      processor  [Monitor:Entrance] Scene: 1 face(s) | Known: NOBLE PRINCE
+2026-04-13 11:24:05  INFO      processor  [Monitor:Entrance] Scene: 1 face(s) | Known: NOBLE PRINCE
+2026-04-13 11:24:05  INFO      processor  [Monitor:Entrance] Scene: 1 face(s) | Known: NOBLE PRINCE
+2026-04-13 11:24:05  INFO      processor  [Monitor:Entrance] Scene: 1 face(s) | Known: NOBLE PRINCE
+2026-04-13 11:24:05  INFO      processor  [Monitor:Entrance] Scene: 1 face(s) | Known: NOBLE PRINCE
+2026-04-13 11:24:05  INFO      processor  [Monitor:Entrance] Scene: 1 face(s) | Known: NOBLE PRINCE
+2026-04-13 11:24:05  INFO      processor  [Monitor:Entrance] Scene: 1 face(s) | Known: NOBLE PRINCE
+2026-04-13 11:24:06  INFO      processor  [Monitor:Entrance] Scene: 1 face(s) | Known: NOBLE PRINCE
+2026-04-13 11:24:06  INFO      processor  [Monitor:Entrance] Scene: 1 face(s) | Known: NOBLE PRINCE
+2026-04-13 11:24:06  INFO      processor  [Monitor:Entrance] Scene: 1 face(s) | Known: NOBLE PRINCE
+2026-04-13 11:24:06  INFO      processor  [Monitor:Entrance] Scene: 1 face(s) | Known: NOBLE PRINCE
+2026-04-13 11:24:06  INFO      processor  [Monitor:Entrance] Scene: 1 face(s) | Known: NOBLE PRINCE
+2026-04-13 11:24:06  INFO      processor  [Monitor:Entrance] Scene: 1 face(s) | Known: NOBLE PRINCE
+2026-04-13 11:24:06  INFO      processor  [Monitor:Entrance] Scene: 1 face(s) | Known: NOBLE PRINCE
+2026-04-13 11:24:07  INFO      httpx  HTTP Request: GET http://emplog.grapesonline.net/Employee/GetEmployeeDetails?RfID=0008944727 "HTTP/1.1 200 OK"
+2026-04-13 11:24:07  INFO      engine  [RF-Check] http://emplog.grapesonline.net/Employee/GetEmployeeDetails → 200 {"status":200,"Data":[{"EmpID":43,"EmployeeName":"NOBLE PRINCE","DoorStatus":"OUT","Checkinstatus":"RdytoChkIn","ExitTyp
+2026-04-13 11:24:07  INFO      processor  [Monitor:Entrance] ✅ ACCESS GRANTED: 'NOBLE PRINCE'
+2026-04-13 11:24:07  INFO      processor  [Monitor:Entrance] Scene: 1 face(s) | Known: NOBLE PRINCE
+2026-04-13 11:24:07  INFO      engine  [Door] Entrance → WebSocket sent: OPEN_DOOR
+2026-04-13 11:24:07  INFO      processor  [Monitor:Entrance] Scene: 1 face(s) | Known: NOBLE PRINCE
+2026-04-13 11:24:07  INFO      processor  [Monitor:Entrance] Scene: 1 face(s) | Known: NOBLE PRINCE
+2026-04-13 11:24:07  INFO      httpx  HTTP Request: POST http://emplog.grapesonline.net/Employee/LogEmployeeEntry?MacAddress=84:1F:E8:24:A0:5C&EmployeeID=43&Status=IN "HTTP/1.1 200 OK"
+2026-04-13 11:24:07  INFO      processor  [Monitor:Entrance] Scene: 1 face(s) | Known: NOBLE PRINCE
+2026-04-13 11:24:07  INFO      processor  [Monitor:Entrance] Scene: 1 face(s) | Known: NOBLE PRINCE
+2026-04-13 11:24:07  INFO      processor  [Monitor:Entrance] Scene: 1 face(s) | Known: NOBLE PRINCE
+2026-04-13 11:24:07  INFO      processor  [Monitor:Entrance] Scene: 1 face(s) | Known: NOBLE PRINCE
+2026-04-13 11:24:07  INFO      processor  [Monitor:Entrance] Scene: 1 face(s) | Known: NOBLE PRINCE
+2026-04-13 11:24:07  INFO      processor  [Monitor:Entrance] Scene: 1 face(s) | Known: NOBLE PRINCE
+2026-04-13 11:24:08  INFO      processor  [Monitor:Entrance] Scene: 1 face(s) | Known: NOBLE PRINCE
+2026-04-13 11:24:08  INFO      processor  [Monitor:Entrance] Scene: 1 face(s) | Known: NOBLE PRINCE
+2026-04-13 11:24:08  INFO      processor  [Monitor:Entrance] Scene: 1 face(s) | Known: NOBLE PRINCE
+2026-04-13 11:24:08  INFO      processor  [Monitor:Entrance] Scene: 1 face(s) | Known: NOBLE PRINCE
+2026-04-13 11:24:08  INFO      processor  [Monitor:Entrance] Scene: 1 face(s) | Known: NOBLE PRINCE
+2026-04-13 11:24:08  INFO      processor  [Monitor:Entrance] Scene: 1 face(s) | Known: NOBLE PRINCE
+2026-04-13 11:24:08  INFO      processor  [Monitor:Entrance] Scene: 1 face(s) | Known: NOBLE PRINCE
+2026-04-13 11:24:08  INFO      processor  [Monitor:Entrance] Scene: 1 face(s) | Known: NOBLE PRINCE
+2026-04-13 11:24:08  INFO      processor  [Monitor:Entrance] Scene: 1 face(s) | Known: NOBLE PRINCE
+2026-04-13 11:24:17  INFO      AudioStreamer  [UDP] Stream complete: 1070/1070 chunks sent.
+2026-04-13 11:24:29  INFO      processor  [Monitor:Entrance] Scene: 1 face(s) | Known: BUHARI
+2026-04-13 11:24:29  INFO      processor  [Monitor:Entrance] Scene: 1 face(s) | Known: BUHARI
+2026-04-13 11:24:29  INFO      processor  [Monitor:Entrance] Scene: 1 face(s) | Known: BUHARI
+2026-04-13 11:24:29  INFO      processor  [Monitor:Entrance] Scene: 1 face(s) | Known: BUHARI
+2026-04-13 11:24:29  INFO      processor  [Monitor:Entrance] Scene: 1 face(s) | Known: BUHARI
+2026-04-13 11:24:29  INFO      processor  [Monitor:Entrance] Scene: 1 face(s) | Known: BUHARI
+2026-04-13 11:24:29  INFO      processor  [Monitor:Entrance] Scene: 1 face(s) | Known: BUHARI
+2026-04-13 11:24:29  INFO      processor  [Monitor:Entrance] Scene: 1 face(s) | Known: BUHARI
+2026-04-13 11:24:29  INFO      processor  [Monitor:Entrance] Scene: 1 face(s) | Known: BUHARI
+2026-04-13 11:24:30  INFO      httpx  HTTP Request: GET http://emplog.grapesonline.net/Employee/GetEmployeeDetails?RfID=0008779049 "HTTP/1.1 200 OK"
+2026-04-13 11:24:30  INFO      engine  [RF-Check] http://emplog.grapesonline.net/Employee/GetEmployeeDetails → 200 {"status":200,"Data":[{"EmpID":20200,"EmployeeName":"BUHARI K ","DoorStatus":"OUT","Checkinstatus":"RdytoChkIn","ExitTyp
+2026-04-13 11:24:30  INFO      processor  [Monitor:Entrance] ✅ ACCESS GRANTED: 'BUHARI'
+2026-04-13 11:24:30  INFO      processor  [Monitor:Entrance] Scene: 1 face(s) | Known: BUHARI
+2026-04-13 11:24:30  INFO      engine  [Door] Entrance → WebSocket sent: OPEN_DOOR
+2026-04-13 11:24:30  INFO      processor  [Monitor:Entrance] Scene: 1 face(s) | Known: BUHARI
+2026-04-13 11:24:30  INFO      processor  [Monitor:Entrance] Scene: 1 face(s) | Known: BUHARI
+2026-04-13 11:24:30  INFO      processor  [Monitor:Entrance] Scene: 1 face(s) | Known: BUHARI
+2026-04-13 11:24:30  INFO      httpx  HTTP Request: POST http://emplog.grapesonline.net/Employee/LogEmployeeEntry?MacAddress=84:1F:E8:24:A0:5C&EmployeeID=20200&Status=IN "HTTP/1.1 200 OK"
+2026-04-13 11:24:30  INFO      processor  [Monitor:Entrance] Scene: 1 face(s) | Known: BUHARI
+2026-04-13 11:24:30  INFO      processor  [Monitor:Entrance] Scene: 1 face(s) | Known: BUHARI
+2026-04-13 11:24:30  INFO      processor  [Monitor:Entrance] Scene: 1 face(s) | Known: BUHARI
+2026-04-13 11:24:30  INFO      processor  [Monitor:Entrance] Scene: 1 face(s) | Known: BUHARI
+2026-04-13 11:24:30  INFO      processor  [Monitor:Entrance] Scene: 1 face(s) | Known: BUHARI
+2026-04-13 11:24:31  INFO      processor  [Monitor:Entrance] Scene: 1 face(s) | Known: BUHARI
+2026-04-13 11:24:31  INFO      processor  [Monitor:Entrance] Scene: 1 face(s) | Known: BUHARI
+2026-04-13 11:24:31  INFO      processor  [Monitor:Entrance] Scene: 1 face(s) | Known: BUHARI
+2026-04-13 11:24:31  INFO      processor  [Monitor:Entrance] Scene: 1 face(s) | Known: BUHARI
+2026-04-13 11:24:31  INFO      processor  [Monitor:Entrance] Scene: 1 face(s) | Known: BUHARI
+2026-04-13 11:24:31  INFO      processor  [Monitor:Entrance] Scene: 1 face(s) | Known: BUHARI
+2026-04-13 11:24:31  INFO      processor  [Monitor:Entrance] Scene: 1 face(s) | Known: BUHARI
+2026-04-13 11:24:31  INFO      processor  [Monitor:Entrance] Scene: 1 face(s) | Known: BUHARI
+2026-04-13 11:24:31  INFO      processor  [Monitor:Entrance] Scene: 1 face(s) | Known: BUHARI
+2026-04-13 11:24:35  INFO      processor  [Monitor:Exit] Scene: 1 unknown face(s) detected.
+2026-04-13 11:24:39  INFO      AudioStreamer  [UDP] Stream complete: 1024/1024 chunks sent.
+2026-04-13 11:25:56  INFO      processor  [Monitor:Entrance] Scene: 1 unknown face(s) detected.
+2026-04-13 11:26:02  INFO      processor  [Monitor:Exit] Scene: 1 unknown face(s) detected.
+2026-04-13 11:30:42  INFO      processor  [Monitor:Entrance] Scene: 1 face(s) | Known: JESWIN THOMAS
+2026-04-13 11:30:42  INFO      processor  [Monitor:Entrance] Scene: 1 unknown face(s) detected.
+2026-04-13 11:30:44  INFO      processor  [Monitor:Entrance] Scene: 2 face(s) | Known: JAYAKRISHNA
+2026-04-13 11:30:51  INFO      processor  [Monitor:Exit] Scene: 1 unknown face(s) detected.
+2026-04-13 11:32:49  INFO      processor  [Monitor:Exit] Scene: 1 unknown face(s) detected.
+2026-04-13 11:32:50  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: BUHARI
+2026-04-13 11:32:51  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: BUHARI
+2026-04-13 11:32:51  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: BUHARI
+2026-04-13 11:32:51  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: BUHARI
+2026-04-13 11:32:51  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: BUHARI
+2026-04-13 11:32:51  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: BUHARI
+2026-04-13 11:32:51  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: BUHARI
+2026-04-13 11:32:51  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: BUHARI
+2026-04-13 11:32:52  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: BUHARI
+2026-04-13 11:32:52  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: BUHARI
+2026-04-13 11:32:52  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: BUHARI
+2026-04-13 11:32:52  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: BUHARI
+2026-04-13 11:32:52  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: BUHARI
+2026-04-13 11:32:52  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: BUHARI
+2026-04-13 11:32:52  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: BUHARI
+2026-04-13 11:32:52  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: BUHARI
+2026-04-13 11:32:52  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: BUHARI
+2026-04-13 11:32:53  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: BUHARI
+2026-04-13 11:32:53  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: BUHARI
+2026-04-13 11:32:53  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: BUHARI
+2026-04-13 11:32:53  INFO      httpx  HTTP Request: GET http://emplog.grapesonline.net/Employee/GetEmployeeDetails?RfID=0008779049 "HTTP/1.1 200 OK"
+2026-04-13 11:32:53  INFO      engine  [RF-Check] http://emplog.grapesonline.net/Employee/GetEmployeeDetails → 200 {"status":200,"Data":[{"EmpID":20200,"EmployeeName":"BUHARI K ","DoorStatus":"IN","Checkinstatus":"RdytoChkIn","ExitType
+2026-04-13 11:32:53  INFO      processor  [Monitor:Exit] ✅ ACCESS GRANTED: 'BUHARI'
+2026-04-13 11:32:53  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: BUHARI
+2026-04-13 11:32:53  INFO      engine  [Door] Exit → WebSocket sent: OPEN_DOOR
+2026-04-13 11:32:53  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: BUHARI
+2026-04-13 11:32:53  INFO      httpx  HTTP Request: POST http://emplog.grapesonline.net/Employee/LogEmployeeEntry?MacAddress=84:1F:E8:24:A0:5C&EmployeeID=20200&Status=OUT "HTTP/1.1 200 OK"
+2026-04-13 11:32:53  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: BUHARI
+2026-04-13 11:32:53  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: BUHARI
+2026-04-13 11:32:53  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: BUHARI
+2026-04-13 11:32:53  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: BUHARI
+2026-04-13 11:32:53  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: BUHARI
+2026-04-13 11:33:01  INFO      AudioStreamer  [UDP] Stream complete: 908/908 chunks sent.
+2026-04-13 12:03:01  INFO      processor  [Monitor:Exit] Scene: 1 unknown face(s) detected.
+2026-04-13 12:03:02  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: JAYAKRISHNA
+2026-04-13 12:03:06  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: JAYAKRISHNA
+2026-04-13 12:03:06  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: JAYAKRISHNA
+2026-04-13 12:03:06  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: JAYAKRISHNA
+2026-04-13 12:03:06  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: JAYAKRISHNA
+2026-04-13 12:03:06  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: JAYAKRISHNA
+2026-04-13 12:03:06  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: JAYAKRISHNA
+2026-04-13 12:03:06  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: JAYAKRISHNA
+2026-04-13 12:03:07  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: JAYAKRISHNA
+2026-04-13 12:03:08  INFO      httpx  HTTP Request: GET http://emplog.grapesonline.net/Employee/GetEmployeeDetails?RfID=0007194544 "HTTP/1.1 200 OK"
+2026-04-13 12:03:08  INFO      engine  [RF-Check] http://emplog.grapesonline.net/Employee/GetEmployeeDetails → 200 {"status":200,"Data":[{"EmpID":20194,"EmployeeName":"SREE JAYAKRISHNA","DoorStatus":"OUT","Checkinstatus":"OUT","ExitTyp
+2026-04-13 12:03:08  INFO      processor  [Monitor:Exit] ✅ ACCESS GRANTED: 'JAYAKRISHNA'
+2026-04-13 12:03:08  INFO      engine  [Door] Exit → WebSocket sent: OPEN_DOOR
+2026-04-13 12:03:08  INFO      httpx  HTTP Request: POST http://emplog.grapesonline.net/Employee/LogEmployeeEntry?MacAddress=84:1F:E8:24:A0:5C&EmployeeID=20194&Status=OUT "HTTP/1.1 200 OK"
+2026-04-13 12:03:17  INFO      AudioStreamer  [UDP] Stream complete: 952/952 chunks sent.
+2026-04-13 12:09:54  INFO      processor  [Monitor:Entrance] Scene: 1 unknown face(s) detected.
+2026-04-13 12:09:54  INFO      processor  [Monitor:Entrance] Scene: 1 face(s) | Known: abhay
+2026-04-13 12:09:54  INFO      processor  [Monitor:Entrance] Scene: 1 face(s) | Known: abhay
+2026-04-13 12:09:55  INFO      processor  [Monitor:Entrance] Scene: 1 face(s) | Known: abhay
+2026-04-13 12:09:55  INFO      processor  [Monitor:Entrance] Scene: 1 face(s) | Known: abhay
+2026-04-13 12:09:55  INFO      processor  [Monitor:Entrance] Scene: 1 face(s) | Known: abhay
+2026-04-13 12:09:55  INFO      processor  [Monitor:Entrance] Scene: 1 face(s) | Known: abhay
+2026-04-13 12:09:55  INFO      processor  [Monitor:Entrance] Scene: 1 face(s) | Known: abhay
+2026-04-13 12:09:56  INFO      processor  [Monitor:Entrance] Scene: 1 face(s) | Known: abhay
+2026-04-13 12:09:56  INFO      processor  [Monitor:Entrance] Scene: 1 face(s) | Known: abhay
+2026-04-13 12:09:56  INFO      processor  [Monitor:Entrance] Scene: 1 face(s) | Known: abhay
+2026-04-13 12:09:56  INFO      processor  [Monitor:Entrance] Scene: 1 face(s) | Known: abhay
+2026-04-13 12:09:56  INFO      processor  [Monitor:Entrance] Scene: 1 face(s) | Known: abhay
+2026-04-13 12:09:56  INFO      processor  [Monitor:Entrance] Scene: 1 face(s) | Known: abhay
+2026-04-13 12:09:56  INFO      httpx  HTTP Request: GET http://emplog.grapesonline.net/Employee/GetEmployeeDetails?RfID=0008941168 "HTTP/1.1 200 OK"
+2026-04-13 12:09:56  INFO      engine  [RF-Check] http://emplog.grapesonline.net/Employee/GetEmployeeDetails → 200 {"status":200,"Data":[{"EmpID":20148,"EmployeeName":"ABHAY RAMESH","DoorStatus":"IN","Checkinstatus":"OUT","ExitType":"T
+2026-04-13 12:09:56  INFO      processor  [Monitor:Entrance] ✅ ACCESS GRANTED: 'abhay'
+2026-04-13 12:09:56  INFO      processor  [Monitor:Entrance] Scene: 1 face(s) | Known: abhay
+2026-04-13 12:09:56  INFO      engine  [Door] Entrance → WebSocket sent: OPEN_DOOR
+2026-04-13 12:09:56  INFO      processor  [Monitor:Entrance] Scene: 1 face(s) | Known: abhay
+2026-04-13 12:09:56  INFO      processor  [Monitor:Entrance] Scene: 1 face(s) | Known: abhay
+2026-04-13 12:09:56  INFO      httpx  HTTP Request: POST http://emplog.grapesonline.net/Employee/LogEmployeeEntry?MacAddress=84:1F:E8:24:A0:5C&EmployeeID=20148&Status=IN "HTTP/1.1 200 OK"
+2026-04-13 12:10:03  INFO      AudioStreamer  [UDP] Stream complete: 743/743 chunks sent.
+2026-04-13 12:11:12  INFO      processor  [Monitor:Entrance] Scene: 1 unknown face(s) detected.
+2026-04-13 12:11:16  INFO      processor  [Monitor:Exit] Scene: 1 unknown face(s) detected.
+2026-04-13 12:11:49  INFO      processor  [Monitor:Entrance] Scene: 1 unknown face(s) detected.
+2026-04-13 12:11:54  INFO      processor  [Monitor:Exit] Scene: 1 unknown face(s) detected.
+2026-04-13 12:12:37  INFO      processor  [Monitor:Exit] Scene: 1 unknown face(s) detected.
+2026-04-13 12:12:39  INFO      processor  [Monitor:Exit] Scene: 1 face(s) | Known: JAYAKRISHNA
+2026-04-13 12:13:32  INFO      processor  [Monitor:Entrance] Scene: 1 unknown face(s) detected.
+2026-04-13 12:13:36  INFO      processor  [Monitor:Exit] Scene: 1 unknown face(s) detected.
+2026-04-13 12:14:23  INFO      processor  [Monitor:Exit] Scene: 1 unknown face(s) detected.
+2026-04-13 12:17:22  INFO      processor  [Monitor:Exit] Scene: 1 unknown face(s) detected.
+2026-04-13 12:17:42  INFO      processor  [Monitor:Entrance] Scene: 1 unknown face(s) detected.
+2026-04-13 12:18:12  INFO      processor  [Monitor:Exit] Scene: 1 unknown face(s) detected.
+2026-04-13 12:21:02  INFO      processor  [Monitor:Exit] Scene: 1 unknown face(s) detected.

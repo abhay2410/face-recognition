@@ -1,133 +1,69 @@
-# FaceID – Face Recognition Attendance System
+# FaceID – FastAPI Door Access (InsightFace + FAISS)
 
-A complete attendance management system using your **CP-E41A IP camera** and Python face recognition.
-
----
-
-## 📁 Project Structure
-
-```
-face/
-├── app.py              ← Flask web server (main entry point)
-├── config.py           ← ⚙️  Camera URL & settings (edit this first!)
-├── camera.py           ← Thread-safe camera stream reader
-├── face_engine.py      ← Face encoding & recognition logic
-├── recogniser.py       ← Background recognition worker thread
-├── database.py         ← SQLite attendance database helpers
-├── setup.py            ← One-time setup / dependency check
-├── requirements.txt    ← Python packages
-├── start.bat           ← Windows quick-launch script
-├── data/
-│   ├── attendance.db   ← Auto-created SQLite database
-│   ├── known_faces/    ← Enrolled face images (per-person folders)
-│   ├── exports/        ← CSV exports
-│   └── encodings.pkl   ← Cached face encodings (auto-generated)
-├── static/
-│   ├── style.css       ← Premium dark-theme UI
-│   └── snapshots/      ← Recognition snapshots saved here
-└── templates/
-    ├── base.html        ← Sidebar layout
-    ├── index.html       ← Dashboard + live feed
-    ├── attendance.html  ← Records & export
-    └── enrol.html       ← Face registration
-```
+Enterprise-grade face recognition system with **ArcFace (w600k)**, **FAISS IVF** indexing, and real-time **IP Camera** monitoring.
 
 ---
 
-## ⚡ Quick Start
+## 📁 Core Architecture
 
-### Step 1 – Configure your camera
-
-Open **`config.py`** and set your CP-E41A's IP address:
-
-```python
-# RTSP stream (recommended)
-CAMERA_URL = "rtsp://admin:admin@192.168.1.64:554/stream"
-
-# OR HTTP stream
-CAMERA_URL = "http://admin:admin@192.168.1.64:8080/video"
-
-# OR local USB webcam
-CAMERA_URL = 0
-```
-
-> **Finding your camera IP:** Check your router's DHCP client list, or use the camera's mobile app.  
-> **Default credentials:** Usually `admin / admin` or `admin / 12345`.  
-> **CP-E41A RTSP port:** 554 (standard). Stream path may vary — try `/stream`, `/ch0`, or `/live`.
-
-### Step 2 – Install & Run
-
-**Option A – Double-click** `start.bat` *(installs everything automatically)*
-
-**Option B – Manual:**
-```powershell
-cd "C:\Users\Abhay\Desktop\face"
-pip install -r requirements.txt
-python setup.py
-python app.py
-```
-
-### Step 3 – Open the app
-
-👉 **http://localhost:5000**
+-   **Deep Learning (ArcFace)**: Powered by `insightface` for robust 512-D embedding extraction.
+-   **Vector Search (FAISS)**: Uses `IndexHNSWFlat` for sub-millisecond search across thousands of identities.
+-   **Vision Pipeline**: Async RTSP stream processing with low-latency decoding.
+-   **Cloud/Local Database**: MS SQL Server storage for high-integrity audit logs and identity data.
 
 ---
 
-## 🎯 How to Use
+## 📷 Enrollment Options
 
-### 1. Enrol Faces
-- Go to **Enrol Face** tab
-- Enter the student's Name, Roll No, Department
-- Either **capture from webcam** or **upload a photo**
-- Click **Enrol** — the system extracts and saves the face encoding
+The system supports two primary ways to register users:
 
-> 💡 Enrol **3–5 photos** per person (different angles/lighting) for best accuracy
-
-### 2. Start Attendance
-- Go to **Dashboard**
-- Click **Start Camera** — the CP-E41A stream will appear
-- The system automatically:
-  - Detects faces in real time
-  - Matches them to enrolled students
-  - Marks attendance in the database (with a snapshot)
-  - Shows live status on the dashboard
-
-### 3. View & Export Records
-- Go to **Attendance** tab
-- Filter by date using the date picker
-- Export to **CSV** with one click
+1.  **Direct Capture (New)**: Enroll someone directly from a live IP camera feed. The system captures multiple high-quality frames and computes a stable mean embedding automatically.
+2.  **Batch Upload**: Upload multiple existing photos (Min 5 recommended) to generate a robust profile.
 
 ---
 
-## ⚙️ Configuration Options (`config.py`)
+## ⚡ Performance Optimization
 
-| Setting | Default | Description |
-|---|---|---|
-| `CAMERA_URL` | RTSP URL | Camera stream source |
-| `FACE_TOLERANCE` | `0.50` | Match strictness (lower = stricter) |
-| `COOLDOWN_MINUTES` | `30` | Re-mark interval per person |
-| `RECOGNITION_INTERVAL_S` | `2` | Seconds between recognition passes |
-| `FLASK_PORT` | `5000` | Web server port |
+This version is optimized for maximum efficiency:
+-   **Frame Resizing**: All AI inference happens on downscaled frames to reduce CPU/GPU load.
+-   **Weighted Moving Average**: When you update or re-enroll a user, the system merges new biometric data with old data to gradually improve accuracy.
+-   **Consensus Logic**: Requires multiple consecutive detections before triggering a door, preventing "glitch" triggers.
+
+---
+
+## 🚀 Quick Start
+
+1.  **Setup Environment**:
+    ```powershell
+    .\venv\Scripts\activate
+    pip install -r requirements.txt
+    ```
+
+2.  **Configure `.env`**:
+    Edit your `RTSP_URLS` and `MSSQL_SERVER` credentials.
+
+3.  **Run Application**:
+    ```powershell
+    python main.py
+    ```
+    Live Dashboard: `http://localhost:8000`
 
 ---
 
 ## 🔧 Troubleshooting
 
-| Problem | Fix |
-|---|---|
-| Camera won't connect | Try changing `CAMERA_URL` from RTSP → HTTP. Check IP & credentials. |
-| "No face detected" on enrol | Ensure good lighting; face must be clearly visible and frontal |
-| False matches | Lower `FACE_TOLERANCE` to `0.40` or `0.45` |
-| Missed recognitions | Raise `FACE_TOLERANCE` slightly (up to `0.55`) |
-| Slow FPS | Reduce camera resolution in its app settings |
+| Issue | Resolution |
+| :--- | :--- |
+| **Only Camera 0 visible** | Ensure `RTSP_URLS` in `.env` is formatted as `Name:URL,Name:URL`. |
+| **Access Denied (False Negative)** | Use the "Update Photos" feature to add more frames of the person in different lighting. |
+| **High CPU Usage** | You can disable the Background AI Monitoring in the Settings panel in the dashboard. |
+| **Database Connection Error** | Verify you have 'ODBC Driver 18 for SQL Server' installed. |
 
 ---
 
-## 📦 Dependencies
+## 📦 Requirements
 
-- **Flask** – Web framework
-- **face_recognition** – dlib-based face recognition
-- **opencv-python** – Camera capture & image processing  
-- **numpy** – Numerical arrays
-- **Pillow** – Image saving
-- **pandas** – Data handling
+-   Python 3.10+
+-   MS SQL Server
+-   onnxruntime (GPU recommended)
+-   insightface, faiss-cpu

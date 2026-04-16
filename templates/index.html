@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FaceID | AI Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #0d1117;
+            --card-bg: #161b22;
+            --accent-color: #58a6ff;
+            --text-main: #c9d1d9;
+            --text-dim: #8b949e;
+            --success: #238636;
+            --error: #f85149;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            margin: 0;
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 250px;
+            background-color: var(--card-bg);
+            border-right: 1px solid #30363d;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 600;
+            color: var(--accent-color);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 40px;
+        }
+
+        .nav-item {
+            padding: 12px 15px;
+            border-radius: 8px;
+            text-decoration: none;
+            color: var(--text-main);
+            margin-bottom: 8px;
+            transition: 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .nav-item:hover {
+            background-color: #21262d;
+            color: var(--accent-color);
+        }
+
+        .nav-item.active {
+            background-color: #1f6feb22;
+            color: var(--accent-color);
+            border-left: 3px solid var(--accent-color);
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            padding: 40px;
+            overflow-y: auto;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .status-badge {
+            background-color: #23863622;
+            color: #3fb950;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 14px;
+            border: 1px solid #23863644;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .pulse {
+            width: 8px;
+            height: 8px;
+            background: #3fb950;
+            border-radius: 50%;
+            box-shadow: 0 0 0 rgba(63, 185, 80, 0.4);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% {
+                box-shadow: 0 0 0 0 rgba(63, 185, 80, 0.7);
+            }
+
+            70% {
+                box-shadow: 0 0 0 10px rgba(63, 185, 80, 0);
+            }
+
+            100% {
+                box-shadow: 0 0 0 0 rgba(63, 185, 80, 0);
+            }
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 20px;
+        }
+
+        .card {
+            background-color: var(--card-bg);
+            border: 1px solid #30363d;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .camera-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 20px;
+        }
+
+        .feed-container {
+            width: 100%;
+            aspect-ratio: 16/9;
+            background-color: #000;
+            border-radius: 8px;
+            overflow: hidden;
+            border: 1px solid #30363d;
+            position: relative;
+        }
+
+        .feed-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .stats-grid {
+            display: grid;
+            gap: 15px;
+        }
+
+        .stat-item {
+            padding: 15px;
+            background-color: #0d1117;
+            border-radius: 8px;
+            border: 1px solid #30363d;
+        }
+
+        .stat-label {
+            color: var(--text-dim);
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 5px;
+        }
+
+        .stat-value {
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--accent-color);
+        }
+
+        h2 {
+            margin-top: 0;
+            font-weight: 600;
+            font-size: 20px;
+        }
+
+        p {
+            color: var(--text-dim);
+        }
+
+        .btn {
+            display: inline-block;
+            background-color: var(--accent-color);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: 0.3s;
+            margin-top: 15px;
+        }
+
+        .btn:hover {
+            background-color: #388bfd;
+            transform: translateY(-2px);
+        }
+
+        .cam-label {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background: rgba(0, 0, 0, 0.6);
+            padding: 2px 10px;
+            border-radius: 4px;
+            font-size: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* Toggle Switch Styling */
+        .switch-container {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 8px;
+            margin-top: 10px;
+        }
+
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 44px;
+            height: 22px;
+        }
+
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #30363d;
+            transition: .4s;
+            border-radius: 34px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 14px;
+            width: 14px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        input:checked+.slider {
+            background-color: var(--accent-color);
+        }
+
+        input:checked+.slider:before {
+            transform: translateX(22px);
+        }
+
+        .offline-placeholder {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            background: #000;
+            color: var(--text-dim);
+            font-size: 14px;
+            gap: 15px;
+        }
+
+        .streaming-off .offline-placeholder {
+            display: flex;
+        }
+
+        .streaming-off img {
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="sidebar">
+        <div class="logo">
+            <span>🛡️</span> FaceID
+        </div>
+        <a href="/" class="nav-item active">Dashboard</a>
+        <a href="/enrol" class="nav-item">New Enrollment</a>
+        <a href="/update" class="nav-item">Update Photos</a>
+        <a href="/audit" class="nav-item">🔍 Audit Trail</a>
+        <a href="/settings" class="nav-item">⚙️ Settings</a>
+
+        <div class="switch-container">
+            <label class="switch">
+                <input type="checkbox" id="stream_toggle" onchange="toggleStreaming()">
+                <span class="slider"></span>
+            </label>
+            <span style="font-size: 13px; font-weight: 600;">Live Feed</span>
+        </div>
+
+        <div style="flex:1"></div>
+        <a href="/logout" class="nav-item" style="color: var(--error); border-radius: 8px; margin-top: 20px;">
+            <span>🚪</span> Logout
+        </a>
+        <a href="/docs" class="nav-item" style="font-size: 12px; color: var(--text-dim)">API Docs</a>
+    </div>
+
+    <div class="main-content">
+        <header>
+            <div>
+                <h1>Architecture Dashboard</h1>
+                <p>Monitoring & Management for ArcFace + FAISS IVF</p>
+            </div>
+            <div class="status-badge">
+                <div class="pulse"></div> System Live
+            </div>
+        </header>
+
+        <div class="grid">
+            <div class="camera-section">
+                <div class="camera-grid">
+                    {% for cam_name in cameras %}
+                    <div class="card">
+                        <h2>Live Feed: {{ cam_name }}</h2>
+                        <div class="feed-container" id="container_{{ loop.index0 }}">
+                            <!-- Placeholder when stream is off -->
+                            <div class="offline-placeholder">
+                                <span style="font-size: 30px;">📷</span>
+                                <span>Preview Disabled to Save CPU</span>
+                                <button class="btn" onclick="document.getElementById('stream_toggle').click()"
+                                    style="font-size: 10px; padding: 5px 10px; margin: 0;">Enable</button>
+                            </div>
+
+                            <!-- Real Feed -->
+                            <img id="stream_{{ loop.index0 }}" src="/video_feed/{{ loop.index0 }}"
+                                alt="Camera Feed {{ cam_name }}"
+                                onerror="this.src='https://via.placeholder.com/640x360?text=Camera+Stream+Disconnected'">
+                            <span class="cam-label">📍 {{ cam_name }}</span>
+                        </div>
+                        <div
+                            style="margin-top: 10px; display: flex; gap: 20px; color: var(--text-dim); font-size: 12px;">
+                            <span>🔋 AI Processing: 10 FPS</span>
+                            <span id="cam_faces_{{ loop.index0 }}">Faces: —</span>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <div class="stats-grid">
+                <div class="card">
+                    <h2>AI Engine Stats</h2>
+                    <div class="stat-item">
+                        <div class="stat-label">Model</div>
+                        <div class="stat-value">ArcFace w600k</div>
+                    </div>
+                    <div style="margin-top:10px"></div>
+                    <div class="stat-item">
+                        <div class="stat-label">FAISS Mode</div>
+                        <div class="stat-value" id="faiss_type">Loading...</div>
+                    </div>
+                    <div style="margin-top:10px"></div>
+                    <div class="stat-item">
+                        <div class="stat-label">Threshold</div>
+                        <div class="stat-value" id="faiss_threshold">...</div>
+                    </div>
+                    <div style="margin-top:10px"></div>
+                    <div class="stat-item">
+                        <div class="stat-label">Inference Device</div>
+                        <div class="stat-value" id="faiss_device">...</div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h2>Actions</h2>
+                    <p style="font-size: 14px;">Total Identities: <span id="id_count"
+                            style="color: var(--accent-color)">Loading...</span></p>
+                    <a href="/enrol" class="btn">Register New Person</a>
+                    <a href="/update" class="btn"
+                        style="background: transparent; border: 1px solid var(--accent-color); color: var(--accent-color); margin-left: 10px;">Update
+                        Person</a>
+                    <div style="margin-top: 20px; font-size: 11px; color: var(--text-dim);">
+                        Network IP: <span id="net_ip" style="color: var(--text-main)">...</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('net_ip').innerText = window.location.hostname;
+
+        async function fetchStats() {
+            try {
+                const res = await fetch('/health');
+                const data = await res.json();
+                document.getElementById('id_count').innerText = data.faiss_vectors;
+                document.getElementById('faiss_type').innerText = data.faiss_type || '—';
+                document.getElementById('faiss_threshold').innerText = data.threshold !== undefined ? data.threshold.toFixed(2) : '—';
+                document.getElementById('faiss_device').innerText = data.device || '—';
+                // Update per-camera face count
+                (data.cameras || []).forEach((cam, i) => {
+                    const el = document.getElementById(`cam_faces_${i}`);
+                    if (el) {
+                        const known = cam.known && cam.known.length ? cam.known.join(', ') : 'none';
+                        el.innerText = `Faces: ${cam.faces_last} | Known: ${known}`;
+                    }
+                });
+            } catch (e) {
+                document.getElementById('id_count').innerText = 'Error';
+            }
+        }
+
+        function toggleStreaming() {
+            const enabled = document.getElementById('stream_toggle').checked;
+            const containers = document.querySelectorAll('.feed-container');
+
+            containers.forEach((container, index) => {
+                const img = document.getElementById(`stream_${index}`);
+                if (enabled) {
+                    container.classList.remove('streaming-off');
+                    // Reload the src to re-trigger the stream endpoint
+                    img.src = `/video_feed/${index}?t=` + new Date().getTime();
+                } else {
+                    container.classList.add('streaming-off');
+                    // Set src to empty to KILL the current HTTP request and stop the CPU usage in Python
+                    img.src = "";
+                }
+            });
+
+            // Persist preference in local storage
+            localStorage.setItem('streaming_enabled', enabled);
+        }
+
+        // Apply saved preference on load, or fallback to backend default
+        window.addEventListener('load', () => {
+            const saved = localStorage.getItem('streaming_enabled');
+            let isEnabled;
+
+            if (saved !== null) {
+                isEnabled = (saved === 'true');
+            } else {
+                // Initial backend default from .env
+                isEnabled = {{ "true" if streaming_default else "false" }};
+            }
+            
+            // FORCE enable if this is the first time or if default is true
+            if ({{ "true" if streaming_default else "false" }}) isEnabled = true;
+
+            document.getElementById('stream_toggle').checked = isEnabled;
+            toggleStreaming(); 
+        });
+
+        fetchStats();
+        setInterval(fetchStats, 5000);
+    </script>
+</body>
+
+</html>
