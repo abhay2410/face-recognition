@@ -14,7 +14,6 @@ import os
 import sys
 import inspect
 import urllib.parse
-import audio_engine
 from functools import partial
 from pathlib import Path
 from typing import Dict, List, Optional, Tuple, Union
@@ -322,6 +321,10 @@ async def close_engine():
     if _http_client: await _http_client.aclose(); _http_client = None
 
 async def check_rf_card(rf: Optional[str], camera_name: str = "Exit"):
+    """
+    Checks the RF Card status via HTTP GET.
+    Returns (status_ok, status_string, exit_type).
+    """
     # Skip the RF status check for anyone without a valid card (NULL, empty, "0", or "None")
     if not config.RF_CHECK_API_URL or not rf or str(rf).strip().lower() in ("", "none", "0"):
         return True, "SKIP", "EXIT"
@@ -340,6 +343,7 @@ async def check_rf_card(rf: Optional[str], camera_name: str = "Exit"):
         return False, "TIMEOUT", "EXIT"
 
 async def log_entry(employee_code: str):
+    """Logs an entry event via HTTP POST."""
     if not config.LOG_ENTRY_API_URL or not config.DEVICE_MAC_ADDRESS:
         return
     url = config.LOG_ENTRY_API_URL.replace("{mac}", str(config.DEVICE_MAC_ADDRESS)).replace("{id}", str(employee_code))
@@ -351,6 +355,7 @@ async def log_entry(employee_code: str):
         return False
 
 async def log_exit(employee_code: str):
+    """Logs an exit event via HTTP POST."""
     if not config.LOG_EXIT_API_URL or not config.DEVICE_MAC_ADDRESS:
         return
     url = config.LOG_EXIT_API_URL.replace("{mac}", str(config.DEVICE_MAC_ADDRESS)).replace("{id}", str(employee_code))
@@ -362,12 +367,26 @@ async def log_exit(employee_code: str):
         return False
 
 async def unlock_door(name: str, employee_code: str = "", camera_name: str = "Exit"):
+    """Unlocks a door via WebSocket (OPEN_DOOR) or HTTP POST."""
     if not config.EXTERNAL_API_ENABLED: return False
     url = config.EXTERNAL_API_URLS.get(camera_name) or config.EXTERNAL_API_URLS.get("Default", config.EXTERNAL_API_URLS.get("Exit", ""))
     if not url: return False
     
-    # 1. Check if it's a WebSocket URL
-    if url.startswith("ws://") or url.startswith("wss://"):
+    # 1. Door Unlock Protocol Selection
+    is_ws_url = url.startswith("ws://") or url.startswith("wss://")
+    
+    # Decide between WebSocket and HTTP
+    mode = config.DOOR_UNLOCK_MODE
+    use_ws = False
+    
+    if mode == "WEBSOCKET":
+        use_ws = True
+    elif mode == "AUTO" and is_ws_url:
+        use_ws = True
+    elif mode == "HTTP":
+        use_ws = False
+
+    if use_ws:
         try:
             import websockets
             async with websockets.connect(url, open_timeout=5) as websocket:
@@ -391,30 +410,24 @@ async def unlock_door(name: str, employee_code: str = "", camera_name: str = "Ex
 
 async def announce(text: str, device_id: str = None):
     """
-    Sends a text message to audio outputs.
-    Switch: Handles 'UDP' (ESP32), 'API' (Network URL), or 'LOCAL'.
+    Sends a text message to audio outputs via HTTP POST.
+    Logic: Triggers Speaker API (Network).
     """
     if not text or not config.AUDIO_MODE:
         return
 
-    # 1. API SPEAKER MODE (HTTP Call)
+    # 1. API SPEAKER MODE (HTTP POST Call)
     if config.AUDIO_MODE in ("API", "NETWORK") and config.SPEAKER_API_URL:
         url = config.SPEAKER_API_URL.replace("{message}", urllib.parse.quote(text))
-        # Use provided device_id or fallback to config
         d_id = device_id or config.SPEAKER_DEVICE_ID
         url = url.replace("{device_id}", str(d_id))
         
         try:
             resp = await _get_http_client().post(url)
-            log.info("[Speaker-API] Sent: '%s' → Status: %d", text, resp.status_code)
+            log.info("[Speaker-API] Sent: '%s' (Device: %s) Status: %d", text, d_id, resp.status_code)
             return
         except Exception as e:
             log.warning("[Speaker-API] Failed: %s", e)
-            # Fallback to local if API fails? (Optional, currently just logs)
-
-    # 2. LOCAL / UDP MODES (via AudioEngine)
-    log.debug("[Engine] Redirecting to AudioEngine: '%s' (Mode: %s)", text, config.AUDIO_MODE)
-    await audio_engine.announce_local(text)
 
 
 async def trigger_pc_start(mac_address: str):

@@ -92,27 +92,17 @@ MULTI_EMB_COUNT = int(os.getenv("MULTI_EMB_COUNT", "3"))
 ONBOARD_FRAMES = int(os.getenv("ONBOARD_FRAMES", "20"))
 
 # ── Audio Announcements ───────────────────────────────────────────────────────
-# AUDIO_MODE: "LOCAL", "NETWORK" (IP Speaker), "ESP32", or "BOTH"
-AUDIO_MODE           = os.getenv("AUDIO_MODE", "LOCAL").upper()
-TTS_VOICE_RATE       = int(os.getenv("TTS_VOICE_RATE", "160"))
-TTS_VOICE_VOLUME     = float(os.getenv("TTS_VOICE_VOLUME", "1.0"))
-TTS_VOICE_NAME       = os.getenv("TTS_VOICE_NAME", "Microsoft Zira Desktop")
-
-# EQ Settings (-10 to +10 dB)
-VOICE_BASS           = float(os.getenv("VOICE_BASS", "0.0"))
-VOICE_TREBLE         = float(os.getenv("VOICE_TREBLE", "0.0"))
-
-# ESP32 Direct Network Audio (UDP Sink)
-ESP32_AUDIO_ENABLED  = os.getenv("ESP32_AUDIO_ENABLED", "false").lower() == "true"
-ESP32_AUDIO_IP       = os.getenv("ESP32_AUDIO_IP", "")
-ESP32_AUDIO_PORT     = int(os.getenv("ESP32_AUDIO_PORT", "1234"))
+# AUDIO_MODE: "API" (Network Speaker via HTTP POST) 
+AUDIO_MODE           = os.getenv("AUDIO_MODE", "API").upper()
 
 # ── External Door API ─────────────────────────────────────────────────────────
+# DOOR_UNLOCK_MODE: "AUTO" (Detects URL), "HTTP", or "WEBSOCKET"
+DOOR_UNLOCK_MODE     = os.getenv("DOOR_UNLOCK_MODE", "AUTO").upper()
 
 EXTERNAL_API_ENABLED = os.getenv("EXTERNAL_API_ENABLED", "true").lower() == "true"
 EXTERNAL_API_TIMEOUT = int(os.getenv("EXTERNAL_API_TIMEOUT", "10"))
-RF_CHECK_API_URL     = os.getenv("RF_CHECK_API_URL", "")
-SPEAKER_API_URL      = os.getenv("SPEAKER_API_URL", "")
+RF_CHECK_API_URL     = os.getenv("RF_CHECK_API_URL", "") # Uses HTTP GET
+SPEAKER_API_URL      = os.getenv("SPEAKER_API_URL", "")  # Uses HTTP POST
 SPEAKER_DEVICE_ID    = os.getenv("SPEAKER_DEVICE_ID", "G-5889-6B1B-5AE0")
 SPEAKER_DEVICE_IDS: dict = {}
 
@@ -124,8 +114,8 @@ if _SPEAKER_RAW:
             _name, _sid = _entry.split(":", 1)
             SPEAKER_DEVICE_IDS[_name.strip()] = _sid.strip()
 
-LOG_ENTRY_API_URL    = os.getenv("LOG_ENTRY_API_URL", "")
-LOG_EXIT_API_URL     = os.getenv("LOG_EXIT_API_URL", "")
+LOG_ENTRY_API_URL    = os.getenv("LOG_ENTRY_API_URL", "") # Uses HTTP POST
+LOG_EXIT_API_URL     = os.getenv("LOG_EXIT_API_URL", "")  # Uses HTTP POST
 DEVICE_MAC_ADDRESS   = os.getenv("DEVICE_MAC_ADDRESS", "")
  
 # --- Remote PC Control (OFF BY DEFAULT) ---
@@ -146,7 +136,7 @@ if _DOOR_RAW:
     for _entry in _DOOR_RAW.split(","):
         if ":" in _entry:
             _name, _url = _entry.split(":", 1)
-            EXTERNAL_API_URLS[_name.strip()] = _url.strip()
+            EXTERNAL_API_URLS[_name.strip()] = _url.strip() # Uses HTTP POST or WebSocket
 
 # ── Live Monitoring (RTSP) ────────────────────────────────────────────────────
 
