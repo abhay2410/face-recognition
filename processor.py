@@ -397,14 +397,15 @@ class MonitoringLoop:
                         door_name=self.name
                     ))
 
-                # 3.2 Follow with grouped announcement (SECOND PRIORITY)
-                denied_v = [
-                    f"Attention, , , {names_str}. A checkout is required before entry is allowed. Please follow the checkout procedure.",
-                    f"Pardon me, , , {names_str}. Access cannot be granted as checkout is required at this time. Thank you for your cooperation."
-                ]
-                msg_denied = random.choice(denied_v)
-                speaker_id = config.SPEAKER_DEVICE_IDS.get(self.name)
-                asyncio.create_task(engine.announce(msg_denied, device_id=speaker_id))
+                # 3.2 Follow with grouped announcement (Only for EXIT cameras)
+                if is_exit_camera:
+                    denied_v = [
+                        f"Attention, , , {names_str}. A checkout is required before exiting. Please follow the checkout procedure.",
+                        f"Pardon me, , , {names_str}. Exit access cannot be granted as checkout is required. Thank you for your cooperation."
+                    ]
+                    msg_denied = random.choice(denied_v)
+                    speaker_id = config.SPEAKER_DEVICE_IDS.get(self.name)
+                    asyncio.create_task(engine.announce(msg_denied, device_id=speaker_id))
 
         except Exception as e:
             log.error("[Monitor:%s] Batch access task failed: %s", self.name, e)
@@ -418,23 +419,33 @@ class MonitoringLoop:
         is_exit_camera = any(k.lower() in self.name.lower() for k in config.EXIT_CAM_KEYWORDS)
         is_exit_event  = p.get("exit_type") == "EXIT" or is_exit_camera
         
-        # 2. GrapesOnline Attendance Logging (Success is preferred but not blocking)
-        if is_exit_event:
-            # Explicit exit event — log OUT
-            asyncio.create_task(engine.log_exit(p["emp_code"]))
+        # 2. GrapesOnline Attendance Logging (Only if NOT in API door mode)
+        # In API mode, the remote command usually handles server-side logging.
+        if config.DOOR_UNLOCK_MODE != "API":
+            if is_exit_event:
+                # Explicit exit event — log OUT
+                asyncio.create_task(engine.log_exit(p["emp_code"]))
+                
+                # PC CONTROL: Turn OFF
+                if config.PC_CONTROL_ENABLED and p.get("pc_control") and p.get("pc_ip"):
+                    asyncio.create_task(engine.trigger_pc_stop(p["pc_ip"]))
             
-            # PC CONTROL: Turn OFF
-            if config.PC_CONTROL_ENABLED and p.get("pc_control") and p.get("pc_ip"):
-                asyncio.create_task(engine.trigger_pc_stop(p["pc_ip"]))
-        
+            else:
+                # Entrance context — log IN if status is ready or currently 'OUT'
+                if p.get("checkin_status") in ("RdytoChkIn", "OUT"):
+                    asyncio.create_task(engine.log_entry(p["emp_code"]))
+                
+                # PC CONTROL: Turn ON
+                if config.PC_CONTROL_ENABLED and p.get("pc_control") and p.get("pc_mac"):
+                    asyncio.create_task(engine.trigger_pc_start(p["pc_mac"]))
         else:
-            # Entrance context — log IN if status is ready or currently 'OUT'
-            if p.get("checkin_status") in ("RdytoChkIn", "OUT"):
-                asyncio.create_task(engine.log_entry(p["emp_code"]))
-            
-            # PC CONTROL: Turn ON
-            if config.PC_CONTROL_ENABLED and p.get("pc_control") and p.get("pc_mac"):
-                asyncio.create_task(engine.trigger_pc_start(p["pc_mac"]))
+            # In API mode, we still handle PC Control if enabled
+            if is_exit_event:
+                if config.PC_CONTROL_ENABLED and p.get("pc_control") and p.get("pc_ip"):
+                    asyncio.create_task(engine.trigger_pc_stop(p["pc_ip"]))
+            else:
+                if config.PC_CONTROL_ENABLED and p.get("pc_control") and p.get("pc_mac"):
+                    asyncio.create_task(engine.trigger_pc_start(p["pc_mac"]))
         
         # 3. System Activity Logging (Local SQL audit)
         await database.log_access(

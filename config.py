@@ -117,6 +117,10 @@ if _SPEAKER_RAW:
 LOG_ENTRY_API_URL    = os.getenv("LOG_ENTRY_API_URL", "") # Uses HTTP POST
 LOG_EXIT_API_URL     = os.getenv("LOG_EXIT_API_URL", "")  # Uses HTTP POST
 DEVICE_MAC_ADDRESS   = os.getenv("DEVICE_MAC_ADDRESS", "")
+
+# Remote Door Control
+BRANCH_ID            = os.getenv("BRANCH_ID", "2")
+REMOTE_DOOR_API_URL  = os.getenv("REMOTE_DOOR_API_URL", "")
  
 # --- Remote PC Control (OFF BY DEFAULT) ---
 PC_CONTROL_ENABLED   = os.getenv("PC_CONTROL_ENABLED", "false").lower() == "true"

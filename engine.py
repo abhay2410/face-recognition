@@ -367,45 +367,52 @@ async def log_exit(employee_code: str):
         return False
 
 async def unlock_door(name: str, employee_code: str = "", camera_name: str = "Exit"):
-    """Unlocks a door via WebSocket (OPEN_DOOR) or HTTP POST."""
+    """Unlocks a door via WebSocket (OPEN_DOOR) or Remote Admin API (HTTP)."""
     if not config.EXTERNAL_API_ENABLED: return False
+    
+    mode = config.DOOR_UNLOCK_MODE # WEBSOCKET, API, or AUTO
+    
+    # 1. Remote Admin API Mode (Grapes Online)
+    if mode == "API" or (mode == "AUTO" and config.REMOTE_DOOR_API_URL and not config.EXTERNAL_API_URLS):
+        if config.REMOTE_DOOR_API_URL and employee_code:
+            remote_url = config.REMOTE_DOOR_API_URL.replace("{branch_id}", str(config.BRANCH_ID)).replace("{user_id}", str(employee_code))
+            try:
+                # Changed to POST as the API returned 405 Method Not Allowed on GET
+                resp = await _get_http_client().post(remote_url)
+                log.info("[Remote-Door] %s → %d", camera_name, resp.status_code)
+                return resp.is_success
+            except Exception as e:
+                log.warning("[Remote-Door] Failed for %s: %s", name, e)
+                return False
+        return False
+
+    # 2. Local Hardware Mode (WebSocket or HTTP POST)
     url = config.EXTERNAL_API_URLS.get(camera_name) or config.EXTERNAL_API_URLS.get("Default", config.EXTERNAL_API_URLS.get("Exit", ""))
     if not url: return False
     
-    # 1. Door Unlock Protocol Selection
     is_ws_url = url.startswith("ws://") or url.startswith("wss://")
-    
-    # Decide between WebSocket and HTTP
-    mode = config.DOOR_UNLOCK_MODE
-    use_ws = False
-    
-    if mode == "WEBSOCKET":
-        use_ws = True
-    elif mode == "AUTO" and is_ws_url:
-        use_ws = True
-    elif mode == "HTTP":
-        use_ws = False
+    use_ws = (mode == "WEBSOCKET") or (mode == "AUTO" and is_ws_url)
 
     if use_ws:
         try:
             import websockets
             async with websockets.connect(url, open_timeout=5) as websocket:
                 await websocket.send("OPEN_DOOR")
-                await asyncio.sleep(0.1) # Small delay for send confirmation
-                log.info("[Door] %s → WebSocket sent: OPEN_DOOR", camera_name)
+                await asyncio.sleep(0.1)
+                log.info("[Door-WS] %s → WebSocket sent: OPEN_DOOR", camera_name)
                 return True
         except Exception as e:
-            log.warning("[Door] WebSocket unlock failed for %s: %s", url, e)
+            log.warning("[Door-WS] WebSocket unlock failed for %s: %s", url, e)
             return False
             
-    # 2. HTTP Fallback
+    # Fallback to legacy HTTP POST (if mode is HTTP or AUTO with http:// url)
     for k, v in {"{code}": str(employee_code), "{name}": str(name), "{door}": str(camera_name), "{id}": str(employee_code)}.items(): url = url.replace(k, v)
     try:
         resp = await _get_http_client().post(url)
-        log.info("[Door] %s → %d %s", camera_name, resp.status_code, resp.text[:120])
+        log.info("[Door-HTTP] %s → %d %s", camera_name, resp.status_code, resp.text[:120])
         return resp.is_success
     except Exception as e:
-        log.warning("[Door] Unlock request failed for '%s': %s", name, e)
+        log.warning("[Door-HTTP] Unlock request failed for '%s': %s", name, e)
         return False
 
 async def announce(text: str, device_id: str = None):
