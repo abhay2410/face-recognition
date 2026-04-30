@@ -426,9 +426,22 @@ class MonitoringLoop:
                 # Explicit exit event — log OUT
                 asyncio.create_task(engine.log_exit(p["emp_code"]))
                 
-                # PC CONTROL: Turn OFF
-                if config.PC_CONTROL_ENABLED and p.get("pc_control") and p.get("pc_ip"):
-                    asyncio.create_task(engine.trigger_pc_stop(p["pc_ip"]))
+                # PC CONTROL: Turn OFF / LOCK
+                if config.PC_CONTROL_ENABLED:
+                    if p.get("pc_control") and p.get("pc_ip"):
+                        now_hour = datetime.datetime.now().hour
+                        is_office_hour = config.PC_OFFICE_HOURS_START <= now_hour < config.PC_OFFICE_HOURS_END
+                        exit_type = str(p.get("exit_type", "")).upper()
+
+                        if exit_type == "EXIT" and not is_office_hour:
+                            asyncio.create_task(engine.trigger_pc_stop(p["pc_ip"]))
+                        else:
+                            asyncio.create_task(engine.trigger_pc_lock(p["pc_ip"]))
+                            log.info("[Monitor] Sending LOCK instead of Shutdown for '%s' (Type: %s, OfficeHr: %s)", 
+                                     p["name"], exit_type, is_office_hour)
+                    else:
+                        log.warning("[Monitor] PC Control skipped for '%s': pc_control=%s, pc_ip=%s", 
+                                    p["name"], p.get("pc_control"), p.get("pc_ip"))
             
             else:
                 # Entrance context — log IN if status is ready or currently 'OUT'
@@ -441,8 +454,21 @@ class MonitoringLoop:
         else:
             # In API mode, we still handle PC Control if enabled
             if is_exit_event:
-                if config.PC_CONTROL_ENABLED and p.get("pc_control") and p.get("pc_ip"):
-                    asyncio.create_task(engine.trigger_pc_stop(p["pc_ip"]))
+                if config.PC_CONTROL_ENABLED:
+                    if p.get("pc_control") and p.get("pc_ip"):
+                        now_hour = datetime.datetime.now().hour
+                        is_office_hour = config.PC_OFFICE_HOURS_START <= now_hour < config.PC_OFFICE_HOURS_END
+                        exit_type = str(p.get("exit_type", "")).upper()
+
+                        if exit_type == "EXIT" and not is_office_hour:
+                            asyncio.create_task(engine.trigger_pc_stop(p["pc_ip"]))
+                        else:
+                            asyncio.create_task(engine.trigger_pc_lock(p["pc_ip"]))
+                            log.info("[Monitor] Sending LOCK instead of Shutdown for '%s' (Type: %s, OfficeHr: %s)", 
+                                     p["name"], exit_type, is_office_hour)
+                    else:
+                        log.warning("[Monitor] PC Control skipped for '%s': pc_control=%s, pc_ip=%s", 
+                                    p["name"], p.get("pc_control"), p.get("pc_ip"))
             else:
                 if config.PC_CONTROL_ENABLED and p.get("pc_control") and p.get("pc_mac"):
                     asyncio.create_task(engine.trigger_pc_start(p["pc_mac"]))

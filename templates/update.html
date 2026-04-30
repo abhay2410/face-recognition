@@ -290,6 +290,35 @@
         .cam-select-row select { flex: 1; }
 
         .divider { border: none; border-top: 1px solid var(--border); margin: 20px 0; }
+
+        /* PC Control Toggle */
+        .pc-toggle {
+            position: relative;
+            display: inline-block;
+            width: 50px;
+            height: 24px;
+            flex-shrink: 0;
+        }
+        .pc-toggle input { opacity: 0; width: 0; height: 0; }
+        .pc-slider {
+            position: absolute;
+            cursor: pointer;
+            inset: 0;
+            background: #30363d;
+            border-radius: 24px;
+            transition: .4s;
+        }
+        .pc-slider:before {
+            content: '';
+            position: absolute;
+            height: 18px; width: 18px;
+            left: 3px; bottom: 3px;
+            background: white;
+            border-radius: 50%;
+            transition: .4s;
+        }
+        .pc-toggle input:checked + .pc-slider { background: #3fb950; }
+        .pc-toggle input:checked + .pc-slider:before { transform: translateX(26px); }
     </style>
 </head>
 
@@ -316,6 +345,7 @@
             <div class="tabs" role="tablist">
                 <button class="tab-btn active" id="tab-upload-btn" onclick="switchTab('upload')">📁 Upload New Photos</button>
                 <button class="tab-btn" id="tab-camera-btn" onclick="switchTab('camera')">📷 Capture from Camera</button>
+                <button class="tab-btn" id="tab-pc-btn" onclick="switchTab('pc')">💻 PC Control</button>
             </div>
 
             <!-- TAB 1: Upload -->
@@ -400,6 +430,59 @@
                     <div id="cam-status"></div>
                 </div>
             </div>
+
+            <!-- TAB 3: PC Control -->
+            <div class="tab-panel" id="tab-pc">
+                <div class="card">
+                    <p style="color:var(--text-dim);margin:0 0 20px;font-size:14px;line-height:1.6;">
+                        Assign a <strong>Wake-on-LAN MAC address</strong> (to power ON the PC on entry) and a
+                        <strong>Shutdown IP</strong> (to send a shutdown signal on exit) per employee.
+                        Make sure <em>PC Automation</em> is enabled in
+                        <a href="/settings" style="color:var(--accent-color);">Settings</a>.
+                    </p>
+
+                    <div class="form-group">
+                        <label for="pc-emp-select">Select Employee *</label>
+                        <select id="pc-emp-select" onchange="onPcEmpChange()">
+                            <option value="" disabled selected>Choose an employee...</option>
+                        </select>
+                    </div>
+
+                    <div id="pc-fields" style="display:none;">
+                        <div class="form-group">
+                            <label for="pc-mac">Wake-on-LAN MAC Address</label>
+                            <input type="text" id="pc-mac" placeholder="e.g. AA:BB:CC:DD:EE:FF"
+                                   pattern="^([0-9A-Fa-f]{2}[:\-]){5}[0-9A-Fa-f]{2}$"
+                                   style="font-family:monospace;">
+                            <div style="font-size:12px;color:var(--text-dim);margin-top:5px;">
+                                The MAC address of the employee's PC network card. Used to send a magic packet (WoL) to wake it up.
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="pc-ip">PC IP Address (for Shutdown)</label>
+                            <input type="text" id="pc-ip" placeholder="e.g. 192.168.1.50"
+                                   style="font-family:monospace;">
+                            <div style="font-size:12px;color:var(--text-dim);margin-top:5px;">
+                                Local IP of the PC. A UDP shutdown signal is sent here when the employee exits.
+                                Requires the <strong>FaceID Client Agent</strong> to be running on that PC.
+                            </div>
+                        </div>
+
+                        <div class="form-group" style="display:flex;align-items:center;gap:14px;">
+                            <label style="margin:0;">Enable PC Control for this employee</label>
+                            <label class="pc-toggle">
+                                <input type="checkbox" id="pc-control-chk">
+                                <span class="pc-slider"></span>
+                            </label>
+                            <span id="pc-toggle-label" style="font-size:13px;color:var(--text-dim);">Disabled</span>
+                        </div>
+
+                        <button class="btn" id="pc-save-btn" onclick="savePcConfig()">💾 Save PC Config</button>
+                        <div id="pc-status" style="margin-top:14px;display:none;"></div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -410,6 +493,7 @@
             document.getElementById('tab-' + tab + '-btn').classList.add('active');
             document.getElementById('tab-' + tab).classList.add('active');
             if (tab !== 'camera') stopPreview();
+            if (tab === 'pc') loadPcEmployees();
         }
 
         // Upload Form
@@ -527,6 +611,93 @@
                 camSubmitBtn.textContent = '📸 Start Camera Update';
             }
         };
+
+        // ── PC Control Tab ───────────────────────────────────────────────────
+        let _pcEmployees = [];   // cached employee list with pc fields
+
+        async function loadPcEmployees() {
+            if (_pcEmployees.length) return;   // already loaded
+            try {
+                const res = await fetch('/api/employees');
+                _pcEmployees = await res.json();
+                const sel = document.getElementById('pc-emp-select');
+                _pcEmployees.forEach(emp => {
+                    const opt = document.createElement('option');
+                    opt.value = emp.id;
+                    opt.textContent = emp.name + (emp.employee_code ? ` (${emp.employee_code})` : '');
+                    sel.appendChild(opt);
+                });
+            } catch (e) {
+                console.error('Failed to load employees:', e);
+            }
+        }
+
+        function onPcEmpChange() {
+            const empId = parseInt(document.getElementById('pc-emp-select').value);
+            const emp = _pcEmployees.find(e => e.id === empId);
+            if (!emp) return;
+
+            document.getElementById('pc-mac').value = emp.pc_mac || '';
+            document.getElementById('pc-ip').value  = emp.pc_ip  || '';
+
+            const chk = document.getElementById('pc-control-chk');
+            chk.checked = !!emp.pc_control;
+            updatePcToggleLabel();
+
+            document.getElementById('pc-fields').style.display = 'block';
+            document.getElementById('pc-status').style.display = 'none';
+        }
+
+        document.getElementById('pc-control-chk').addEventListener('change', updatePcToggleLabel);
+
+        function updatePcToggleLabel() {
+            const chk = document.getElementById('pc-control-chk');
+            const lbl = document.getElementById('pc-toggle-label');
+            lbl.textContent = chk.checked ? 'Enabled ✅' : 'Disabled';
+            lbl.style.color = chk.checked ? '#3fb950' : 'var(--text-dim)';
+        }
+
+        async function savePcConfig() {
+            const empId = document.getElementById('pc-emp-select').value;
+            if (!empId) return;
+
+            const btn = document.getElementById('pc-save-btn');
+            const statusEl = document.getElementById('pc-status');
+            btn.disabled = true;
+            btn.textContent = 'Saving...';
+            statusEl.style.display = 'none';
+
+            const fd = new FormData();
+            fd.append('pc_mac',     document.getElementById('pc-mac').value.trim());
+            fd.append('pc_ip',      document.getElementById('pc-ip').value.trim());
+            fd.append('pc_control', document.getElementById('pc-control-chk').checked ? 'true' : 'false');
+
+            try {
+                const res = await fetch(`/api/employee/${empId}/pc-config`, { method: 'PATCH', body: fd });
+                const data = await res.json();
+                statusEl.style.display = 'block';
+                if (res.ok) {
+                    statusEl.className = 'success';
+                    statusEl.innerHTML = '<strong>✅ Saved!</strong> PC config updated. Changes are live immediately.';
+                    // Update local cache
+                    const emp = _pcEmployees.find(e => e.id === parseInt(empId));
+                    if (emp) {
+                        emp.pc_mac     = fd.get('pc_mac');
+                        emp.pc_ip      = fd.get('pc_ip');
+                        emp.pc_control = fd.get('pc_control') === 'true';
+                    }
+                } else {
+                    statusEl.className = 'error';
+                    statusEl.innerText = data.detail || 'Save failed.';
+                }
+            } catch (err) {
+                statusEl.className = 'error';
+                statusEl.innerText = 'Connection error.';
+            } finally {
+                btn.disabled = false;
+                btn.textContent = '💾 Save PC Config';
+            }
+        }
     </script>
 </body>
 

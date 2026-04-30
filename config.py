@@ -124,6 +124,8 @@ REMOTE_DOOR_API_URL  = os.getenv("REMOTE_DOOR_API_URL", "")
  
 # --- Remote PC Control (OFF BY DEFAULT) ---
 PC_CONTROL_ENABLED   = os.getenv("PC_CONTROL_ENABLED", "false").lower() == "true"
+PC_OFFICE_HOURS_START = int(os.getenv("PC_OFFICE_HOURS_START", "9"))
+PC_OFFICE_HOURS_END   = int(os.getenv("PC_OFFICE_HOURS_END",   "18"))
 
 _DEFAULT_DOOR_URL = os.getenv("EXTERNAL_API_URL", "")
 EXTERNAL_API_URLS: dict = {}

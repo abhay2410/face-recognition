@@ -474,3 +474,19 @@ async def trigger_pc_stop(ip_address: str):
     except Exception as e:
         log.error("[Engine] Remote shutdown failed for %s: %s", ip_address, e)
         return False
+
+
+async def trigger_pc_lock(ip_address: str):
+    """Sends a lock signal to the Client Agent."""
+    if not ip_address:
+        return False
+    try:
+        import socket
+        # Send simple UDP packet to the listener port (9999)
+        with socket.socket(socket.AF_INET, socket.SOCK_DGRAM) as s:
+            s.sendto(b"LOCK_NOW", (ip_address, 9999))
+        log.info("[Engine] Lock signal sent to %s", ip_address)
+        return True
+    except Exception as e:
+        log.error("[Engine] Remote lock failed for %s: %s", ip_address, e)
+        return False

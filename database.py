@@ -562,6 +562,38 @@ async def delete_employee(employee_id: int):
     await loop.run_in_executor(None, partial(_delete_employee_sync, employee_id))
 
 
+def _update_employee_pc_config_sync(
+    employee_id: int,
+    pc_mac: str,
+    pc_ip: str,
+    pc_control: bool,
+):
+    """Update the PC-automation fields for a single employee."""
+    conn = _get_conn()
+    cur  = conn.cursor()
+    cur.execute(
+        "UPDATE employees SET pc_mac=?, pc_ip=?, pc_control=? WHERE id=?",
+        (pc_mac or None, pc_ip or None, 1 if pc_control else 0, employee_id),
+    )
+    conn.commit()
+    # Evict from cache so the next recognition cycle picks up the new values
+    clear_employee_cache(employee_id)
+    log.info("[DB] PC config updated for employee_id=%d (control=%s).", employee_id, pc_control)
+
+
+@db_retry(max_attempts=3, delay=1.0)
+async def update_employee_pc_config(
+    employee_id: int,
+    pc_mac: str = "",
+    pc_ip: str = "",
+    pc_control: bool = False,
+):
+    loop = asyncio.get_event_loop()
+    await loop.run_in_executor(
+        None, partial(_update_employee_pc_config_sync, employee_id, pc_mac, pc_ip, pc_control)
+    )
+
+
 # ──────────────────────────────────────────────────────────────────────────────
 #  Access log
 # ──────────────────────────────────────────────────────────────────────────────

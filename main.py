@@ -815,6 +815,7 @@ async def get_settings(request: Request):
             "RF_CHECK_API_URL":          config.RF_CHECK_API_URL,
             "TRAY_ICON_ENABLED":         config.TRAY_ICON_ENABLED,
             "FACE_LABELING_ENABLED":     config.FACE_LABELING_ENABLED,
+            "PC_CONTROL_ENABLED":        config.PC_CONTROL_ENABLED,
             "AUTH_USERNAME":             config.AUTH_USERNAME,
             "AUTH_PASSWORD":             "****",
         },
@@ -835,6 +836,7 @@ async def post_settings(
     RF_CHECK_API_URL:          str   = Form(""),
     TRAY_ICON_ENABLED:         str   = Form("false"),
     FACE_LABELING_ENABLED:     str   = Form("true"),
+    PC_CONTROL_ENABLED:        str   = Form("false"),
     AUTH_USERNAME:             str   = Form("admin"),
     AUTH_PASSWORD:             str   = Form(""),
 ):
@@ -850,6 +852,7 @@ async def post_settings(
         "RF_CHECK_API_URL":          RF_CHECK_API_URL,
         "TRAY_ICON_ENABLED":         TRAY_ICON_ENABLED == "true",
         "FACE_LABELING_ENABLED":     FACE_LABELING_ENABLED == "true",
+        "PC_CONTROL_ENABLED":        PC_CONTROL_ENABLED == "true",
         "AUTH_USERNAME":             AUTH_USERNAME,
     }
     if AUTH_PASSWORD and AUTH_PASSWORD != "****":
@@ -861,6 +864,46 @@ async def post_settings(
         url="/settings?msg=Settings+Updated+Successfully",
         status_code=status.HTTP_303_SEE_OTHER,
     )
+
+
+# ══════════════════════════════════════════════════════════════════════════════
+#  PC Automation API
+# ══════════════════════════════════════════════════════════════════════════════
+
+@app.get("/api/employees", tags=["PC Control"])
+async def list_employees(user: str = Depends(login_required)):
+    """Return all employees with their pc_mac, pc_ip, pc_control fields."""
+    rows = await database.get_all_employees()
+    return [
+        {
+            "id":           r["id"],
+            "name":         r["name"],
+            "employee_code": r.get("employee_code", ""),
+            "pc_mac":       r.get("pc_mac") or "",
+            "pc_ip":        r.get("pc_ip") or "",
+            "pc_control":   bool(r.get("pc_control")),
+        }
+        for r in rows
+    ]
+
+
+@app.patch("/api/employee/{employee_id}/pc-config", tags=["PC Control"])
+async def update_pc_config(
+    employee_id: int,
+    pc_mac:     str  = Form(""),
+    pc_ip:      str  = Form(""),
+    pc_control: str  = Form("false"),
+    user: str = Depends(login_required),
+):
+    """Save Wake-on-LAN MAC, shutdown IP, and enable-flag for one employee."""
+    await database.update_employee_pc_config(
+        employee_id=employee_id,
+        pc_mac=pc_mac.strip(),
+        pc_ip=pc_ip.strip(),
+        pc_control=pc_control.lower() == "true",
+    )
+    log.info("[PC-Config] employee_id=%d mac=%s ip=%s ctrl=%s", employee_id, pc_mac, pc_ip, pc_control)
+    return {"ok": True, "employee_id": employee_id}
 
 
 # ══════════════════════════════════════════════════════════════════════════════
