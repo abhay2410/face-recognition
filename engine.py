@@ -8,6 +8,18 @@ Fixed in v2.3:
   - Suppression: correctly suppresses ORT warnings if possible, stays quiet if not
 """
 
+"""
+engine.py – Hardware & Integration Layer [v3 — Multi-Office Ready]
+==================================================================
+Manages all external interactions: door locks, network speakers, and 
+remote employee attendance APIs.
+
+Design Logic:
+  - Branch Isolation: Uses office-specific Branch IDs for accurate reporting.
+  - Fail-Safe Hardware: Supports WebSocket and HTTP POST for local/remote locks.
+  - Group Audio: Shared speaker support for office clusters (e.g. DEV office).
+"""
+
 import asyncio
 import logging
 import os
@@ -61,9 +73,10 @@ def _best_ort_providers() -> List[str]:
 
 
 _ORT_PROVIDERS = _best_ort_providers()
-_use_gpu       = any(p in _ORT_PROVIDERS for p in ["CUDAExecutionProvider", "TensorrtExecutionProvider"])
+# Use GPU context if ANY acceleration provider (CUDA, TensorRT, or DirectML) is found
+_use_gpu       = any(p in _ORT_PROVIDERS for p in ["CUDAExecutionProvider", "TensorrtExecutionProvider", "DmlExecutionProvider"])
 _ctx_id        = 0 if _use_gpu else -1
-_device_str    = "GPU (CUDA)" if _use_gpu else "CPU"
+_device_str    = "GPU (Accelerated)" if _use_gpu else "CPU"
 
 
 def _make_analyzer(det_size: tuple, det_thresh: float) -> FaceAnalysis:
@@ -306,6 +319,39 @@ async def extract_faces_full(image: Union[bytes, np.ndarray], enrol_mode: bool =
         for f in faces if f.normed_embedding is not None
     ]
 
+async def auto_optimize_identity(emp_id: int, name: str, new_embedding: np.ndarray):
+    """
+    Intelligently integrates a new high-quality face into the existing identity model.
+    Only triggers if AUTO_UPDATE_ENABLED is true.
+    """
+    if not config.AUTO_UPDATE_ENABLED:
+        return
+
+    import database as db
+    try:
+        # 1. Fetch current multi-embeddings for this employee
+        raw_multi = await db.get_multi_embeddings_for_employee(emp_id)
+        if not raw_multi:
+            log.warning("[Engine] No multi-embeddings found for '%s' to optimize.", name)
+            return
+
+        current_anchors = list(db.bytes_to_multi_embeddings(bytes(raw_multi)))
+        
+        # 2. Update Strategy: Rolling FIFO replacement
+        # We replace the oldest anchor with the newest high-confidence one.
+        # This keeps the model fresh and adapts to gradual appearance changes.
+        new_anchors = current_anchors[1:] + [new_embedding]
+        
+        # 3. Save back to DB
+        await db.update_multi_embeddings(emp_id, new_anchors)
+        log.info("[Engine] ⚡ AUTO-OPTIMIZED identity for '%s' (Face model refreshed).", name)
+        
+        # 4. Trigger Index Reload (In the background to avoid blocking)
+        asyncio.create_task(load_index())
+
+    except Exception as e:
+        log.error("[Engine] Auto-optimization failed for '%s': %s", name, e)
+
 async def extract_embedding(image: Union[bytes, np.ndarray]) -> Optional[np.ndarray]:
     faces = await extract_faces_full(image, enrol_mode=True)
     return max(faces, key=lambda f: f["face"].det_score)["embedding"] if faces else None
@@ -375,11 +421,13 @@ async def unlock_door(name: str, employee_code: str = "", camera_name: str = "Ex
     # 1. Remote Admin API Mode (Grapes Online)
     if mode == "API" or (mode == "AUTO" and config.REMOTE_DOOR_API_URL and not config.EXTERNAL_API_URLS):
         if config.REMOTE_DOOR_API_URL and employee_code:
-            remote_url = config.REMOTE_DOOR_API_URL.replace("{branch_id}", str(config.BRANCH_ID)).replace("{user_id}", str(employee_code))
+            # Hierarchical Branch ID lookup
+            branch_id = config.get_cam_setting(camera_name, "BRANCH_ID", config.BRANCH_ID)
+            remote_url = config.REMOTE_DOOR_API_URL.replace("{branch_id}", str(branch_id)).replace("{user_id}", str(employee_code))
             try:
                 # Changed to POST as the API returned 405 Method Not Allowed on GET
                 resp = await _get_http_client().post(remote_url)
-                log.info("[Remote-Door] %s → %d", camera_name, resp.status_code)
+                log.info("[Remote-Door] %s (Branch:%s) → %d", camera_name, branch_id, resp.status_code)
                 return resp.is_success
             except Exception as e:
                 log.warning("[Remote-Door] Failed for %s: %s", name, e)
@@ -387,7 +435,7 @@ async def unlock_door(name: str, employee_code: str = "", camera_name: str = "Ex
         return False
 
     # 2. Local Hardware Mode (WebSocket or HTTP POST)
-    url = config.EXTERNAL_API_URLS.get(camera_name) or config.EXTERNAL_API_URLS.get("Default", config.EXTERNAL_API_URLS.get("Exit", ""))
+    url = config.get_cam_setting(camera_name, "EXTERNAL_API_URLS")
     if not url: return False
     
     is_ws_url = url.startswith("ws://") or url.startswith("wss://")

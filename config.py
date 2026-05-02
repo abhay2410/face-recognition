@@ -10,6 +10,21 @@ Tuning rationale for ~100 employee scale:
   - Blur threshold: 80 → stricter quality gate for clean embeddings
 """
 
+"""
+config.py – Global Configuration Management [v3 — Multi-Office Architecture]
+========================================================================
+This module handles all environment-based configuration for the Face Access 
+System. It supports a hierarchical configuration model allowing multiple 
+offices (e.g., DEV, KINFRA) to share global defaults while overriding 
+specific hardware, security, and integration settings.
+
+Design Patterns:
+  - Hierarchical Resolution: Camera-specific > Group-specific > Global Default.
+  - Environment Injection: All settings are loaded from a central .env file.
+  - Mapping: RTSP URLs, Speakers, and Door APIs are indexed by logical camera names.
+"""
+
+import logging
 import os
 import sys
 from dotenv import load_dotenv
@@ -157,8 +172,69 @@ else:
     _SINGLE_URL  = os.getenv("RTSP_URL", "rtsp://test:admin123@192.168.1.213:554/stream")
     RTSP_CAMERAS = {"Exit": _SINGLE_URL}
 
-_ENABLED_RAW    = os.getenv("CAMERAS_ENABLED", "")
+# ── Office / Group Management ──────────────────────────────────────────────────
+OFFICE_GROUPS: dict = {}
+_GROUPS_RAW = os.getenv("OFFICE_GROUPS", "")
+if _GROUPS_RAW:
+    for _entry in _GROUPS_RAW.split(","):
+        if ":" in _entry:
+            _gname, _cams = _entry.split(":", 1)
+            _gname = _gname.strip().upper()
+            OFFICE_GROUPS[_gname] = [c.strip() for c in _cams.split("|")]
+
+def get_cam_group(cam_name: str) -> str:
+    """Find which office group a camera belongs to."""
+    for gname, cams in OFFICE_GROUPS.items():
+        if cam_name in cams:
+            return gname
+    return "GLOBAL"
+
+def get_cam_setting(cam_name: str, key: str, default=None):
+    """
+    Hierarchical lookup for camera settings:
+    1. Dictionary-specific (e.g. if key is 'SPEAKER_DEVICE_IDS', check cam_name in that dict)
+    2. Camera-specific ENV override (e.g. DEV_EXIT_BRANCH_ID)
+    3. Group-specific ENV override (e.g. DEV_BRANCH_ID)
+    4. Global default ENV
+    """
+    gname = get_cam_group(cam_name)
+    
+    # Check if the key refers to one of our pre-parsed dicts (SPEAKER_DEVICE_IDS, etc.)
+    # We allow group-level fallback within these dicts
+    dict_map = globals().get(key)
+    if isinstance(dict_map, dict):
+        # 1a. Try Camera specific
+        if cam_name in dict_map:
+            return dict_map[cam_name]
+        # 1b. Try Group specific (e.g. look for "DEV" in SPEAKER_DEVICE_IDS)
+        if gname in dict_map:
+            return dict_map[gname]
+
+    # 2. Check Group-specific ENV (e.g. KINFRA_BRANCH_ID)
+    g_key = f"{gname}_{key.upper()}"
+    val = os.getenv(g_key)
+    if val is not None:
+        return val
+
+    # 3. Fallback to global ENV or hardcoded default
+    return os.getenv(key, default)
+    
+# ── Performance Tuning ────────────────────────────────────────────────────────
+# Capture at this rate regardless of camera native FPS
+TARGET_INGEST_FPS = int(os.getenv("TARGET_INGEST_FPS", "10"))
+
+# Run AI inference at this rate (Reduce to 5 for slower CPUs)
+PROCESSING_FPS    = int(os.getenv("PROCESSING_FPS", "10"))
+
+# Dashboard MJPEG stream FPS
+STREAM_FPS        = int(os.getenv("STREAM_FPS", "10"))
+
+RTSP_RECONNECT_DELAY = int(os.getenv("RTSP_RECONNECT_DELAY", "5"))
+MONITOR_COOLDOWN     = int(os.getenv("MONITOR_COOLDOWN",     "10"))
+MONITOR_ENABLED      = os.getenv("MONITOR_ENABLED",  "true").lower() == "true"
+
 ENABLED_CAMERAS: dict = {}
+_ENABLED_RAW    = os.getenv("CAMERAS_ENABLED", "")
 if _ENABLED_RAW:
     for _entry in _ENABLED_RAW.split(","):
         if ":" in _entry:
@@ -166,10 +242,6 @@ if _ENABLED_RAW:
             ENABLED_CAMERAS[_name.strip()] = _state.strip().lower() == "true"
 
 EXIT_CAM_KEYWORDS = [k.strip() for k in os.getenv("EXIT_CAM_KEYWORDS", "Exit,OUT").split(",")]
-
-RTSP_RECONNECT_DELAY = int(os.getenv("RTSP_RECONNECT_DELAY", "5"))
-MONITOR_COOLDOWN     = int(os.getenv("MONITOR_COOLDOWN",     "10"))
-MONITOR_ENABLED      = os.getenv("MONITOR_ENABLED",  "true").lower() == "true"
 
 # ── ML / Accuracy Tuning ──────────────────────────────────────────────────────
 #
@@ -184,6 +256,14 @@ FACE_MIN_SIZE       = int(os.getenv("FACE_MIN_SIZE",       "80"))
 BLUR_THRESHOLD      = float(os.getenv("BLUR_THRESHOLD",    "80.0"))
 CONSENSUS_WINDOW    = int(os.getenv("CONSENSUS_WINDOW",    "7"))
 CONSENSUS_THRESHOLD = int(os.getenv("CONSENSUS_THRESHOLD", "5"))
+
+# ── Self-Improving Identity ───────────────────────────────────────────────────
+#
+# If enabled, the system will automatically update an employee's face model
+# if it detects them with extremely high confidence (> AUTO_UPDATE_THRESHOLD).
+# This helps the system adapt to beard growth, new glasses, or aging.
+AUTO_UPDATE_ENABLED   = os.getenv("AUTO_UPDATE_ENABLED", "true").lower() == "true"
+AUTO_UPDATE_THRESHOLD = float(os.getenv("AUTO_UPDATE_THRESHOLD", "0.65"))
 
 # ── Motion Detection (AI Sleep Mode) ──────────────────────────────────────────
 

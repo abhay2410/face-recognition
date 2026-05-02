@@ -13,6 +13,18 @@ Key improvements over v1:
   - Thread-safe design reviewed for all shared state
 """
 
+"""
+processor.py – Multi-Camera Vision Pipeline [v3 — Multi-Office Ready]
+=====================================================================
+Orchestrates high-resolution RTSP ingestion and real-time face recognition.
+
+Key Features:
+  - Office Grouping: Independent logic for DEV and KINFRA sites.
+  - Stability Tuning: Custom FFmpeg profiles for 5MP H.264 high-res streams.
+  - Near-Only Detection: Dynamic face-size filtering to ignore background personnel.
+  - Consensus Logic: Multi-frame agreement to eliminate transient false positives.
+"""
+
 import asyncio
 import datetime
 import logging
@@ -37,10 +49,10 @@ log = logging.getLogger("processor")
 # ──────────────────────────────────────────────────────────────────────────────
 
 # RTSP reader: capture at this rate regardless of camera native FPS
-TARGET_INGEST_FPS   = 10         # frames stored per second in the shared buffer
+TARGET_INGEST_FPS   = config.TARGET_INGEST_FPS
 
 # Monitoring pipeline: run inference at this rate
-PROCESSING_FPS      = 10         # 10 FPS for snappier response
+PROCESSING_FPS      = config.PROCESSING_FPS
 _PROCESS_INTERVAL   = 1.0 / PROCESSING_FPS
 
 # Backoff for RTSP reconnection (seconds): starts at 2s, caps at 30s
@@ -48,11 +60,11 @@ _RECONNECT_MIN_DELAY  = 2.0
 _RECONNECT_MAX_DELAY  = 30.0
 
 # Dashboard MJPEG stream FPS
-STREAM_FPS          = 10
+STREAM_FPS          = config.STREAM_FPS
 _STREAM_INTERVAL    = 1.0 / STREAM_FPS
 
-# Pre-allocated buffer resolution — match your cameras, or leave at max
-_BUF_H, _BUF_W = 1080, 1920
+# Pre-allocated buffer resolution — Increased to support 5MP (2560x1920) natively
+_BUF_H, _BUF_W = 2000, 3000
 
 
 # ══════════════════════════════════════════════════════════════════════════════
@@ -155,19 +167,44 @@ class VideoProcessor:
             src = int(src)
 
         if isinstance(src, str) and src.lower().startswith("rtsp"):
+            # Base optimized options
+            transport     = "tcp"
+            fflags        = "nobuffer"
+            buffer_size   = "1024000"
+            reorder_queue = "128"
+            max_delay     = "500000"
+            
+            # Special tuning for high-resolution 5MP cameras (Kinfra Site)
+            is_kinfra_5mp = any(ip in str(src) for ip in [".221", ".225"]) or "Kinfra" in self.name
+            
+            if is_kinfra_5mp:
+                transport     = "tcp"
+                fflags        = "genpts" 
+                buffer_size   = "67108864" # 64MB
+                reorder_queue = "512"
+                max_delay     = "1000000"
+                log.info("[RTSP:%s] 5MP Stable-Lag-Fix: TCP + 64MB Buffer", self.name)
+                
+                os.environ["OPENCV_FFMPEG_CAPTURE_OPTIONS"] = (
+                    f"rtsp_transport;{transport}|"
+                    f"fflags;{fflags}|"
+                    f"reorder_queue_size;{reorder_queue}|"
+                    f"max_delay;{max_delay}|"
+                    f"buffer_size;{buffer_size}|"
+                    "probesize;30000000|"
+                    "analyzeduration;30000000"
+                )
+            else:
+                os.environ["OPENCV_FFMPEG_CAPTURE_OPTIONS"] = (
+                    f"rtsp_transport;{transport}|"
+                    f"fflags;{fflags}|"
+                    f"reorder_queue_size;{reorder_queue}|"
+                    f"max_delay;{max_delay}|"
+                    f"buffer_size;{buffer_size}"
+                )
+
             os.environ["OPENCV_FFMPEG_DEBUG"]             = "0"
             os.environ["OPENCV_LOG_LEVEL"]                = "QUIET"
-            os.environ["OPENCV_FFMPEG_CAPTURE_OPTIONS"]   = (
-                "rtsp_transport;tcp|"
-                "fflags;nobuffer|"
-                "reorder_queue_size;128|"   # Better handling of out-of-order packets
-                "max_delay;500000|"        # 500ms jitter tolerance (was 200ms)
-                "rtsp_flags;prefer_tcp|"   # Redundant but improves socket reliability
-                "stimeout;5000000|"        # 5s socket timeout
-                "threads;auto|"
-                "buffer_size;1024000|"     # 1MB internal socket buffer
-                "loglevel;error"           # Suppress spam, show only critical errors
-            )
             cap = cv2.VideoCapture(src, cv2.CAP_FFMPEG)
         else:
             cap = cv2.VideoCapture(src)
@@ -176,8 +213,10 @@ class VideoProcessor:
             cap.release()
             return False
 
-        cap.set(cv2.CAP_PROP_BUFFERSIZE, 2)   # 2 frames = stable streaming with low latency
         self.cap = cap
+        # CRITICAL: Keep buffer small but not zero to avoid decoder starvation on 5MP
+        self.cap.set(cv2.CAP_PROP_BUFFERSIZE, 1)
+            
         self._reconnect_delay = _RECONNECT_MIN_DELAY  # reset backoff on success
         log.info("[RTSP:%s] Connected successfully.", self.name)
         return True
@@ -185,11 +224,7 @@ class VideoProcessor:
     def _capture_loop(self):
         """
         The main RTSP reader loop. Runs in a dedicated daemon thread.
-
-        Frame-rate limiting strategy (REPAIRED):
-          To prevent RTSP lag, we MUST constantly drain the OpenCV/FFMPEG buffer.
-          We call cap.grab() as fast as possible. We only call cap.retrieve()
-          (the expensive decode step) when target interval has passed.
+        Uses a small buffer and fresh reads to ensure zero latency.
         """
         _frame_interval = 1.0 / TARGET_INGEST_FPS
         last_retrieve_time = 0.0
@@ -197,30 +232,18 @@ class VideoProcessor:
         while self.running:
             # ── Open / reconnect if needed ──────────────────────────────────
             if self.cap is None or not self.cap.isOpened():
-                log.info(
-                    "[RTSP:%s] Connecting... (retry delay=%.1fs)",
-                    self.name, self._reconnect_delay
-                )
+                log.info("[RTSP:%s] Connecting... (retry delay=%.1fs)", self.name, self._reconnect_delay)
                 if not self._open_source():
-                    log.warning(
-                        "[RTSP:%s] Failed to open source. Retrying in %.1fs",
-                        self.name, self._reconnect_delay
-                    )
+                    log.warning("[RTSP:%s] Failed to open source. Retrying in %.1fs", self.name, self._reconnect_delay)
                     time.sleep(self._reconnect_delay)
-                    # Exponential backoff, capped at max delay
-                    self._reconnect_delay = min(
-                        self._reconnect_delay * 1.5,
-                        _RECONNECT_MAX_DELAY
-                    )
+                    self._reconnect_delay = min(self._reconnect_delay * 1.5, _RECONNECT_MAX_DELAY)
                 continue
-
-            # ── Read frame (Must decode fully to prevent stream corruption) ───
-            # Skipping retrieve() correctly advances the stream but breaks H264
-            # decoders because the skipped P/B frames are needed as references.
+            
             cap = self.cap
-            if cap is None:
-                continue
+            if cap is None: continue
 
+            # ── Read LATEST frame ──
+            # With CAP_PROP_BUFFERSIZE=1, read() returns the most recent frame.
             ret, frame = cap.read()
             if not ret or frame is None:
                 log.warning("[RTSP:%s] Stream read failed — reconnecting.", self.name)
@@ -230,7 +253,7 @@ class VideoProcessor:
 
             now = time.monotonic()
 
-            # ── Only ingest to AI pipeline at target FPS ─────────────
+            # ── Ingest to shared buffer at target FPS ─────────────
             if now - last_retrieve_time >= _frame_interval:
                 # Write into pre-allocated buffer (in-place, no new allocation)
                 h, w = frame.shape[:2]
@@ -252,7 +275,7 @@ class VideoProcessor:
                 self.last_frame_time = now
                 last_retrieve_time = now
             else:
-                self.frames_dropped += 1  # intermediate frame decoded but skipped by AI
+                self.frames_dropped += 1
 
 
 # ══════════════════════════════════════════════════════════════════════════════
@@ -329,9 +352,10 @@ class MonitoringLoop:
             elif 12 <= hour < 17: period = "Good Afternoon"
             else:                 period = "Good Evening"
             
-            is_exit_camera = any(k.lower() in self.name.lower() for k in config.EXIT_CAM_KEYWORDS)
-
             # 2. Handle Granted (Longer, More Welcoming Announcements)
+            is_exit_camera = any(k.lower() in self.name.lower() for k in config.EXIT_CAM_KEYWORDS)
+            speaker_id = config.get_cam_setting(self.name, "SPEAKER_DEVICE_IDS")
+
             if granted:
                 names_str = self._format_names([p["name"] for p in granted])
                 is_group = len(granted) > 1
@@ -380,7 +404,6 @@ class MonitoringLoop:
 
                 # 2.3 Follow with grouped announcement (SECOND PRIORITY)
                 # ANN-01: Grouped greeting with small pause (,,, or ...) before names
-                speaker_id = config.SPEAKER_DEVICE_IDS.get(self.name)
                 asyncio.create_task(engine.announce(msg, device_id=speaker_id))
 
             # 3. Handle Denied (Clear instructions)
@@ -404,7 +427,7 @@ class MonitoringLoop:
                         f"Pardon me, , , {names_str}. Exit access cannot be granted as checkout is required. Thank you for your cooperation."
                     ]
                     msg_denied = random.choice(denied_v)
-                    speaker_id = config.SPEAKER_DEVICE_IDS.get(self.name)
+                    speaker_id = config.get_cam_setting(self.name, "SPEAKER_DEVICE_IDS")
                     asyncio.create_task(engine.announce(msg_denied, device_id=speaker_id))
 
         except Exception as e:
@@ -419,59 +442,42 @@ class MonitoringLoop:
         is_exit_camera = any(k.lower() in self.name.lower() for k in config.EXIT_CAM_KEYWORDS)
         is_exit_event  = p.get("exit_type") == "EXIT" or is_exit_camera
         
-        # 2. GrapesOnline Attendance Logging (Only if NOT in API door mode)
-        # In API mode, the remote command usually handles server-side logging.
-        if config.DOOR_UNLOCK_MODE != "API":
-            if is_exit_event:
-                # Explicit exit event — log OUT
-                asyncio.create_task(engine.log_exit(p["emp_code"]))
-                
-                # PC CONTROL: Turn OFF / LOCK
-                if config.PC_CONTROL_ENABLED:
-                    if p.get("pc_control") and p.get("pc_ip"):
-                        now_hour = datetime.datetime.now().hour
-                        is_office_hour = config.PC_OFFICE_HOURS_START <= now_hour < config.PC_OFFICE_HOURS_END
-                        exit_type = str(p.get("exit_type", "")).upper()
-
-                        if exit_type == "EXIT" and not is_office_hour:
-                            asyncio.create_task(engine.trigger_pc_stop(p["pc_ip"]))
-                        else:
-                            asyncio.create_task(engine.trigger_pc_lock(p["pc_ip"]))
-                            log.info("[Monitor] Sending LOCK instead of Shutdown for '%s' (Type: %s, OfficeHr: %s)", 
-                                     p["name"], exit_type, is_office_hour)
-                    else:
-                        log.warning("[Monitor] PC Control skipped for '%s': pc_control=%s, pc_ip=%s", 
-                                    p["name"], p.get("pc_control"), p.get("pc_ip"))
+        # 2. Secondary Actions (Only if door opened successfully)
+        if door_ok:
+            # 2.1 GrapesOnline Attendance Logging (Only if NOT in API door mode)
+            if config.DOOR_UNLOCK_MODE != "API":
+                if is_exit_event:
+                    asyncio.create_task(engine.log_exit(p["emp_code"]))
+                else:
+                    if p.get("checkin_status") in ("RdytoChkIn", "OUT"):
+                        asyncio.create_task(engine.log_entry(p["emp_code"]))
             
-            else:
-                # Entrance context — log IN if status is ready or currently 'OUT'
-                if p.get("checkin_status") in ("RdytoChkIn", "OUT"):
-                    asyncio.create_task(engine.log_entry(p["emp_code"]))
-                
-                # PC CONTROL: Turn ON
-                if config.PC_CONTROL_ENABLED and p.get("pc_control") and p.get("pc_mac"):
-                    asyncio.create_task(engine.trigger_pc_start(p["pc_mac"]))
-        else:
-            # In API mode, we still handle PC Control if enabled
-            if is_exit_event:
-                if config.PC_CONTROL_ENABLED:
-                    if p.get("pc_control") and p.get("pc_ip"):
+            # 2.2 PC Automation (Wake-on-LAN / Lock / Shutdown)
+            if config.PC_CONTROL_ENABLED and p.get("pc_control"):
+                if is_exit_event:
+                    if p.get("pc_ip"):
                         now_hour = datetime.datetime.now().hour
                         is_office_hour = config.PC_OFFICE_HOURS_START <= now_hour < config.PC_OFFICE_HOURS_END
                         exit_type = str(p.get("exit_type", "")).upper()
-
                         if exit_type == "EXIT" and not is_office_hour:
                             asyncio.create_task(engine.trigger_pc_stop(p["pc_ip"]))
                         else:
                             asyncio.create_task(engine.trigger_pc_lock(p["pc_ip"]))
-                            log.info("[Monitor] Sending LOCK instead of Shutdown for '%s' (Type: %s, OfficeHr: %s)", 
-                                     p["name"], exit_type, is_office_hour)
-                    else:
-                        log.warning("[Monitor] PC Control skipped for '%s': pc_control=%s, pc_ip=%s", 
-                                    p["name"], p.get("pc_control"), p.get("pc_ip"))
-            else:
-                if config.PC_CONTROL_ENABLED and p.get("pc_control") and p.get("pc_mac"):
-                    asyncio.create_task(engine.trigger_pc_start(p["pc_mac"]))
+                else:
+                    if p.get("pc_mac"):
+                        asyncio.create_task(engine.trigger_pc_start(p["pc_mac"]))
+
+            # 2.3 SELF-IMPROVING IDENTITY: If confidence is high, update the employee's model
+            if config.AUTO_UPDATE_ENABLED and p.get("score", 0) >= config.AUTO_UPDATE_THRESHOLD:
+                if p.get("emp_id") and p.get("embedding") is not None:
+                    # Trigger optimization in the background
+                    asyncio.create_task(engine.auto_optimize_identity(
+                        emp_id=p["emp_id"],
+                        name=p["name"],
+                        new_embedding=p["embedding"]
+                    ))
+        else:
+            log.error("[Monitor:%s] ❌ Secondary actions skipped for '%s' (Door unlock failed).", self.name, p["name"])
         
         # 3. System Activity Logging (Local SQL audit)
         await database.log_access(
@@ -526,8 +532,7 @@ class MonitoringLoop:
         gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
         return cv2.Laplacian(gray, cv2.CV_64F).var() < config.BLUR_THRESHOLD
 
-    @staticmethod
-    def _face_too_small(face) -> bool:
+    def _face_too_small(self, face) -> bool:
         """
         Use ArcFace bounding box to check face size — replaces MediaPipe face_w check.
         face.bbox = [x1, y1, x2, y2] in pixel coords of the frame.
@@ -536,10 +541,34 @@ class MonitoringLoop:
         x1, y1, x2, y2 = face.bbox
         face_w = (x2 - x1)
         face_h = (y2 - y1)
-        return face_w < config.FACE_MIN_SIZE or face_h < config.FACE_MIN_SIZE
+        
+        # Look up per-camera or per-group face size threshold
+        min_size = int(config.get_cam_setting(self.name, "FACE_MIN_SIZE", config.FACE_MIN_SIZE))
+        return face_w < min_size or face_h < min_size
 
-    @staticmethod
-    def _get_face_crop(frame: np.ndarray, bbox: list, padding: int = 40) -> Optional[bytes]:
+    def _is_outside_roi(self, face_bbox, frame_shape) -> bool:
+        """Checks if the face center point is within the allowed ROI (defined in % of frame)."""
+        roi_raw = config.get_cam_setting(self.name, "ROI")
+        if not roi_raw:
+            return False
+        
+        try:
+            h, w = frame_shape[:2]
+            # ROI format: y1,x1,y2,x2 (all in 0-100 percent)
+            ry1, rx1, ry2, rx2 = map(float, [x.strip() for x in roi_raw.split(",")])
+            
+            # Face center point
+            fx1, fy1, fx2, fy2 = face_bbox
+            cx = (fx1 + fx2) / 2 / w * 100
+            cy = (fy1 + fy2) / 2 / h * 100
+            
+            # Return True if outside
+            return not (rx1 <= cx <= rx2 and ry1 <= cy <= ry2)
+        except Exception as e:
+            log.warning("[Monitor:%s] ROI parse error: %s", self.name, e)
+            return False
+
+    def _get_face_crop(self, frame: np.ndarray, bbox: list, padding: int = 40) -> Optional[bytes]:
         """Extracts a padded face crop from the frame and encodes as JPEG."""
         try:
             h, w = frame.shape[:2]
@@ -629,8 +658,11 @@ class MonitoringLoop:
             self.current_emp_ids    = []
             return
 
-        # Filter undersized faces (person too far from camera)
-        face_results = [f for f in face_results if not self._face_too_small(f['face'])]
+        # Filter undersized faces (person too far from camera) or faces outside ROI
+        face_results = [
+            f for f in face_results 
+            if not self._face_too_small(f['face']) and not self._is_outside_roi(f['face'].bbox, frame.shape)
+        ]
         if not face_results:
             # All detected faces were filtered out — clear UI labels
             self.last_num_faces     = 0
@@ -748,6 +780,14 @@ class MonitoringLoop:
             # Set cooldown IMMEDIATELY to prevent spawning multiple concurrent tasks
             self.cooldown_dict[emp_id] = now + config.MONITOR_COOLDOWN
             
+            # Find the best result for this employee in the current frame to use for potential auto-update
+            best_idx = -1
+            max_score = -1.0
+            for j, (eid, s) in enumerate(search_results):
+                if eid == emp_id and s > max_score:
+                    max_score = s
+                    best_idx = j
+
             batch.append({
                 "emp_id": emp_id,
                 "name": name,
@@ -756,8 +796,9 @@ class MonitoringLoop:
                 "pc_mac": emp_data.get("pc_mac"),
                 "pc_ip": emp_data.get("pc_ip"),
                 "pc_control": emp_data.get("pc_control"),
-                "score": next((s for eid, s in search_results if eid == emp_id), 0.0),
-                "bbox": next((face_results[j]['bbox'] for j, (eid, s) in enumerate(search_results) if eid == emp_id), None)
+                "score": max_score,
+                "embedding": face_results[best_idx]['embedding'] if best_idx != -1 else None,
+                "bbox": face_results[best_idx]['bbox'] if best_idx != -1 else None
             })
 
         if batch:

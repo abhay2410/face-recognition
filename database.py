@@ -317,6 +317,28 @@ def multi_embeddings_to_bytes(vecs: list) -> bytes:
     mat = np.vstack([v.astype(np.float32) for v in vecs])   # (N, 512)
     return mat.tobytes()
 
+def _get_multi_embeddings_for_employee_sync(emp_id: int) -> Optional[bytes]:
+    conn = _get_conn()
+    cur  = conn.cursor()
+    cur.execute("SELECT embeddings_multi FROM employees WHERE id=?", (emp_id,))
+    row = cur.fetchone()
+    return row[0] if row else None
+
+async def get_multi_embeddings_for_employee(emp_id: int) -> Optional[bytes]:
+    loop = asyncio.get_event_loop()
+    return await loop.run_in_executor(None, partial(_get_multi_embeddings_for_employee_sync, emp_id))
+
+def _update_multi_embeddings_sync(emp_id: int, multi_embeddings: list):
+    raw = multi_embeddings_to_bytes(multi_embeddings)
+    conn = _get_conn()
+    cur = conn.cursor()
+    cur.execute("UPDATE employees SET embeddings_multi=? WHERE id=?", (raw, emp_id))
+    conn.commit()
+
+async def update_multi_embeddings(emp_id: int, multi_embeddings: list):
+    loop = asyncio.get_event_loop()
+    await loop.run_in_executor(None, partial(_update_multi_embeddings_sync, emp_id, multi_embeddings))
+
 
 def bytes_to_multi_embeddings(raw: bytes) -> np.ndarray:
     """
@@ -412,10 +434,10 @@ def _upsert_employee_sync(
 
     emp_record = {
         "id":            emp_id,
-        "name":          name,
-        "employee_code": employee_code,
-        "department":    department,
-        "rf_card":       rf_card,
+        "name":          name.strip(),
+        "employee_code": employee_code.strip(),
+        "department":    department.strip(),
+        "rf_card":       rf_card.strip(),
     }
     _cache_set(emp_id, emp_record)
     return emp_id
@@ -456,10 +478,10 @@ def _get_all_employees_sync() -> list:
         if _cache_get(emp_id) is None:
             _cache_set(emp_id, {
                 "id":            row["id"],
-                "name":          row["name"],
-                "employee_code": row["employee_code"],
-                "department":    row["department"],
-                "rf_card":       row["rf_card"],
+                "name":          row["name"].strip() if row["name"] else "",
+                "employee_code": row["employee_code"].strip() if row["employee_code"] else "",
+                "department":    row["department"].strip() if row["department"] else "",
+                "rf_card":       row["rf_card"].strip() if row["rf_card"] else "",
                 "pc_mac":        row["pc_mac"],
                 "pc_ip":         row["pc_ip"],
                 "pc_control":    row["pc_control"],
@@ -537,6 +559,10 @@ def _get_employee_by_id_sync(employee_id: int) -> Optional[dict]:
         return None
     cols = [c[0] for c in cur.description]
     res  = dict(zip(cols, row))
+    # Clean strings
+    for k in ["name", "employee_code", "department", "rf_card"]:
+        if res.get(k): res[k] = res[k].strip()
+        
     _cache_set(employee_id, res)   # Populate cache for next hit
     return res
 
