@@ -36,9 +36,12 @@ def build():
         "--contents-directory", "_internal",
         "--noconsole",          # Hide console window for background production use
         "--name", "FaceAccessSystem",
+        "--icon", os.path.join(base_dir, "logo.ico"),
         # Bundle templates & models
         f"--add-data={templates_dir}{os.pathsep}templates",
         f"--add-data={models_dir}{os.pathsep}data/insightface_models",
+        f"--add-data={os.path.join(base_dir, 'logo.ico')}{os.pathsep}.",
+        f"--add-data={os.path.join(base_dir, 'logo.png')}{os.pathsep}.",
         # Collect all dependencies
         "--collect-all", "fastapi",
         "--collect-all", "uvicorn",

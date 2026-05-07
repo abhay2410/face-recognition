@@ -1,15 +1,5 @@
 """
-engine.py – Production-Grade ArcFace + FAISS Core  [v2.3 — Version-Aware Fixing]
-==============================================================================
-Fixed in v2.3:
-  - Version discovery: automatically detects what FaceAnalysis supports
-  - Bulletproof init: gracefully handles missing 'providers' or 'session_options'
-  - High performance: keeps CUDA/GPU acceleration on your existing library
-  - Suppression: correctly suppresses ORT warnings if possible, stays quiet if not
-"""
-
-"""
-engine.py – Hardware & Integration Layer [v3 — Multi-Office Ready]
+engine.py – Hardware & Integration Layer [v3.1 — Multi-Office Ready]
 ==================================================================
 Manages all external interactions: door locks, network speakers, and 
 remote employee attendance APIs.
@@ -18,6 +8,8 @@ Design Logic:
   - Branch Isolation: Uses office-specific Branch IDs for accurate reporting.
   - Fail-Safe Hardware: Supports WebSocket and HTTP POST for local/remote locks.
   - Group Audio: Shared speaker support for office clusters (e.g. DEV office).
+  - Version Discovery: Automatically detects FaceAnalysis capabilities.
+  - GPU Acceleration: Supports CUDA (NVIDIA) and DirectML (Intel/AMD) on Windows.
 """
 
 import asyncio
@@ -183,34 +175,53 @@ async def load_index():
             all_vecs.append(vec)
             new_ids.append(emp_id)
             
-    async with _index_lock:
-        if not all_vecs:
+    if not all_vecs:
+        async with _index_lock:
             log.info("[Engine] No vectors found. Creating empty IndexFlatIP.")
             _index, _index_ids = faiss.IndexFlatIP(config.EMBEDDING_DIM), []
             return
-            
-        log.info("[Engine] Building HNSW index with %d vectors...", len(all_vecs))
-        _index = faiss.IndexHNSWFlat(config.EMBEDDING_DIM, config.HNSW_M, faiss.METRIC_INNER_PRODUCT)
-        _index.hnsw.efSearch = config.HNSW_EF_SEARCH
+
+    # --- Start of heavy CPU section ---
+    def _build_index_sync(vecs, ids):
+        log.info("[Engine] Building HNSW index with %d vectors in background...", len(vecs))
+        # 1. Create the index
+        idx = faiss.IndexHNSWFlat(config.EMBEDDING_DIM, config.HNSW_M, faiss.METRIC_INNER_PRODUCT)
+        idx.hnsw.efSearch = config.HNSW_EF_SEARCH
         
-        log.info("[Engine] Adding vectors to FAISS index...")
-        _index.add(np.vstack(all_vecs).astype(np.float32))
+        # 2. Add vectors
+        idx.add(np.vstack(vecs).astype(np.float32))
+        
+        # 3. Save to disk (fast enough on most SSDs)
+        save_path = os.path.join(config.BASE_DIR, "data", "faiss_hnsw.index")
+        os.makedirs(os.path.dirname(save_path), exist_ok=True)
+        try:
+            faiss.write_index(idx, save_path)
+            # Read back as mmap if possible to save RAM, otherwise keep the one we built
+            # For simplicity here we just use the built one
+        except Exception as e:
+            log.error("[Engine] Disk save failed: %s", e)
+            
+        return idx
+
+    # Run the heavy math in the thread pool to keep the event loop alive
+    loop = asyncio.get_event_loop()
+    new_index = await loop.run_in_executor(None, _build_index_sync, all_vecs, new_ids)
+
+    # Atomic swap
+    async with _index_lock:
+        _index = new_index
         _index_ids = new_ids
         
-        save_path = os.path.join(config.BASE_DIR, "data", "faiss_hnsw.index")
-        os.makedirs(os.path.join(config.BASE_DIR, "data"), exist_ok=True)
-        log.info("[Engine] Saving index to %s...", save_path)
-        try:
-            faiss.write_index(_index, save_path)
-            log.info("[Engine] Index saved to disk.")
-            # Sync to SQL as requested to "keep it in SQL"
-            with open(save_path, "rb") as f:
-                blob = f.read()
-            asyncio.create_task(db.save_faiss_index(blob))
-        except Exception as e:
-            log.error("[Engine] Failed to save/sync index: %s", e)
-        
     log.info("[Engine] Index ready (%d vectors).", _index.ntotal)
+    
+    # Background sync to SQL
+    try:
+        save_path = os.path.join(config.BASE_DIR, "data", "faiss_hnsw.index")
+        with open(save_path, "rb") as f:
+            blob = f.read()
+        asyncio.create_task(db.save_faiss_index(blob))
+    except Exception as e:
+        log.error("[Engine] SQL sync failed: %s", e)
 
 
 async def load_index_from_disk() -> bool:
@@ -366,14 +377,23 @@ async def close_engine():
     global _http_client
     if _http_client: await _http_client.aclose(); _http_client = None
 
-async def check_rf_card(rf: Optional[str], camera_name: str = "Exit"):
+async def check_rf_card(rf: Optional[str], camera_name: str = "Exit", department: str = ""):
     """
     Checks the RF Card status via HTTP GET.
     Returns (status_ok, status_string, exit_type).
     """
-    # Skip the RF status check for anyone without a valid card (NULL, empty, "0", or "None")
+    # 0. Bypass for "Entrance" camera or "embeded"/"embedded" department
+    is_entrance = "entrance" in str(camera_name).lower()
+    is_embeded = department and str(department).strip().lower() in ("embeded", "embedded")
+    
+    if is_entrance or is_embeded:
+        log.info("[RF-Check] Bypassing status check (Camera: %s, Dept: %s)", camera_name, department)
+        return True, "BYPASS", "EXIT"
+
+    # 1. Skip the RF status check for anyone without a valid card (NULL, empty, "0", or "None")
     if not config.RF_CHECK_API_URL or not rf or str(rf).strip().lower() in ("", "none", "0"):
         return True, "SKIP", "EXIT"
+    
     url = config.RF_CHECK_API_URL.replace("{rf_card}", str(rf)).replace("rffid", str(rf))
     try:
         resp = await _get_http_client().get(url)

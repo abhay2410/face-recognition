@@ -5,6 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FaceID | Login</title>
+    <link rel="icon" type="image/png" href="/logo.png?v=2">
+    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=2">
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -40,11 +42,10 @@
         }
 
         .logo {
-            font-size: 32px;
-            font-weight: 600;
-            color: var(--accent-color);
             margin-bottom: 30px;
-            display: block;
+            display: inline-block;
+            max-width: 150px;
+            height: auto;
         }
 
         h1 {
@@ -124,7 +125,7 @@
 <body>
 
     <div class="login-card">
-        <span class="logo">🛡️ FaceID</span>
+        <img src="/logo.png" alt="FaceID Logo" class="logo">
         <h1>Administrator Login</h1>
 
         <div id="error" class="error-msg">Invalid username or password.</div>

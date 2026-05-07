@@ -5,6 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Settings | FaceID</title>
+    <link rel="icon" type="image/png" href="/logo.png?v=2">
+    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=2">
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -34,11 +36,10 @@
             flex-direction: column;
         }
 
-        .logo {
-            font-size: 24px;
-            font-weight: 600;
-            color: var(--accent-color);
-            margin-bottom: 40px;
+        .logo img {
+            width: 140px;
+            height: auto;
+            margin-bottom: 30px;
         }
 
         .nav-item {
@@ -181,7 +182,9 @@
 
 <body>
     <div class="sidebar">
-        <div class="logo">🛡️ FaceID</div>
+        <div class="logo">
+            <img src="/logo.png" alt="FaceID Logo">
+        </div>
         <a href="/" class="nav-item">Dashboard</a>
         <a href="/enrol" class="nav-item">New Enrollment</a>
         <a href="/audit" class="nav-item">🔍 Audit Trail</a>

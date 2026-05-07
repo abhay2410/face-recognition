@@ -48,6 +48,17 @@ This version is optimized for maximum efficiency:
     ```
     Live Dashboard: `http://localhost:8000`
 
+4.  **Clean Stop (Release Port 8000)**:
+    If the port is stuck, run this in PowerShell:
+    ```powershell
+    Stop-Process -Id (Get-NetTCPConnection -LocalPort 8000).OwningProcess -Force
+    ```
+
+5.  **Build Executable**:
+    ```powershell
+    python make_exe.py
+    ```
+
 ---
 
 ## 🔧 Troubleshooting

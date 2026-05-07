@@ -57,7 +57,7 @@ from fastapi import (
 )
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import (
-    HTMLResponse, JSONResponse, RedirectResponse, StreamingResponse,
+    FileResponse, HTMLResponse, JSONResponse, RedirectResponse, StreamingResponse,
 )
 from fastapi.templating import Jinja2Templates
 
@@ -194,6 +194,27 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+
+@app.get("/favicon.ico", include_in_schema=False)
+async def favicon():
+    icon_path = _INTERNAL_DIR / "logo.ico"
+    if not icon_path.exists():
+        # Fallback to current dir if not in frozen path
+        icon_path = Path("logo.ico")
+    if icon_path.exists():
+        return FileResponse(icon_path)
+    return Response(status_code=404)
+
+
+@app.get("/logo.png", include_in_schema=False)
+async def logo_img():
+    img_path = _INTERNAL_DIR / "logo.png"
+    if not img_path.exists():
+        img_path = Path("logo.png")
+    if img_path.exists():
+        return FileResponse(img_path)
+    return Response(status_code=404)
 
 
 # ══════════════════════════════════════════════════════════════════════════════
@@ -763,8 +784,8 @@ async def access(image: Annotated[UploadFile, File()]):
     emp_name = employee["name"] if employee else f"employee_{emp_id}"
 
     rf_card_number = employee.get("rf_card", "") if employee else ""
-    # Correctly unpack the 3rd element (ExitType) which is ignored in this endpoint
-    rf_ok, checkin_status, _ = await engine.check_rf_card(rf_card_number)
+    # Pass department to allow bypass for "embeded"
+    rf_ok, checkin_status, _ = await engine.check_rf_card(rf_card_number, department=employee.get("department", "") if employee else "")
 
     if not rf_ok:
         await database.log_access(employee_id=emp_id, distance=distance, door_ok=False)

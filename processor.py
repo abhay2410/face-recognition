@@ -329,7 +329,7 @@ class MonitoringLoop:
         """Processes a batch of people detected in the same cycle with professional, long-form announcements."""
         try:
             # 1. Run all RF checks in parallel
-            rf_tasks = [engine.check_rf_card(p["rf_card"], camera_name=self.name) for p in batch]
+            rf_tasks = [engine.check_rf_card(p["rf_card"], camera_name=self.name, department=p.get("department", "")) for p in batch]
             rf_results = await asyncio.gather(*rf_tasks)
             
             granted = []
@@ -798,7 +798,8 @@ class MonitoringLoop:
                 "pc_control": emp_data.get("pc_control"),
                 "score": max_score,
                 "embedding": face_results[best_idx]['embedding'] if best_idx != -1 else None,
-                "bbox": face_results[best_idx]['bbox'] if best_idx != -1 else None
+                "bbox": face_results[best_idx]['bbox'] if best_idx != -1 else None,
+                "department": emp_data.get("department", "")
             })
 
         if batch:
