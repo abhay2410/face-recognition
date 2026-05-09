@@ -67,7 +67,6 @@ def build():
         "--hidden-import=database",
         "--hidden-import=processor",
         "--hidden-import=config",
-        "--hidden-import=silencer",
         # Entry point
         main_script
     ]
@@ -83,7 +82,7 @@ def build():
         print("\nDeployment Instructions:")
         print("1. Copy the entire 'dist/FaceAccessSystem' FOLDER to the client system.")
         print("2. Copy your '.env' file into that same folder (next to the .exe).")
-        print("3. Run 'Install_Service.ps1' as Administrator to register as a Windows Service.")
+        print("3. Run the .exe to start the system.")
         print("4. Access via http://localhost:8000")
     except subprocess.CalledProcessError as e:
         print(f"Build failed: {e}")

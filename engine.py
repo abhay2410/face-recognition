@@ -382,30 +382,48 @@ async def check_rf_card(rf: Optional[str], camera_name: str = "Exit", department
     Checks the RF Card status via HTTP GET.
     Returns (status_ok, status_string, exit_type).
     """
-    # 0. Bypass for "Entrance" camera or "embeded"/"embedded" department
+    # 1. Skip the RF status check for anyone without a valid card (NULL, empty, "0", or "None")
+    if not config.RF_CHECK_API_URL or not rf or str(rf).strip().lower() in ("", "none", "0"):
+        return True, "SKIP", "ENTRY" if "entrance" in str(camera_name).lower() else "EXIT"
+    
+    url = config.RF_CHECK_API_URL.replace("{rf_card}", str(rf)).replace("rffid", str(rf))
+    
+    # 2. Determine bypass conditions
     is_entrance = "entrance" in str(camera_name).lower()
     is_embeded = department and str(department).strip().lower() in ("embeded", "embedded")
     
-    if is_entrance or is_embeded:
-        log.info("[RF-Check] Bypassing status check (Camera: %s, Dept: %s)", camera_name, department)
-        return True, "BYPASS", "EXIT"
-
-    # 1. Skip the RF status check for anyone without a valid card (NULL, empty, "0", or "None")
-    if not config.RF_CHECK_API_URL or not rf or str(rf).strip().lower() in ("", "none", "0"):
-        return True, "SKIP", "EXIT"
-    
-    url = config.RF_CHECK_API_URL.replace("{rf_card}", str(rf)).replace("rffid", str(rf))
     try:
         resp = await _get_http_client().get(url)
         log.info("[RF-Check] %s → %d %s", url.split('?')[0], resp.status_code, resp.text[:120])
-        if not resp.is_success: return False, "ERROR", "EXIT"
+        if not resp.is_success:
+            if is_entrance or is_embeded:
+                return True, "BYPASS_ERR", "ENTRY" if is_entrance else "EXIT"
+            return False, "ERROR", "EXIT"
+            
         d = resp.json()
         item = d.get("Data", [{}])[0] if d.get("status") == 200 else {}
         status = item.get("Checkinstatus")
         exit_type = str(item.get("ExitType", "EXIT")).strip()
-        return status in ("OUT", "RdytoChkIn"), status, exit_type
+        
+        # 3. Logic: Normal check vs Bypass
+        rf_ok = status in ("OUT", "RdytoChkIn")
+        
+        if is_entrance or is_embeded:
+            # Determine a safe default exit_type for bypass cases if API is vague
+            default_type = "ENTRY" if is_entrance else "EXIT"
+            final_exit_type = exit_type if exit_type and exit_type != "EXIT" else default_type
+            
+            if not rf_ok:
+                log.info("[RF-Check] Bypassing status '%s' (Camera: %s, Dept: %s)", status, camera_name, department)
+            return True, status, final_exit_type
+            
+        return rf_ok, status, exit_type
+        
     except Exception as e:
         log.warning("[RF-Check] Request failed: %s", e)
+        # If timeout/exception, bypass scenarios still get access
+        if is_entrance or is_embeded:
+            return True, "BYPASS_EXC", "ENTRY" if is_entrance else "EXIT"
         return False, "TIMEOUT", "EXIT"
 
 async def log_entry(employee_code: str):

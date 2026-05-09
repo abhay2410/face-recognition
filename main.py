@@ -31,12 +31,6 @@ import warnings
 import sys
 from pathlib import Path
 
-# Force the silencer to run before any other ML module loads
-PROJ_ROOT = Path(__file__).parent
-sys.path.append(str(PROJ_ROOT))
-import silencer
-silencer.silence_cpp_logs()
-
 os.environ["ORT_LOGGING_LEVEL"] = "3"
 os.environ["PYTHONWARNINGS"] = "ignore"
 warnings.filterwarnings("ignore")
@@ -152,11 +146,32 @@ async def lifespan(app: FastAPI):
     await database.init_db()
 
     # 1. Cleanup old logs (Audit Trail 7-day retention)
-    try:
-        asyncio.create_task(database.purge_old_audit(days=7))
-    except Exception as e:
-        log.warning("[System] Failed to purge old audits: %s", e)
+    # 1. Purge old audits
+    asyncio.create_task(database.purge_old_audit(days=7))
 
+    # 2. Network Diagnostics for Cameras
+    log.info("[System] Running network diagnostics for cameras...")
+    urls = config.RTSP_CAMERAS
+    for name, url in urls.items():
+        if not config.get_cam_setting(name, "MONITOR_ENABLED", "true").lower() == "true":
+            continue
+        
+        # Simple TCP check on port 554 (RTSP)
+        import socket
+        try:
+            # Parse IP from URL
+            import re
+            match = re.search(r'@([^:/]+)', url)
+            if match:
+                ip = match.group(1)
+                with socket.create_connection((ip, 554), timeout=3.0):
+                    log.info("[Diag:%s] ✅ Camera network reachable (Port 554)", name)
+            else:
+                log.warning("[Diag:%s] ⚠️ Could not parse IP from URL", name)
+        except Exception as e:
+            log.error("[Diag:%s] ❌ Camera network UNREACHABLE: %s", name, e)
+
+    # 3. Load Models
     # 2. Fast startup: try loading FAISS index from disk first (mmap mode)
     loaded = await engine.load_index_from_disk()
     if not loaded:

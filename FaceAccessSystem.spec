@@ -3,7 +3,7 @@ from PyInstaller.utils.hooks import collect_all
 
 datas = [('c:\\Users\\Abhay\\Desktop\\face\\templates', 'templates'), ('c:\\Users\\Abhay\\Desktop\\face\\data\\insightface_models', 'data/insightface_models'), ('c:\\Users\\Abhay\\Desktop\\face\\logo.ico', '.'), ('c:\\Users\\Abhay\\Desktop\\face\\logo.png', '.')]
 binaries = []
-hiddenimports = ['uvicorn.logging', 'uvicorn.loops', 'uvicorn.loops.auto', 'uvicorn.protocols', 'uvicorn.protocols.http', 'uvicorn.protocols.http.auto', 'onnxruntime', 'engine', 'database', 'processor', 'config', 'silencer']
+hiddenimports = ['uvicorn.logging', 'uvicorn.loops', 'uvicorn.loops.auto', 'uvicorn.protocols', 'uvicorn.protocols.http', 'uvicorn.protocols.http.auto', 'onnxruntime', 'engine', 'database', 'processor', 'config']
 tmp_ret = collect_all('fastapi')
 datas += tmp_ret[0]; binaries += tmp_ret[1]; hiddenimports += tmp_ret[2]
 tmp_ret = collect_all('uvicorn')
