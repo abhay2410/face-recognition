@@ -230,7 +230,12 @@ PROCESSING_FPS    = int(os.getenv("PROCESSING_FPS", "10"))
 STREAM_FPS        = int(os.getenv("STREAM_FPS", "10"))
 
 RTSP_RECONNECT_DELAY = int(os.getenv("RTSP_RECONNECT_DELAY", "5"))
-MONITOR_COOLDOWN     = int(os.getenv("MONITOR_COOLDOWN",     "10"))
+MONITOR_COOLDOWN          = int(os.getenv("MONITOR_COOLDOWN",          "10"))  # legacy fallback
+# Cross-camera cooldown: how long OTHER cameras ignore a person after they
+# have been detected on ANY camera.
+COOLDOWN_OTHER_CAMERAS   = int(os.getenv("COOLDOWN_OTHER_CAMERAS",   "10"))
+# Same-camera cooldown: how long the SAME camera ignores the person again.
+COOLDOWN_SAME_CAMERA     = int(os.getenv("COOLDOWN_SAME_CAMERA",     "30"))
 MONITOR_ENABLED      = os.getenv("MONITOR_ENABLED",  "true").lower() == "true"
 
 ENABLED_CAMERAS: dict = {}

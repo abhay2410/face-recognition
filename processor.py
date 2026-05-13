@@ -44,6 +44,44 @@ import engine
 
 log = logging.getLogger("processor")
 
+# ══════════════════════════════════════════════════════════════════════════════
+#  Global Cross-Camera Cooldown Registry
+# ══════════════════════════════════════════════════════════════════════════════
+# Stores the last time each employee was triggered on each camera:
+#   _global_cooldown[emp_id][camera_name] = timestamp (float)
+#
+# Rules enforced by _is_on_cooldown() / _set_cooldown():
+#   • Same camera  → suppress for COOLDOWN_SAME_CAMERA   seconds (default 30)
+#   • Other camera → suppress for COOLDOWN_OTHER_CAMERAS seconds (default 10)
+_global_cooldown: Dict[int, Dict[str, float]] = {}
+_global_cooldown_lock = threading.Lock()
+
+
+def _is_on_cooldown(emp_id: int, camera_name: str, now: float) -> bool:
+    """Return True if emp_id should be suppressed on camera_name right now."""
+    with _global_cooldown_lock:
+        cam_times = _global_cooldown.get(emp_id)
+        if not cam_times:
+            return False
+        for cam, ts in cam_times.items():
+            if cam == camera_name:
+                # Same-camera: longer cooldown
+                if now < ts + config.COOLDOWN_SAME_CAMERA:
+                    return True
+            else:
+                # Other camera: shorter cooldown
+                if now < ts + config.COOLDOWN_OTHER_CAMERAS:
+                    return True
+        return False
+
+
+def _set_cooldown(emp_id: int, camera_name: str, now: float) -> None:
+    """Record that emp_id was just triggered on camera_name."""
+    with _global_cooldown_lock:
+        if emp_id not in _global_cooldown:
+            _global_cooldown[emp_id] = {}
+        _global_cooldown[emp_id][camera_name] = now
+
 # ──────────────────────────────────────────────────────────────────────────────
 #  Tuning constants  (NOT user-facing config — these are engineering knobs)
 # ──────────────────────────────────────────────────────────────────────────────
@@ -305,7 +343,9 @@ class MonitoringLoop:
         self.running    = False
 
         # Recognition state
-        self.cooldown_dict: Dict[int, float] = {}    # emp_id → next_trigger_time
+        # cooldown is now managed by the module-level _global_cooldown registry
+        # (kept as a no-op placeholder so old references compile cleanly)
+        self.cooldown_dict: Dict[int, float] = {}  # DEPRECATED — use _is_on_cooldown()
         self.frame_count  = 0
 
         # Consensus window: each position holds a set of emp_ids seen that cycle
@@ -763,8 +803,14 @@ class MonitoringLoop:
         # ── Decision loop: trigger door for current confirmed batch ───────────
         batch = []
         for emp_id in confirmed_ids:
-            # Cooldown gate — prevent repeated triggers for same person
-            if now < self.cooldown_dict.get(emp_id, 0.0):
+            # Cooldown gate — cross-camera aware
+            #   • Same camera  → COOLDOWN_SAME_CAMERA   seconds (default 30s)
+            #   • Other camera → COOLDOWN_OTHER_CAMERAS seconds (default 10s)
+            if _is_on_cooldown(emp_id, self.name, now):
+                log.debug(
+                    "[Monitor:%s] ⏳ Cooldown active for emp_id=%s — skipping.",
+                    self.name, emp_id
+                )
                 continue
 
             emp_data = database._employee_cache.get(emp_id)
@@ -777,8 +823,14 @@ class MonitoringLoop:
             emp_code = emp_data.get("employee_code", "")
             rf_card  = emp_data.get("rf_card", "")
 
-            # Set cooldown IMMEDIATELY to prevent spawning multiple concurrent tasks
-            self.cooldown_dict[emp_id] = now + config.MONITOR_COOLDOWN
+            # Record trigger IMMEDIATELY (before spawning tasks) so parallel
+            # cameras see the cooldown entry straight away.
+            _set_cooldown(emp_id, self.name, now)
+            log.info(
+                "[Monitor:%s] 🔒 Cooldown set for '%s' — same=%ds, others=%ds",
+                self.name, name,
+                config.COOLDOWN_SAME_CAMERA, config.COOLDOWN_OTHER_CAMERAS
+            )
             
             # Find the best result for this employee in the current frame to use for potential auto-update
             best_idx = -1

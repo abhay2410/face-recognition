@@ -257,11 +257,6 @@ async def show_login(request: Request):
 
 @app.post("/login", tags=["Auth"])
 async def login(response: Response, username: str = Form(...), password: str = Form(...)):
-    if username == "/exit":
-        await engine.log_exit("0")
-        log.info("[Auth] /exit command detected in login field. Logged to API.")
-        return {"ok": False, "detail": "Exit logged"}
-
     if username == config.AUTH_USERNAME and password == config.AUTH_PASSWORD:
         response.set_cookie(
             key="session_id",
@@ -945,25 +940,6 @@ async def update_pc_config(
     )
     log.info("[PC-Config] employee_id=%d mac=%s ip=%s ctrl=%s", employee_id, pc_mac, pc_ip, pc_control)
     return {"ok": True, "employee_id": employee_id}
-
-
-# ══════════════════════════════════════════════════════════════════════════════
-#  Manual Trigger Endpoints
-# ══════════════════════════════════════════════════════════════════════════════
-
-@app.get("/exit", tags=["System"])
-async def manual_exit_trigger(id: str = "0"):
-    """
-    Manually trigger an exit log via the external API.
-    Used for testing or manual overrides.
-    """
-    ok = await engine.log_exit(id)
-    if ok:
-        log.info("[System] Manual /exit logged via API for ID: %s", id)
-        return {"ok": True, "message": f"Exit logged for ID {id}"}
-    else:
-        log.warning("[System] Manual /exit log FAILED for ID: %s", id)
-        return {"ok": False, "message": "External API call failed"}
 
 
 # ══════════════════════════════════════════════════════════════════════════════
