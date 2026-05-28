@@ -142,6 +142,10 @@ PC_CONTROL_ENABLED   = os.getenv("PC_CONTROL_ENABLED", "false").lower() == "true
 PC_OFFICE_HOURS_START = int(os.getenv("PC_OFFICE_HOURS_START", "9"))
 PC_OFFICE_HOURS_END   = int(os.getenv("PC_OFFICE_HOURS_END",   "18"))
 
+# --- Bypass Settings ---
+# If true, users in the 'embeded' or 'embedded' department bypass status checks.
+ENABLE_EMBEDDED_BYPASS = os.getenv("ENABLE_EMBEDDED_BYPASS", "true").lower() == "true"
+
 _DEFAULT_DOOR_URL = os.getenv("EXTERNAL_API_URL", "")
 EXTERNAL_API_URLS: dict = {}
 

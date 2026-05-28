@@ -390,7 +390,7 @@ async def check_rf_card(rf: Optional[str], camera_name: str = "Exit", department
     
     # 2. Determine bypass conditions
     is_entrance = "entrance" in str(camera_name).lower()
-    is_embeded = department and str(department).strip().lower() in ("embeded", "embedded")
+    is_embeded = config.ENABLE_EMBEDDED_BYPASS and department and str(department).strip().lower() in ("embeded", "embedded")
     
     try:
         resp = await _get_http_client().get(url)
@@ -530,16 +530,43 @@ async def trigger_pc_start(mac_address: str):
     try:
         import struct
         import socket
+        import ipaddress
+        
+        # Discover directed broadcast addresses of all active interfaces to overcome multi-adapter routing issues
+        broadcast_ips = {'255.255.255.255'}
+        try:
+            import psutil
+            for interface, addrs in psutil.net_if_addrs().items():
+                for addr in addrs:
+                    if addr.family == socket.AF_INET:
+                        ip = addr.address
+                        netmask = addr.netmask
+                        if ip and netmask and not ip.startswith('127.'):
+                            try:
+                                network = ipaddress.IPv4Network(f"{ip}/{netmask}", strict=False)
+                                broadcast_ips.add(str(network.broadcast_address))
+                            except Exception:
+                                pass
+        except Exception as pe:
+            log.warning("[Engine] Failed to resolve active subnet broadcasts: %s", pe)
+
         # Clean the MAC address
         add_bytes = mac_address.replace(':', '').replace('-', '')
         hw_addr = struct.pack('BBBBBB', *[int(add_bytes[i:i+2], 16) for i in range(0, 12, 2)])
         # Build the magic packet
         msg = b'\xff' * 6 + hw_addr * 16
-        # Send via UDP broadcast
+        
+        # Send via UDP broadcast multiple times to all active interface subnet broadcasts
         with socket.socket(socket.AF_INET, socket.SOCK_DGRAM) as s:
             s.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)
-            s.sendto(msg, ('255.255.255.255', 9))
-        log.info("[Engine] Wake-on-LAN magic packet sent to %s", mac_address)
+            for _ in range(3):
+                for b_ip in broadcast_ips:
+                    try:
+                        s.sendto(msg, (b_ip, 9))
+                    except Exception as se:
+                        log.warning("[Engine] Send to %s failed: %s", b_ip, se)
+                await asyncio.sleep(0.1)
+        log.info("[Engine] Wake-on-LAN magic packet sent to %s (3 times) via targets: %s", mac_address, list(broadcast_ips))
         return True
     except Exception as e:
         log.error("[Engine] Wake-on-LAN failed for %s: %s", mac_address, e)

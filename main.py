@@ -428,6 +428,85 @@ async def get_audit_image(log_id: int, user: str = Depends(login_required)):
 
 
 # ══════════════════════════════════════════════════════════════════════════════
+#  Log Viewer
+# ══════════════════════════════════════════════════════════════════════════════
+
+@app.get("/logs", response_class=HTMLResponse, tags=["UI"])
+async def show_logs_page(request: Request, user: str = Depends(login_required)):
+    return templates.TemplateResponse("logs.html", {"request": request})
+
+
+@app.get("/api/logs", tags=["System"])
+async def get_logs(
+    offset: int = 0,
+    limit:  int = 2000,
+    user:   str = Depends(login_required),
+):
+    """
+    Return a slice of the current log file as JSON.
+    offset=0 → full initial load.  offset=N → tail (only new lines since N).
+    """
+    import asyncio
+
+    log_path = Path(config.BASE_DIR) / "fastapi_access.log"
+
+    if not log_path.exists():
+        return {
+            "filename":    log_path.name,
+            "size_kb":     0,
+            "total_lines": 0,
+            "lines":       [],
+        }
+
+    # Read in a thread so we don't block the event loop on large files
+    def _read():
+        with open(log_path, "r", encoding="utf-8", errors="replace") as f:
+            return f.readlines()
+
+    loop  = asyncio.get_event_loop()
+    lines = await loop.run_in_executor(None, _read)
+
+    total       = len(lines)
+    size_kb     = round(log_path.stat().st_size / 1024, 1)
+    # Strip trailing newlines, return only the requested slice
+    slice_lines = [l.rstrip("\n\r") for l in lines[offset : offset + limit]]
+
+    return {
+        "filename":    log_path.name,
+        "size_kb":     size_kb,
+        "total_lines": total,
+        "lines":       slice_lines,
+    }
+
+
+@app.get("/api/logs/download", tags=["System"])
+async def download_log(user: str = Depends(login_required)):
+    """Serve the raw log file as a download."""
+    log_path = Path(config.BASE_DIR) / "fastapi_access.log"
+    if not log_path.exists():
+        raise HTTPException(status_code=404, detail="Log file not found.")
+    return FileResponse(
+        path=str(log_path),
+        media_type="text/plain",
+        filename=log_path.name,
+    )
+
+
+@app.delete("/api/logs/clear", tags=["System"])
+async def clear_log(user: str = Depends(login_required)):
+    """Truncate the log file to zero bytes (file is kept so the rotating handler stays intact)."""
+    log_path = Path(config.BASE_DIR) / "fastapi_access.log"
+    try:
+        with open(log_path, "w", encoding="utf-8") as f:
+            f.truncate(0)
+        log.info("[LogViewer] Log file cleared by user '%s'.", user)
+        return {"ok": True, "message": "Log file cleared."}
+    except Exception as e:
+        log.error("[LogViewer] Failed to clear log: %s", e)
+        raise HTTPException(status_code=500, detail=f"Could not clear log: {e}")
+
+
+# ══════════════════════════════════════════════════════════════════════════════
 #  /health
 # ══════════════════════════════════════════════════════════════════════════════
 
@@ -940,6 +1019,48 @@ async def update_pc_config(
     )
     log.info("[PC-Config] employee_id=%d mac=%s ip=%s ctrl=%s", employee_id, pc_mac, pc_ip, pc_control)
     return {"ok": True, "employee_id": employee_id}
+
+
+@app.post("/api/employee/{employee_id}/pc-action", tags=["PC Control"])
+async def trigger_pc_action(
+    employee_id: int,
+    action: str = Form(...),  # start, lock, shutdown
+    user: str = Depends(login_required),
+):
+    """Trigger manual PC actions (WoL, Lock, Shutdown) from the web UI."""
+    emp = await database.get_employee_by_id(employee_id)
+    if not emp:
+        raise HTTPException(status_code=404, detail="Employee not found")
+        
+    pc_mac = emp.get("pc_mac")
+    pc_ip = emp.get("pc_ip")
+    pc_control = emp.get("pc_control")
+    
+    if not pc_control:
+        raise HTTPException(status_code=400, detail="PC Control is disabled for this employee. Enable it first.")
+        
+    log.info("[PC-Action] Triggering '%s' for %s (MAC: %s, IP: %s)", action, emp.get("name"), pc_mac, pc_ip)
+    
+    success = False
+    if action == "start":
+        if not pc_mac:
+            raise HTTPException(status_code=400, detail="No Wake-on-LAN MAC address configured.")
+        success = await engine.trigger_pc_start(pc_mac)
+    elif action == "lock":
+        if not pc_ip:
+            raise HTTPException(status_code=400, detail="No IP address configured for Lock.")
+        success = await engine.trigger_pc_lock(pc_ip)
+    elif action == "shutdown":
+        if not pc_ip:
+            raise HTTPException(status_code=400, detail="No IP address configured for Shutdown.")
+        success = await engine.trigger_pc_stop(pc_ip)
+    else:
+        raise HTTPException(status_code=400, detail=f"Unknown action: {action}")
+        
+    if not success:
+        raise HTTPException(status_code=500, detail=f"Failed to execute {action} command. Check engine logs.")
+        
+    return {"ok": True, "action": action, "employee_id": employee_id}
 
 
 # ══════════════════════════════════════════════════════════════════════════════

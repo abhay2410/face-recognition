@@ -8,7 +8,7 @@ FaceRemoteSetup.ps1 (v2.0 - Combined & Persistent)
 
 # 1. Self-Elevate to Administrator
 if (-not ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)) {
-    Start-Process powershell.exe "-NoProfile -ExecutionPolicy Bypass -File `"$PSCommandPath`"" -Verb RunAs; exit
+    Start-Process powershell.exe "-NoExit -NoProfile -ExecutionPolicy Bypass -File `"$PSCommandPath`"" -Verb RunAs; exit
 }
 
 # 2. DATA DISCOVERY
@@ -33,10 +33,26 @@ $sqlQuery = "UPDATE employees SET pc_mac = '$mac', pc_ip = '$ip', pc_control = 0
 $results += $sqlQuery
 $results += "----------------------------------------------"
 
-# 3. Enable WoL
-Write-Host "Configuring Wake on LAN..." -ForegroundColor Cyan
+# 3. Enable WoL & Fix Power States
+Write-Host "Configuring Wake on LAN and fixing Power States..." -ForegroundColor Cyan
 if ($adapter) { 
+    # Enable Wake on Magic Packet
     Set-NetAdapterAdvancedProperty -Name $adapter.Name -DisplayName "Wake on Magic Packet" -DisplayValue "Enabled" -ErrorAction SilentlyContinue
+    
+    # Disable Energy Efficient Ethernet / Green Ethernet to prevent deep sleep WOL failures
+    $powerSettings = @("Energy Efficient Ethernet", "Green Ethernet", "Power Saving Mode", "Advanced EEE")
+    foreach ($setting in $powerSettings) {
+        Set-NetAdapterAdvancedProperty -Name $adapter.Name -DisplayName $setting -DisplayValue "Disabled" -ErrorAction SilentlyContinue
+        Set-NetAdapterAdvancedProperty -Name $adapter.Name -DisplayName $setting -DisplayValue "0" -ErrorAction SilentlyContinue
+    }
+}
+
+# Disable Windows Fast Startup (Hybrid Boot) which breaks WOL
+Write-Host "Disabling Windows Fast Startup (Hiberboot)..." -ForegroundColor Cyan
+try {
+    Set-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Control\Session Manager\Power" -Name HiberbootEnabled -Value 0 -ErrorAction Stop
+} catch {
+    Write-Host "Warning: Could not disable Fast Startup." -ForegroundColor Yellow
 }
 
 # 4. Firewall Rule (UDP Port 9999)
@@ -82,7 +98,12 @@ while ($true) {
         }
         elseif ($data -eq "LOCK_NOW") {
             "$(Get-Date): Executing LOCK" | Out-File $logFile -Append
-            rundll32.exe user32.dll,LockWorkStation
+            foreach ($session in (query session)) {
+                if ($session -match 'Active') {
+                    $id = [regex]::Match($session, '\s+(\d+)\s+Active').Groups[1].Value
+                    if ($id) { tsdiscon.exe $id }
+                }
+            }
         }
     } catch {
         "$(Get-Date): Error: $($_.Exception.Message)" | Out-File $logFile -Append
@@ -103,7 +124,7 @@ $taskName = "FaceSystem_Remote_Listener"
 $action = New-ScheduledTaskAction -Execute "powershell.exe" -Argument "-NoProfile -WindowStyle Hidden -ExecutionPolicy Bypass -File `"$listenerFile`""
 $trigger = New-ScheduledTaskTrigger -AtStartup
 $settings = New-ScheduledTaskSettingsSet -AllowStartIfOnBatteries -DontStopIfGoingOnBatteries -StartWhenAvailable
-$principal = New-ScheduledTaskPrincipal -GroupId "Users" -RunLevel Highest
+$principal = New-ScheduledTaskPrincipal -UserId "NT AUTHORITY\SYSTEM" -LogonType ServiceAccount -RunLevel Highest
 
 try {
     Unregister-ScheduledTask -TaskName $taskName -Confirm:$false -ErrorAction SilentlyContinue

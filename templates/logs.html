@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FaceID | System Logs</title>
+    <link rel="icon" type="image/png" href="/logo.png?v=2">
+    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=2">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color:    #0d1117;
+            --card-bg:     #161b22;
+            --accent-color:#58a6ff;
+            --text-main:   #c9d1d9;
+            --text-dim:    #8b949e;
+            --success:     #238636;
+            --error:       #f85149;
+            --border:      #30363d;
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            margin: 0;
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* ── Sidebar ─────────────────────────────────────────────────── */
+        .sidebar {
+            width: 250px;
+            background-color: var(--card-bg);
+            border-right: 1px solid var(--border);
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            flex-shrink: 0;
+        }
+        .logo img { width: 140px; height: auto; margin-bottom: 30px; }
+        .nav-item {
+            padding: 12px 15px;
+            border-radius: 8px;
+            text-decoration: none;
+            color: var(--text-main);
+            margin-bottom: 8px;
+            transition: .3s;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .nav-item:hover { background-color: #21262d; color: var(--accent-color); }
+        .nav-item.active {
+            background-color: #1f6feb22;
+            color: var(--accent-color);
+            border-left: 3px solid var(--accent-color);
+        }
+
+        /* ── Main ───────────────────────────────────────────────────── */
+        .main-content {
+            flex: 1;
+            padding: 30px 36px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 22px;
+            flex-shrink: 0;
+        }
+        header h1 { margin: 0; font-size: 22px; font-weight: 600; }
+        header p  { margin: 4px 0 0; color: var(--text-dim); font-size: 13px; }
+
+        .status-badge {
+            background-color: #23863622;
+            color: #3fb950;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 13px;
+            border: 1px solid #23863644;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .pulse {
+            width: 8px; height: 8px;
+            background: #3fb950;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0%   { box-shadow: 0 0 0 0   rgba(63,185,80,.7); }
+            70%  { box-shadow: 0 0 0 10px rgba(63,185,80,0); }
+            100% { box-shadow: 0 0 0 0   rgba(63,185,80,0); }
+        }
+
+        /* ── Toolbar ─────────────────────────────────────────────────── */
+        .toolbar {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            flex-wrap: wrap;
+            margin-bottom: 14px;
+            flex-shrink: 0;
+        }
+
+        .search-box {
+            flex: 1;
+            min-width: 220px;
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 8px 14px;
+            color: var(--text-main);
+            font-family: 'Outfit', sans-serif;
+            font-size: 13px;
+            outline: none;
+            transition: border-color .2s;
+        }
+        .search-box:focus { border-color: var(--accent-color); }
+        .search-box::placeholder { color: var(--text-dim); }
+
+        .filter-btn {
+            padding: 8px 14px;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            background: var(--card-bg);
+            color: var(--text-dim);
+            cursor: pointer;
+            font-family: 'Outfit', sans-serif;
+            font-size: 12px;
+            font-weight: 600;
+            letter-spacing: .5px;
+            transition: .2s;
+            text-transform: uppercase;
+        }
+        .filter-btn:hover  { border-color: var(--accent-color); color: var(--accent-color); }
+        .filter-btn.active { background: #1f6feb22; border-color: var(--accent-color); color: var(--accent-color); }
+
+        .filter-btn.f-error   { --hi: #f85149; }
+        .filter-btn.f-warn    { --hi: #d29922; }
+        .filter-btn.f-info    { --hi: var(--accent-color); }
+        .filter-btn.f-debug   { --hi: var(--text-dim); }
+
+        .filter-btn.active.f-error  { background:#f8514922; border-color:#f85149; color:#f85149; }
+        .filter-btn.active.f-warn   { background:#d2992222; border-color:#d29922; color:#d29922; }
+        .filter-btn.active.f-info   { background:#1f6feb22; border-color:var(--accent-color); color:var(--accent-color); }
+        .filter-btn.active.f-debug  { background:#8b949e22; border-color:#8b949e; color:#8b949e; }
+
+        .icon-btn {
+            padding: 8px 14px;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            background: var(--card-bg);
+            color: var(--text-dim);
+            cursor: pointer;
+            font-size: 14px;
+            transition: .2s;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-family: 'Outfit', sans-serif;
+            font-size: 13px;
+        }
+        .icon-btn:hover { border-color: var(--accent-color); color: var(--accent-color); }
+        .icon-btn.live-on { background:#23863622; border-color:#3fb950; color:#3fb950; }
+        .icon-btn.danger   { border-color:#f85149; color:#f85149; }
+        .icon-btn.danger:hover { background:#f8514922; }
+
+        /* ── Confirm modal ───────────────────────────────────────────────── */
+        .modal-overlay {
+            display: none;
+            position: fixed; inset: 0;
+            background: rgba(0,0,0,.65);
+            backdrop-filter: blur(4px);
+            z-index: 999;
+            align-items: center;
+            justify-content: center;
+        }
+        .modal-overlay.open { display: flex; }
+        .modal-box {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 32px 36px;
+            max-width: 400px;
+            width: 90%;
+            box-shadow: 0 20px 60px rgba(0,0,0,.6);
+            text-align: center;
+        }
+        .modal-box .icon { font-size: 40px; margin-bottom: 12px; }
+        .modal-box h3 { margin: 0 0 8px; font-size: 18px; }
+        .modal-box p  { color: var(--text-dim); font-size: 14px; margin: 0 0 24px; }
+        .modal-actions { display: flex; gap: 12px; justify-content: center; }
+        .btn-cancel {
+            padding: 10px 24px; border-radius: 8px;
+            border: 1px solid var(--border);
+            background: transparent; color: var(--text-main);
+            cursor: pointer; font-family:'Outfit',sans-serif; font-size:14px;
+            transition:.2s;
+        }
+        .btn-cancel:hover { border-color: var(--accent-color); color: var(--accent-color); }
+        .btn-confirm-clear {
+            padding: 10px 24px; border-radius: 8px;
+            border: 1px solid #f85149;
+            background: #f8514922; color: #f85149;
+            cursor: pointer; font-family:'Outfit',sans-serif; font-size:14px; font-weight:600;
+            transition:.2s;
+        }
+        .btn-confirm-clear:hover { background: #f85149; color:#fff; }
+
+        /* ── Stats bar ───────────────────────────────────────────────── */
+        .stats-bar {
+            display: flex;
+            gap: 16px;
+            margin-bottom: 12px;
+            flex-shrink: 0;
+            flex-wrap: wrap;
+        }
+        .stat-pill {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 4px 14px;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .stat-pill .dot { width:8px; height:8px; border-radius:50%; display:inline-block; }
+        .dot-error  { background: #f85149; }
+        .dot-warn   { background: #d29922; }
+        .dot-info   { background: var(--accent-color); }
+        .dot-debug  { background: var(--text-dim); }
+        .stat-pill span { color: var(--text-main); font-weight: 600; }
+
+        /* ── Log terminal ─────────────────────────────────────────────── */
+        .log-card {
+            flex: 1;
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            min-height: 0;
+        }
+
+        .log-header-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 18px;
+            border-bottom: 1px solid var(--border);
+            background: #0d1117;
+            flex-shrink: 0;
+        }
+        .terminal-dots { display:flex; gap:6px; }
+        .terminal-dots span {
+            width: 12px; height: 12px; border-radius: 50%;
+        }
+        .td-r { background:#f85149; } .td-y { background:#d29922; } .td-g { background:#3fb950; }
+
+        .log-filename {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 12px;
+            color: var(--text-dim);
+        }
+
+        .log-count-badge {
+            font-size: 11px;
+            background: #21262d;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 2px 10px;
+            color: var(--text-dim);
+        }
+
+        .log-body {
+            flex: 1;
+            overflow-y: auto;
+            padding: 10px 0;
+            scroll-behavior: smooth;
+        }
+
+        .log-line {
+            display: flex;
+            gap: 0;
+            align-items: baseline;
+            padding: 1px 18px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 12px;
+            line-height: 1.7;
+            border-left: 3px solid transparent;
+            transition: background .15s;
+        }
+        .log-line:hover { background: rgba(255,255,255,.03); }
+
+        .log-line.ERROR   { border-left-color: #f85149; background: rgba(248,81,73,.04); }
+        .log-line.WARNING { border-left-color: #d29922; background: rgba(210,153,34,.04); }
+        .log-line.INFO    { border-left-color: transparent; }
+        .log-line.DEBUG   { opacity: .6; }
+
+        .log-line.hidden  { display: none; }
+
+        .ts   { color: #6e7681; flex-shrink: 0; width: 170px; }
+        .lvl  { flex-shrink: 0; width: 70px; font-weight: 600; }
+        .lvl-ERROR   { color: #f85149; }
+        .lvl-WARNING { color: #d29922; }
+        .lvl-INFO    { color: var(--accent-color); }
+        .lvl-DEBUG   { color: var(--text-dim); }
+        .src  { color: #79c0ff; flex-shrink: 0; max-width: 140px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .msg  { color: var(--text-main); flex: 1; word-break: break-word; white-space: pre-wrap; }
+
+        .msg mark {
+            background: #d2992244;
+            color: #d29922;
+            border-radius: 3px;
+            padding: 0 2px;
+        }
+
+        /* ── Empty / Loading states ──────────────────────────────────── */
+        .empty-state {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            color: var(--text-dim);
+            gap: 12px;
+            font-size: 14px;
+        }
+        .empty-state .icon { font-size: 36px; }
+
+        /* ── Scrollbar ───────────────────────────────────────────────── */
+        .log-body::-webkit-scrollbar { width: 6px; }
+        .log-body::-webkit-scrollbar-track { background: transparent; }
+        .log-body::-webkit-scrollbar-thumb { background: #30363d; border-radius: 3px; }
+        .log-body::-webkit-scrollbar-thumb:hover { background: #58a6ff55; }
+    </style>
+</head>
+<body>
+
+<div class="sidebar">
+    <div class="logo"><img src="/logo.png" alt="FaceID Logo"></div>
+    <a href="/"        class="nav-item">🏠 Dashboard</a>
+    <a href="/enrol"   class="nav-item">➕ New Enrollment</a>
+    <a href="/update"  class="nav-item">✏️ Update Photos</a>
+    <a href="/audit"   class="nav-item">🔍 Audit Trail</a>
+    <a href="/logs"    class="nav-item active">📋 System Logs</a>
+    <a href="/settings"class="nav-item">⚙️ Settings</a>
+    <div style="flex:1"></div>
+    <a href="/logout"  class="nav-item" style="color:var(--error)">🚪 Logout</a>
+    <a href="/docs"    class="nav-item" style="font-size:12px;color:var(--text-dim)">API Docs</a>
+</div>
+
+<div class="main-content">
+    <header>
+        <div>
+            <h1>📋 System Logs</h1>
+            <p id="log-file-info">Loading log file…</p>
+        </div>
+        <div class="status-badge" id="live-badge">
+            <div class="pulse"></div> Live Tail
+        </div>
+    </header>
+
+    <!-- Toolbar -->
+    <div class="toolbar">
+        <input class="search-box" id="search-input" type="text"
+               placeholder="🔍  Search logs…" oninput="applyFilters()">
+
+        <button class="filter-btn f-error  active" data-level="ERROR"   onclick="toggleLevel(this)">ERROR</button>
+        <button class="filter-btn f-warn   active" data-level="WARNING" onclick="toggleLevel(this)">WARN</button>
+        <button class="filter-btn f-info   active" data-level="INFO"    onclick="toggleLevel(this)">INFO</button>
+        <button class="filter-btn f-debug  active" data-level="DEBUG"   onclick="toggleLevel(this)">DEBUG</button>
+
+        <button class="icon-btn live-on" id="live-btn" onclick="toggleLive()">⏸ Pause</button>
+        <button class="icon-btn"         onclick="scrollToBottom()">⬇ Jump to End</button>
+        <button class="icon-btn"         onclick="downloadLog()">⬇ Download</button>
+        <button class="icon-btn danger"  onclick="openClearModal()">🗑 Clear Log</button>
+    </div>
+
+    <!-- Stats bar -->
+    <div class="stats-bar">
+        <div class="stat-pill"><span class="dot dot-error"></span>Errors: <span id="cnt-error">—</span></div>
+        <div class="stat-pill"><span class="dot dot-warn"></span>Warnings: <span id="cnt-warn">—</span></div>
+        <div class="stat-pill"><span class="dot dot-info"></span>Info: <span id="cnt-info">—</span></div>
+        <div class="stat-pill"><span class="dot dot-debug"></span>Debug: <span id="cnt-debug">—</span></div>
+        <div class="stat-pill">📄 Total: <span id="cnt-total">—</span></div>
+    </div>
+
+    <!-- Log terminal card -->
+    <div class="log-card">
+        <div class="log-header-bar">
+            <div class="terminal-dots">
+                <span class="td-r"></span><span class="td-y"></span><span class="td-g"></span>
+            </div>
+            <span class="log-filename" id="log-filename">fastapi_access.log</span>
+            <span class="log-count-badge" id="visible-count">0 lines</span>
+        </div>
+        <div class="log-body" id="log-body">
+            <div class="empty-state">
+                <div class="icon">⏳</div>
+                <div>Loading logs…</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    /* ──────────────────────────────────────────────────────────────────── */
+    /*  State                                                              */
+    /* ──────────────────────────────────────────────────────────────────── */
+    let allLines   = [];          // raw parsed line objects from server
+    let liveActive = true;        // auto-refresh toggle
+    let liveTimer  = null;
+    let activeLevel= new Set(["ERROR","WARNING","INFO","DEBUG"]);
+    let lastLineCount = 0;        // track additions for smooth tail
+
+    /* ──────────────────────────────────────────────────────────────────── */
+    /*  Fetch                                                               */
+    /* ──────────────────────────────────────────────────────────────────── */
+    async function fetchLogs(append = false) {
+        try {
+            const offset = append ? lastLineCount : 0;
+            const r = await fetch(`/api/logs?offset=${offset}&limit=2000`);
+            if (!r.ok) throw new Error(r.statusText);
+            const data = await r.json();
+
+            if (!append) {
+                allLines = data.lines;
+                document.getElementById('log-file-info').textContent =
+                    `${data.filename}  ·  ${data.size_kb} KB  ·  ${data.total_lines} lines`;
+                document.getElementById('log-filename').textContent = data.filename;
+            } else {
+                allLines = allLines.concat(data.lines);
+            }
+
+            lastLineCount = allLines.length;
+            renderLines(append);
+            updateStats();
+
+            if (liveActive) scheduleNext();
+        } catch(e) {
+            console.error('Log fetch failed:', e);
+            scheduleNext();
+        }
+    }
+
+    function scheduleNext() {
+        clearTimeout(liveTimer);
+        liveTimer = setTimeout(() => fetchLogs(true), 3000);
+    }
+
+    /* ──────────────────────────────────────────────────────────────────── */
+    /*  Render                                                              */
+    /* ──────────────────────────────────────────────────────────────────── */
+    const LEVEL_RE = /\b(ERROR|WARNING|INFO|DEBUG)\b/;
+
+    function parseLine(raw) {
+        // Format: 2026-05-13 14:39:44  INFO      processor  [Monitor:Exit] ...
+        const m = raw.match(/^(\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2})\s+(ERROR|WARNING|INFO|DEBUG)\s+(\S+)\s+(.*)$/);
+        if (m) return { ts: m[1], level: m[2], src: m[3], msg: m[4], raw };
+        return { ts: '', level: 'DEBUG', src: '', msg: raw, raw };
+    }
+
+    function esc(s) {
+        return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+    }
+
+    function highlight(text, term) {
+        if (!term) return esc(text);
+        const re = new RegExp(term.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'gi');
+        return esc(text).replace(re, m => `<mark>${m}</mark>`);
+    }
+
+    function renderLines(append = false) {
+        const body    = document.getElementById('log-body');
+        const term    = document.getElementById('search-input').value.trim();
+        const wasAtBottom = isAtBottom(body);
+
+        if (!append) {
+            body.innerHTML = '';
+        }
+
+        // When appending, only render new lines
+        const startIdx = append ? (lastLineCount - allLines.length + allLines.length - (allLines.length - body.querySelectorAll('.log-line').length)) : 0;
+        const linesToRender = append
+            ? allLines.slice(body.querySelectorAll('.log-line').length)
+            : allLines;
+
+        if (!linesToRender.length && !append) {
+            body.innerHTML = '<div class="empty-state"><div class="icon">📭</div><div>No log entries found</div></div>';
+            return;
+        }
+
+        const frag = document.createDocumentFragment();
+        for (const raw of linesToRender) {
+            const p  = parseLine(raw);
+            const el = document.createElement('div');
+            el.className = `log-line ${p.level}`;
+            el.dataset.level = p.level;
+            el.dataset.raw   = raw.toLowerCase();
+
+            el.innerHTML = `<span class="ts">${p.ts || '&nbsp;'.repeat(19)}</span>` +
+                           `<span class="lvl lvl-${p.level}">${p.level}</span>` +
+                           `<span class="src">${esc(p.src)}&nbsp;</span>` +
+                           `<span class="msg">${highlight(p.msg, term)}</span>`;
+
+            // Visibility
+            const levelOk  = activeLevel.has(p.level);
+            const searchOk  = !term || raw.toLowerCase().includes(term.toLowerCase());
+            if (!levelOk || !searchOk) el.classList.add('hidden');
+
+            frag.appendChild(el);
+        }
+        body.appendChild(frag);
+
+        updateVisibleCount();
+
+        // Auto-scroll to bottom if already near bottom
+        if (wasAtBottom || !append) scrollToBottom();
+    }
+
+    function isAtBottom(el) {
+        return el.scrollHeight - el.scrollTop - el.clientHeight < 80;
+    }
+
+    function scrollToBottom() {
+        const body = document.getElementById('log-body');
+        body.scrollTop = body.scrollHeight;
+    }
+
+    /* ──────────────────────────────────────────────────────────────────── */
+    /*  Filters                                                             */
+    /* ──────────────────────────────────────────────────────────────────── */
+    function toggleLevel(btn) {
+        const lvl = btn.dataset.level;
+        if (activeLevel.has(lvl)) { activeLevel.delete(lvl); btn.classList.remove('active'); }
+        else                       { activeLevel.add(lvl);    btn.classList.add('active');    }
+        applyFilters();
+    }
+
+    function applyFilters() {
+        const term = document.getElementById('search-input').value.trim().toLowerCase();
+        const lines = document.querySelectorAll('.log-line');
+        let vis = 0;
+        lines.forEach(el => {
+            const levelOk  = activeLevel.has(el.dataset.level);
+            const searchOk = !term || el.dataset.raw.includes(term);
+            if (levelOk && searchOk) { el.classList.remove('hidden'); vis++; }
+            else                      { el.classList.add('hidden'); }
+
+            // Re-highlight search term in msg
+            if (levelOk && term) {
+                const msg = el.querySelector('.msg');
+                const p   = parseLine(el.dataset.raw.length > 0 ? allLines.find(l=>l.toLowerCase()===el.dataset.raw)||el.dataset.raw : el.dataset.raw);
+                if (msg) msg.innerHTML = highlight(p.msg || el.dataset.raw, term);
+            } else if (levelOk) {
+                const msg = el.querySelector('.msg');
+                const p   = parseLine(allLines[Array.from(lines).indexOf(el)] || '');
+                if (msg) msg.innerHTML = esc(p.msg);
+            }
+        });
+        updateVisibleCount(vis);
+    }
+
+    function updateVisibleCount(vis) {
+        if (vis === undefined) {
+            vis = document.querySelectorAll('.log-line:not(.hidden)').length;
+        }
+        document.getElementById('visible-count').textContent = `${vis.toLocaleString()} lines`;
+    }
+
+    /* ──────────────────────────────────────────────────────────────────── */
+    /*  Stats                                                               */
+    /* ──────────────────────────────────────────────────────────────────── */
+    function updateStats() {
+        let err=0, warn=0, info=0, dbg=0;
+        allLines.forEach(raw => {
+            if      (raw.includes(' ERROR '  )) err++;
+            else if (raw.includes(' WARNING ')) warn++;
+            else if (raw.includes(' INFO '   )) info++;
+            else if (raw.includes(' DEBUG '  )) dbg++;
+        });
+        document.getElementById('cnt-error').textContent = err.toLocaleString();
+        document.getElementById('cnt-warn' ).textContent = warn.toLocaleString();
+        document.getElementById('cnt-info' ).textContent = info.toLocaleString();
+        document.getElementById('cnt-debug').textContent = dbg.toLocaleString();
+        document.getElementById('cnt-total').textContent = allLines.length.toLocaleString();
+    }
+
+    /* ──────────────────────────────────────────────────────────────────── */
+    /*  Live toggle                                                         */
+    /* ──────────────────────────────────────────────────────────────────── */
+    function toggleLive() {
+        liveActive = !liveActive;
+        const btn  = document.getElementById('live-btn');
+        const badge= document.getElementById('live-badge');
+        if (liveActive) {
+            btn.textContent = '⏸ Pause';
+            btn.classList.add('live-on');
+            badge.style.opacity = '1';
+            fetchLogs(true);
+        } else {
+            btn.textContent = '▶ Resume';
+            btn.classList.remove('live-on');
+            badge.style.opacity = '.4';
+            clearTimeout(liveTimer);
+        }
+    }
+
+    /* ──────────────────────────────────────────────────────────────────── */
+    /*  Download                                                            */
+    /* ──────────────────────────────────────────────────────────────────── */
+    function downloadLog() {
+        window.open('/api/logs/download', '_blank');
+    }
+
+    /* ──────────────────────────────────────────────────────────────────── */
+    /*  Clear Log                                                           */
+    /* ──────────────────────────────────────────────────────────────────── */
+    function openClearModal()  { document.getElementById('clear-modal').classList.add('open'); }
+    function closeClearModal() { document.getElementById('clear-modal').classList.remove('open'); }
+
+    async function confirmClear() {
+        closeClearModal();
+        try {
+            const r = await fetch('/api/logs/clear', { method: 'DELETE' });
+            if (!r.ok) throw new Error(await r.text());
+            // Reset local state and re-render empty
+            allLines = [];
+            lastLineCount = 0;
+            document.getElementById('log-body').innerHTML =
+                '<div class="empty-state"><div class="icon">🧹</div><div>Log cleared</div></div>';
+            document.getElementById('visible-count').textContent = '0 lines';
+            document.getElementById('cnt-error').textContent  = '0';
+            document.getElementById('cnt-warn' ).textContent  = '0';
+            document.getElementById('cnt-info' ).textContent  = '0';
+            document.getElementById('cnt-debug').textContent  = '0';
+            document.getElementById('cnt-total').textContent  = '0';
+            document.getElementById('log-file-info').textContent = 'Log file cleared';
+        } catch(e) {
+            alert('Failed to clear log: ' + e.message);
+        }
+    }
+
+    /* ──────────────────────────────────────────────────────────────────── */
+    /*  Boot                                                                */
+    /* ──────────────────────────────────────────────────────────────────── */
+    fetchLogs(false);
+</script>
+</body>
+</html>

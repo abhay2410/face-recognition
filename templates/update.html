@@ -480,6 +480,20 @@
 
                         <button class="btn" id="pc-save-btn" onclick="savePcConfig()">💾 Save PC Config</button>
                         <div id="pc-status" style="margin-top:14px;display:none;"></div>
+                        
+                        <div class="divider" style="margin-top:30px;"></div>
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                            <h3 style="margin: 0; font-size: 16px;">Quick Actions</h3>
+                            <button type="button" id="qa-toggle-btn" onclick="toggleQuickActions(this)" style="background: transparent; border: 1px solid var(--border); color: var(--text-dim); padding: 5px 10px; border-radius: 6px; cursor: pointer; transition: 0.2s;">Show</button>
+                        </div>
+                        <div id="quick-actions-panel" style="display: none;">
+                            <div style="display: flex; gap: 10px;">
+                                <button class="btn" style="background: #238636; flex: 1;" onclick="triggerPcAction('start')">🚀 Start (WoL)</button>
+                                <button class="btn" style="background: #d29922; flex: 1;" onclick="triggerPcAction('lock')">🔒 Lock PC</button>
+                                <button class="btn" style="background: #da3633; flex: 1;" onclick="triggerPcAction('shutdown')">🛑 Shut Down</button>
+                            </div>
+                            <div id="pc-action-status" style="margin-top:14px;display:none;padding:14px 16px;border-radius:8px;font-size:14px;"></div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -646,6 +660,14 @@
 
             document.getElementById('pc-fields').style.display = 'block';
             document.getElementById('pc-status').style.display = 'none';
+            
+            // Hide quick actions when switching employees
+            const qaPanel = document.getElementById('quick-actions-panel');
+            const qaBtn = document.getElementById('qa-toggle-btn');
+            if (qaPanel && qaBtn) {
+                qaPanel.style.display = 'none';
+                qaBtn.textContent = 'Show';
+            }
         }
 
         document.getElementById('pc-control-chk').addEventListener('change', updatePcToggleLabel);
@@ -696,6 +718,49 @@
             } finally {
                 btn.disabled = false;
                 btn.textContent = '💾 Save PC Config';
+            }
+        }
+
+        async function triggerPcAction(action) {
+            const empId = document.getElementById('pc-emp-select').value;
+            if (!empId) {
+                alert("Please select an employee first.");
+                return;
+            }
+            
+            const statusEl = document.getElementById('pc-action-status');
+            statusEl.style.display = 'none';
+            statusEl.className = '';
+            
+            const fd = new FormData();
+            fd.append('action', action);
+            
+            try {
+                const res = await fetch(`/api/employee/${empId}/pc-action`, { method: 'POST', body: fd });
+                const data = await res.json();
+                statusEl.style.display = 'block';
+                if (res.ok) {
+                    statusEl.className = 'success';
+                    statusEl.innerHTML = `<strong>✅ Success:</strong> ${action.toUpperCase()} command triggered successfully.`;
+                } else {
+                    statusEl.className = 'error';
+                    statusEl.innerText = data.detail || 'Action failed.';
+                }
+            } catch (err) {
+                statusEl.style.display = 'block';
+                statusEl.className = 'error';
+                statusEl.innerText = 'Connection error.';
+            }
+        }
+
+        function toggleQuickActions(btn) {
+            const panel = document.getElementById('quick-actions-panel');
+            if (panel.style.display === 'none' || panel.style.display === '') {
+                panel.style.display = 'block';
+                btn.textContent = 'Hide';
+            } else {
+                panel.style.display = 'none';
+                btn.textContent = 'Show';
             }
         }
     </script>

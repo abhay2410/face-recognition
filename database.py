@@ -94,7 +94,6 @@ def _conn_str() -> str:
 
 _tl = threading.local()   # thread-local storage
 
-
 def _get_conn() -> pyodbc.Connection:
     """
     Returns the thread-local pyodbc connection, creating it if necessary.
@@ -102,10 +101,17 @@ def _get_conn() -> pyodbc.Connection:
     """
     conn = getattr(_tl, "conn", None)
     if conn is None:
-        conn = pyodbc.connect(_conn_str(), autocommit=True)
-        _tl.conn = conn
-        return conn
-    # Ping the connection — cheap health check
+        try:
+            conn = pyodbc.connect(_conn_str(), autocommit=True, timeout=5)
+            conn.timeout = 10
+            _tl.conn = conn
+            return conn
+        except Exception as e:
+            log.error("[DB] Initial connection failed: %s", e)
+            _tl.conn = None
+            raise e
+
+    # Ping the connection — cheap health check (will timeout in 10s if link is dead)
     try:
         conn.cursor().execute("SELECT 1")
         return conn
@@ -115,9 +121,16 @@ def _get_conn() -> pyodbc.Connection:
             conn.close()
         except Exception:
             pass
-        conn = pyodbc.connect(_conn_str(), autocommit=True)
-        _tl.conn = conn
-        return conn
+        _tl.conn = None
+        try:
+            conn = pyodbc.connect(_conn_str(), autocommit=True, timeout=5)
+            conn.timeout = 10
+            _tl.conn = conn
+            return conn
+        except Exception as e:
+            log.error("[DB] Reconnection failed: %s", e)
+            _tl.conn = None
+            raise e
 
 
 def db_retry(max_attempts: int = 3, delay: float = 2.0):
@@ -281,6 +294,30 @@ def _init_db_sync():
         conn.commit()
     except Exception as exc:
         log.warning("[DB] system_config table bootstrap: %s", exc)
+
+    # --- indexes bootstrap ----------------------------------------------------
+    try:
+        cur.execute("""
+            IF NOT EXISTS (SELECT * FROM sys.indexes WHERE name = 'IX_recognition_audit_detected_at' AND object_id = OBJECT_ID('recognition_audit'))
+            BEGIN
+                CREATE NONCLUSTERED INDEX IX_recognition_audit_detected_at ON recognition_audit (detected_at DESC)
+            END
+        """)
+        cur.execute("""
+            IF NOT EXISTS (SELECT * FROM sys.indexes WHERE name = 'IX_access_log_matched_at' AND object_id = OBJECT_ID('access_log'))
+            BEGIN
+                CREATE NONCLUSTERED INDEX IX_access_log_matched_at ON access_log (matched_at)
+            END
+        """)
+        cur.execute("""
+            IF NOT EXISTS (SELECT * FROM sys.indexes WHERE name = 'IX_access_log_employee_id' AND object_id = OBJECT_ID('access_log'))
+            BEGIN
+                CREATE NONCLUSTERED INDEX IX_access_log_employee_id ON access_log (employee_id)
+            END
+        """)
+        conn.commit()
+    except Exception as exc:
+        log.warning("[DB] Indexes bootstrap: %s", exc)
 
     # Thread-local conn — do NOT close here
     log.info("[DB] Schema initialised.")
@@ -604,7 +641,16 @@ def _update_employee_pc_config_sync(
     conn.commit()
     # Evict from cache so the next recognition cycle picks up the new values
     clear_employee_cache(employee_id)
-    log.info("[DB] PC config updated for employee_id=%d (control=%s).", employee_id, pc_control)
+import ctypes
+
+def lock_workstation():
+    """Lock the Windows workstation immediately."""
+    try:
+        ctypes.windll.user32.LockWorkStation()
+        log.info("[PC-LOCK] Workstation locked via LockWorkStation API.")
+    except Exception as e:
+        log.error("[PC-LOCK] Failed to lock workstation: %s", e)
+
 
 
 @db_retry(max_attempts=3, delay=1.0)

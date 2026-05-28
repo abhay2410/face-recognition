@@ -1,0 +1,3 @@
+@echo off
+echo Starting Face System Remote Setup...
+powershell -NoExit -ExecutionPolicy Bypass -Command "& {Start-Process powershell -ArgumentList '-NoExit -ExecutionPolicy Bypass -File ""%~dp0FaceRemoteSetup.ps1""' -Verb RunAs}"

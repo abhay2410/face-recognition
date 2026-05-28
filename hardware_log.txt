@@ -1,0 +1,19 @@
+﻿--- Hardware Log: 2026-05-28 14:05:09 ---
+CPU Information:
+  Name                : 12th Gen Intel(R) Core(TM) i3-12100
+  Cores               : 4
+  Logical Processors : 8
+  Max Clock Speed (MHz): 3300
+Memory Information:
+  Total Physical RAM   : 8 GB
+  Module: Manufacturer=SK Hynix, Capacity=8GB, Speed=3200MHz, Serial=2864746E
+OS Memory Stats:
+  Total Visible Memory : 7.69 MB
+  Free Physical Memory : 0.68 MB
+GPU Information:
+  Name          : Radeon RX550/550 Series
+  Processor     : AMD Radeon Graphics Processor (0x699F)
+  Driver Version: 31.0.21925.1001
+  Adapter RAM   : 2 GB
+--- End of Log ---
+
