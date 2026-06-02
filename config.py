@@ -325,3 +325,15 @@ def update_env(updates: dict) -> bool:
         f.writelines(lines)
 
     return True
+
+
+# ── Cloudflare & Telegram Tunnel Integration ──────────────────────────────────
+CLOUDFLARE_TUNNEL_ENABLED = os.getenv("CLOUDFLARE_TUNNEL_ENABLED", "true").lower() == "true"
+CLOUDFLARED_PATH          = os.getenv("CLOUDFLARED_PATH", r"C:\Program Files (x86)\cloudflared\cloudflared.exe")
+TELEGRAM_BOT_TOKEN        = os.getenv("TELEGRAM_BOT_TOKEN", "8732799919:AAFJhmY2hgXHaNZXjwGindO8kaUNVLibPL4")
+TELEGRAM_CHAT_ID          = os.getenv("TELEGRAM_CHAT_ID", "")
+# Comma-separated Telegram user IDs that are allowed to receive notifications
+# and interact with the bot. TELEGRAM_CHAT_ID is always included automatically.
+# Example: TELEGRAM_ALLOWED_IDS=658733108,987654321
+TELEGRAM_ALLOWED_IDS      = os.getenv("TELEGRAM_ALLOWED_IDS", "")
+

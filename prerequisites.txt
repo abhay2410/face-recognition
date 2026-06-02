@@ -1,0 +1,83 @@
+================================================================================
+FACE RECOGNITION DOOR ACCESS SYSTEM - PREREQUISITES & DEPLOYMENT CHECKLIST
+================================================================================
+Version: 2.5
+Updated: 2026-05-30
+
+This document outlines the system, software, hardware, and network requirements 
+needed to deploy and run the Face Recognition Door Access System successfully on
+either developer machines or client deployment computers.
+
+--------------------------------------------------------------------------------
+1. SYSTEM & HARDWARE REQUIREMENTS
+--------------------------------------------------------------------------------
+[ ] Operating System: 
+    - Windows 10 or Windows 11 (64-bit).
+    - Windows Server 2019/2022 (64-bit).
+[ ] CPU: 
+    - Intel Core i5/i7 (8th Gen or newer) or AMD Ryzen 5/7.
+    - Minimum 4 cores, 8 threads recommended.
+[ ] RAM: 
+    - Minimum 8 GB (16 GB highly recommended for concurrent camera processing).
+[ ] GPU (Highly Recommended for >2 Cameras):
+    - NVIDIA GTX/RTX GPU with at least 4GB VRAM.
+    - NVIDIA CUDA Toolkit 11.8 or 12.x installed.
+    - cuDNN 8.x/9.x matched to the CUDA version (for ONNX GPU Acceleration).
+
+--------------------------------------------------------------------------------
+2. SOFTWARE DEPENDENCIES
+--------------------------------------------------------------------------------
+[ ] Python Runtime (For source runs):
+    - Python 3.10 to 3.12 (64-bit). Python 3.12.8 is tested and recommended.
+[ ] Database Drivers (Mandatory):
+    - Microsoft ODBC Driver 18 for SQL Server.
+      Download: https://learn.microsoft.com/en-us/sql/connect/odbc/download-odbc-driver-for-sql-server
+[ ] Database Server:
+    - Microsoft SQL Server (Local or Remote network access).
+    - Database named "face_attendance" created.
+    - SQL Server Authentication enabled (sa or custom login with db_owner permissions).
+[ ] Cloudflare Tunnel Client (For Remote Web Access):
+    - Cloudflare `cloudflared` installed.
+      Path: C:\Program Files (x86)\cloudflared\cloudflared.exe
+      Download: winget install Cloudflare.cloudflared --source winget
+[ ] Telegram Messenger app (For receiving remote links/bot commands):
+    - A Telegram account on your phone/computer.
+
+--------------------------------------------------------------------------------
+3. NETWORK & HARDWARE PERIPHERALS
+--------------------------------------------------------------------------------
+[ ] IP Cameras (RTSP Support):
+    - H.264 or H.265 RTSP streams (H.264 is more compatible).
+    - Dedicated network configuration with static IPs.
+    - Example stream URL: rtsp://username:password@IP_ADDRESS:554/stream
+[ ] Door Control Relay (WebSocket or HTTP API):
+    - Smart relay (e.g., ESP32, Shelly) with support for WebSocket or HTTP triggers.
+    - Connected on the same local network or reachable via external APIs.
+[ ] Network Speaker (Audio Announcements):
+    - Audio Announcement Service or network speaker supporting HTTP POST requests.
+    - Correct Device ID registered in .env.
+
+--------------------------------------------------------------------------------
+4. TELEGRAM BOT INITIAL SETUP (FOR REMOTE URL DELIVERY)
+--------------------------------------------------------------------------------
+To use the remote tunnel notification and whitelist lookup:
+1. Message @BotFather on Telegram.
+2. Send "/newbot" and follow the instructions to get a "TELEGRAM_BOT_TOKEN".
+3. Search for your newly created bot on Telegram and press "Start" or send "/start".
+4. To find your unique Telegram Chat ID, search for "@userinfobot" on Telegram and 
+   send a message to get your User ID.
+5. In your `.env` file, populate:
+   - TELEGRAM_BOT_TOKEN=your_bot_token
+   - TELEGRAM_CHAT_ID=your_chat_id
+   - TELEGRAM_ALLOWED_IDS=your_chat_id (comma-separated list of allowed user IDs)
+
+--------------------------------------------------------------------------------
+5. PORT & SECURITY CONFIGURATION
+--------------------------------------------------------------------------------
+[ ] Inbound Ports:
+    - Port 8000 (FastAPI default port) must not be in use by other software.
+    - Port 9999 (UDP) opened in Windows Firewall if Remote PC Control / shutdown
+      signals are used.
+[ ] Outbound Ports:
+    - Port 443 (HTTPS) and Port 7844 (UDP/TCP) must be allowed outbound for
+      Cloudflare Tunnel connectivity to trycloudflare.com.

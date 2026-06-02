@@ -59,6 +59,7 @@ import config
 import database
 import engine
 import processor
+import tunnel
 
 warnings.filterwarnings("ignore", category=FutureWarning, module="insightface")
 warnings.filterwarnings("ignore", category=UserWarning,  module="google")
@@ -182,11 +183,15 @@ async def lifespan(app: FastAPI):
     
     # 3. Start database maintenance loop
     asyncio.create_task(database.clear_old_detections_loop())
-    
+
+    # 4. Start Cloudflare Tunnel + Telegram notification (runs in background thread)
+    tunnel.start_background_tunnel()
+
     log.info("  Startup complete. API ready on http://%s:%d", config.API_HOST, config.API_PORT)
     yield
 
     log.info("  Shutdown initiated ...")
+    tunnel.stop_background_tunnel()
     processor.stop_background_monitoring()
     await engine.close_engine()
     _log_listener.stop()

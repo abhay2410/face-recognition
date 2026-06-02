@@ -119,6 +119,17 @@ def _make_analyzer(det_size: tuple, det_thresh: float) -> FaceAnalysis:
                 # If even that fails, try the most basic prepare
                 a.prepare(ctx_id=_ctx_id, det_thresh=det_thresh, det_size=det_size)
                 
+    # Force GPU/DirectML execution provider settings for models
+    if _use_gpu:
+        log.info("[Engine] Forcing ONNX Execution Providers %s on all models.", _ORT_PROVIDERS)
+        for name, model in a.models.items():
+            if hasattr(model, 'session') and model.session is not None:
+                try:
+                    model.session.set_providers(_ORT_PROVIDERS)
+                    log.info("[Engine] Successfully set execution providers for model '%s': %s", name, model.session.get_providers())
+                except Exception as e:
+                    log.warning("[Engine] Failed to set execution providers for model '%s': %s", name, e)
+                
     return a
 
 # ═════════════════════════ (Rest of file remains highly optimized) ════════════
@@ -533,7 +544,8 @@ async def trigger_pc_start(mac_address: str):
         import ipaddress
         
         # Discover directed broadcast addresses of all active interfaces to overcome multi-adapter routing issues
-        broadcast_ips = {'255.255.255.255'}
+        # Always include the 192.168.1.255 subnet broadcast since all systems are in this range
+        broadcast_ips = {'255.255.255.255', '192.168.1.255'}
         try:
             import psutil
             for interface, addrs in psutil.net_if_addrs().items():
@@ -541,7 +553,7 @@ async def trigger_pc_start(mac_address: str):
                     if addr.family == socket.AF_INET:
                         ip = addr.address
                         netmask = addr.netmask
-                        if ip and netmask and not ip.startswith('127.'):
+                        if ip and netmask and not ip.startswith('127.') and not ip.startswith('169.254.'):
                             try:
                                 network = ipaddress.IPv4Network(f"{ip}/{netmask}", strict=False)
                                 broadcast_ips.add(str(network.broadcast_address))
@@ -557,17 +569,24 @@ async def trigger_pc_start(mac_address: str):
         msg = b'\xff' * 6 + hw_addr * 16
         
         # Send via UDP broadcast multiple times to all active interface subnet broadcasts
+        any_success = False
         with socket.socket(socket.AF_INET, socket.SOCK_DGRAM) as s:
             s.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)
             for _ in range(3):
                 for b_ip in broadcast_ips:
                     try:
                         s.sendto(msg, (b_ip, 9))
+                        any_success = True
                     except Exception as se:
-                        log.warning("[Engine] Send to %s failed: %s", b_ip, se)
+                        log.debug("[Engine] Send to %s failed: %s", b_ip, se)
                 await asyncio.sleep(0.1)
-        log.info("[Engine] Wake-on-LAN magic packet sent to %s (3 times) via targets: %s", mac_address, list(broadcast_ips))
-        return True
+                
+        if any_success:
+            log.info("[Engine] Wake-on-LAN magic packet sent to %s (3 times) via targets: %s", mac_address, list(broadcast_ips))
+        else:
+            log.warning("[Engine] Wake-on-LAN magic packet broadcast failed on all interfaces: %s", list(broadcast_ips))
+            
+        return any_success
     except Exception as e:
         log.error("[Engine] Wake-on-LAN failed for %s: %s", mac_address, e)
         return False
